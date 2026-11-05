@@ -3,469 +3,514 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0f3460">
-<meta name="description" content="یاری بەرگریکردنی شار - وێب ئەپڵیکەیشن">
+<meta name="theme-color" content="#2d1b0e">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="City Defender">
-<title>🛡️ بەرگریکردنی شار</title>
-<link rel="apple-touch-icon" href="icon-192.png">
+<title>⚔️ سەربازی ئازا</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   
   html, body {
-    height: 100%;
-    overflow: hidden;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: #0a0a1a;
-    color: #fff;
-    user-select: none;
+    height:100%; overflow:hidden;
+    font-family:'Segoe UI', Tahoma, sans-serif;
+    background:#1a0f08; color:#fff;
+    user-select:none;
   }
   
   #app {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
-    max-width: 500px;
-    margin: 0 auto;
-    position: relative;
+    display:flex; flex-direction:column;
+    height:100vh; height:100dvh;
+    max-width:600px; margin:0 auto;
+    position:relative;
+    background:#1a0f08;
   }
   
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    border-bottom: 2px solid #e94560;
-    flex-shrink: 0;
+  /* HUD سەرەوە */
+  .hud {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:8px 12px; gap:6px;
+    background:linear-gradient(135deg, #2d1b0e, #4a2c17);
+    border-bottom:3px solid #b8860b;
+    flex-shrink:0;
+    font-size:13px;
   }
   
-  .stat {
-    background: rgba(255,255,255,0.08);
-    padding: 6px 14px;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.15);
-    font-size: 14px;
-    font-weight: bold;
+  .hud-item {
+    background:rgba(0,0,0,0.4);
+    padding:5px 10px; border-radius:8px;
+    border:1px solid rgba(184,134,11,0.5);
+    font-weight:bold;
+    display:flex; align-items:center; gap:4px;
   }
   
-  .stat span { color: #f5c518; }
-  
-  #gameArea {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    background: radial-gradient(circle at 50% 100%, #16213e, #0a0a1a);
+  .hp-bar {
+    flex:1; max-width:120px;
+    height:18px; background:rgba(0,0,0,0.6);
+    border-radius:9px; overflow:hidden;
+    border:1px solid rgba(184,134,11,0.5);
+    position:relative;
   }
   
-  canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    touch-action: none;
+  .hp-fill {
+    height:100%; background:linear-gradient(90deg, #e94560, #ff6b6b);
+    transition:width 0.3s;
   }
   
+  .hp-text {
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:bold;
+    text-shadow:0 1px 2px #000;
+  }
+  
+  #gameArea { flex:1; position:relative; overflow:hidden; }
+  canvas { display:block; width:100%; height:100%; touch-action:none; }
+  
+  /* کۆنترۆلەکان */
+  .controls {
+    position:absolute; bottom:0; left:0; right:0;
+    padding:10px; display:flex; justify-content:space-between;
+    align-items:flex-end; pointer-events:none;
+    background:linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+  }
+  
+  .move-controls {
+    display:flex; gap:8px; pointer-events:auto;
+  }
+  
+  .move-btn {
+    width:60px; height:60px;
+    background:linear-gradient(135deg, #4a2c17, #2d1b0e);
+    border:2px solid #b8860b;
+    border-radius:50%;
+    color:#f5c518; font-size:24px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 15px rgba(0,0,0,0.5);
+    transition:transform 0.1s;
+  }
+  
+  .move-btn:active { transform:scale(0.9); }
+  
+  .action-controls {
+    display:flex; flex-direction:column; gap:8px;
+    pointer-events:auto;
+  }
+  
+  .action-btn {
+    width:70px; height:70px;
+    background:radial-gradient(circle, #e94560, #8b1e3f);
+    border:3px solid #f5c518;
+    border-radius:50%;
+    color:#fff; font-size:28px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 20px rgba(233,69,96,0.6);
+    transition:transform 0.1s;
+  }
+  
+  .action-btn:active { transform:scale(0.9); }
+  
+  .action-btn.small {
+    width:55px; height:55px;
+    background:radial-gradient(circle, #00b4d8, #0f3460);
+    font-size:22px;
+    box-shadow:0 4px 15px rgba(0,180,216,0.6);
+  }
+  
+  /* شاشەکان */
   .overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: rgba(10, 10, 26, 0.95);
-    backdrop-filter: blur(8px);
-    z-index: 10;
-    padding: 30px;
-    text-align: center;
-    transition: opacity 0.3s;
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    justify-content:center; align-items:center;
+    background:rgba(10,5,0,0.95);
+    backdrop-filter:blur(6px);
+    z-index:20; padding:25px;
+    text-align:center;
+    overflow-y:auto;
   }
   
-  .overlay.hidden { display: none; }
+  .overlay.hidden { display:none; }
   
   .overlay h1 {
-    font-size: 32px;
-    color: #e94560;
-    margin-bottom: 10px;
-    text-shadow: 0 0 20px rgba(233,69,96,0.6);
+    font-size:30px; color:#f5c518;
+    margin-bottom:8px;
+    text-shadow:0 0 20px rgba(245,197,24,0.6);
+  }
+  
+  .overlay h2 {
+    font-size:20px; color:#e94560;
+    margin:10px 0;
   }
   
   .overlay p {
-    color: #aaa;
-    margin-bottom: 25px;
-    line-height: 1.8;
-    font-size: 15px;
+    color:#c9b28a; margin-bottom:15px;
+    line-height:1.7; font-size:14px;
   }
   
   .btn {
-    padding: 14px 40px;
-    font-size: 17px;
-    font-weight: bold;
-    color: #fff;
-    background: linear-gradient(135deg, #e94560, #c23152);
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 15px rgba(233,69,96,0.4);
+    padding:12px 35px;
+    font-size:16px; font-weight:bold;
+    color:#fff;
+    background:linear-gradient(135deg, #b8860b, #8b6914);
+    border:2px solid #f5c518;
+    border-radius:12px;
+    cursor:pointer;
+    transition:transform 0.15s, box-shadow 0.15s;
+    box-shadow:0 4px 15px rgba(184,134,11,0.5);
+    margin:5px;
+    font-family:inherit;
   }
   
-  .btn:active { transform: scale(0.95); }
-  .btn:hover { box-shadow: 0 0 25px rgba(233,69,96,0.7); }
+  .btn:active { transform:scale(0.95); }
+  .btn:hover { box-shadow:0 0 25px rgba(245,197,24,0.7); }
   
-  .btn-secondary {
-    background: linear-gradient(135deg, #16213e, #0f3460);
-    box-shadow: 0 4px 15px rgba(15,52,96,0.4);
-    margin-top: 12px;
+  .btn-danger {
+    background:linear-gradient(135deg, #e94560, #8b1e3f);
+    border-color:#f5c518;
   }
   
-  .final-score {
-    font-size: 60px;
-    font-weight: bold;
-    color: #f5c518;
-    margin: 15px 0;
-    text-shadow: 0 0 30px rgba(245,197,24,0.5);
+  .btn-shop {
+    background:linear-gradient(135deg, #0f3460, #16213e);
+    border-color:#00b4d8;
   }
   
-  .sound-btn {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #fff;
-    font-size: 18px;
-    cursor: pointer;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* دوکان */
+  .shop-grid {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:10px; width:100%; max-width:400px;
+    margin:15px 0;
   }
   
-  #installPrompt {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(120px);
-    background: linear-gradient(135deg, #1a1a2e, #0f3460);
-    border: 1px solid #e94560;
-    padding: 14px 20px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-    transition: transform 0.4s ease;
-    z-index: 100;
-    width: calc(100% - 40px);
-    max-width: 400px;
+  .shop-item {
+    background:linear-gradient(135deg, #2d1b0e, #4a2c17);
+    border:2px solid #b8860b;
+    border-radius:12px;
+    padding:12px 8px;
+    cursor:pointer;
+    transition:transform 0.15s, border-color 0.15s;
+    display:flex; flex-direction:column;
+    align-items:center; gap:6px;
   }
   
-  #installPrompt.show { transform: translateX(-50%) translateY(0); }
+  .shop-item:hover { border-color:#f5c518; transform:translateY(-2px); }
+  .shop-item:active { transform:scale(0.97); }
+  .shop-item.disabled { opacity:0.4; cursor:not-allowed; }
   
-  #installPrompt button {
-    padding: 8px 16px;
-    font-size: 14px;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
+  .shop-item .icon { font-size:30px; }
+  .shop-item .name { font-size:13px; font-weight:bold; color:#f5c518; }
+  .shop-item .desc { font-size:11px; color:#c9b28a; }
+  .shop-item .price {
+    font-size:13px; font-weight:bold; color:#ffd700;
+    background:rgba(0,0,0,0.3); padding:2px 10px;
+    border-radius:8px;
   }
   
-  #installBtn { background: #e94560; color: #fff; }
-  #dismissBtn { background: transparent; color: #aaa; }
+  .stats-display {
+    display:flex; gap:15px; flex-wrap:wrap;
+    justify-content:center; margin:10px 0;
+    font-size:14px;
+  }
+  
+  .stat-box {
+    background:rgba(0,0,0,0.4);
+    padding:6px 14px; border-radius:8px;
+    border:1px solid rgba(184,134,11,0.5);
+  }
+  
+  .stat-box strong { color:#f5c518; }
+  
+  /* ئاگادارکردنەوە */
+  .toast {
+    position:absolute; top:70px; left:50%;
+    transform:translateX(-50%) translateY(-100px);
+    background:linear-gradient(135deg, #2d1b0e, #4a2c17);
+    border:2px solid #f5c518;
+    padding:10px 20px; border-radius:10px;
+    font-weight:bold; color:#f5c518;
+    z-index:50; transition:transform 0.3s;
+    box-shadow:0 4px 20px rgba(0,0,0,0.6);
+    font-size:14px;
+  }
+  
+  .toast.show { transform:translateX(-50%) translateY(0); }
+  
+  /* نیشاندانی مەترسی */
+  .wave-info {
+    position:absolute; top:70px; left:50%;
+    transform:translateX(-50%);
+    background:rgba(233,69,96,0.9);
+    padding:6px 20px; border-radius:20px;
+    font-weight:bold; font-size:13px;
+    z-index:5; opacity:0; transition:opacity 0.3s;
+    border:1px solid #f5c518;
+  }
+  
+  .wave-info.show { opacity:1; }
 </style>
 </head>
 <body>
 <div id="app">
-  <header>
-    <div class="stat">🛡️ خاڵ: <span id="score">0</span></div>
-    <div class="stat">❤️ ژیان: <span id="lives">3</span></div>
-    <div class="stat">🏆 باشترین: <span id="best">0</span></div>
-  </header>
+  <div class="hud">
+    <div class="hud-item">💰 <span id="gold">0</span></div>
+    <div class="hp-bar">
+      <div class="hp-fill" id="hpFill" style="width:100%"></div>
+      <div class="hp-text" id="hpText">100/100</div>
+    </div>
+    <div class="hud-item">⚔️ <span id="dmg">10</span></div>
+    <div class="hud-item">🌊 <span id="waveNum">1</span></div>
+  </div>
   
   <div id="gameArea">
     <canvas id="game"></canvas>
+    <div class="wave-info" id="waveInfo">🌊 شەپۆلی ١</div>
+    <div class="toast" id="toast"></div>
     
-    <button class="sound-btn" id="soundBtn" title="دەنگ">🔊</button>
+    <div class="controls">
+      <div class="move-controls">
+        <button class="move-btn" id="btnLeft">◀</button>
+        <button class="move-btn" id="btnRight">▶</button>
+      </div>
+      <div class="action-controls">
+        <button class="action-btn small" id="btnShop">🏪</button>
+        <button class="action-btn" id="btnAttack">⚔️</button>
+      </div>
+    </div>
     
+    <!-- شاشەی سەرەتا -->
     <div class="overlay" id="startScreen">
-      <h1>🛡️ بەرگریکردنی شار</h1>
+      <h1>⚔️ سەربازی ئازا</h1>
       <p>
-        تۆپە دوژمنەکان بەرەو شارەکەت دێن!<br>
-        🖱️ بە ماوس یان پەنجە بجووڵێنە<br>
-        🎯 بەرگرییەکەت بەکاربهێنە بۆ تێکشکاندنیان<br>
-        ⚠️ ڕێگە مەدە بگەنە خوارەوە!
+        تۆ سەربازێکی ئازایت لە دوورگەیەکی گەورەدا.<br>
+        دوژمنەکان هاتوون بۆ تێکدانی شارەکەت!<br>
+        ⚔️ شمشێرەکەت بەکاربهێنە و شەڕ بکە<br>
+        💰 پارە کۆبکەرەوە و شمشێر و ژیانت بەهێز بکە<br>
+        🏪 لە دوکان هێز و شمشێری نوێ بکڕە
       </p>
+      <div class="stats-display">
+        <div class="stat-box">⚔️ شمشێر: <strong>ئاسایی</strong></div>
+        <div class="stat-box">❤️ ژیان: <strong>100</strong></div>
+      </div>
       <button class="btn" onclick="startGame()">▶️ دەستپێکردن</button>
     </div>
     
+    <!-- شاشەی کۆتایی -->
     <div class="overlay hidden" id="endScreen">
-      <h1>💥 یاری تەواو!</h1>
-      <div class="final-score" id="finalScore">0</div>
-      <p id="endMessage">باشە! بەڵام دەتوانیت باشتر بیت</p>
-      <button class="btn" onclick="startGame()">🔄 دووبارە یاری</button>
-      <button class="btn btn-secondary" onclick="goHome()">🏠 سەرەتا</button>
+      <h1 id="endTitle">💀 شکست هێنا!</h1>
+      <p id="endMessage">دوژمنەکان زۆر بەهێز بوون...</p>
+      <div class="stats-display">
+        <div class="stat-box">💰 پارە: <strong id="finalGold">0</strong></div>
+        <div class="stat-box">🌊 شەپۆل: <strong id="finalWave">0</strong></div>
+        <div class="stat-box">⚔️ کوشتن: <strong id="finalKills">0</strong></div>
+      </div>
+      <button class="btn btn-danger" onclick="startGame()">🔄 دووبارە یاری</button>
+      <button class="btn" onclick="goHome()">🏠 سەرەتا</button>
+    </div>
+    
+    <!-- دوکان -->
+    <div class="overlay hidden" id="shopScreen">
+      <h1>🏪 دوکان</h1>
+      <p>💰 پارەی تۆ: <strong id="shopGold" style="color:#ffd700; font-size:18px;">0</strong></p>
+      <div class="shop-grid" id="shopGrid"></div>
+      <button class="btn" onclick="closeShop()">✅ گەڕانەوە</button>
     </div>
   </div>
 </div>
 
-<div id="installPrompt">
-  <span style="flex:1; font-size:14px;">📲 ئەم یارییە وەک ئەپ دامەزرێنە!</span>
-  <button id="installBtn">دامەزراندن</button>
-  <button id="dismissBtn">✕</button>
-</div>
-
 <script>
-// ====== دەستپێکردنی PWA بە دینامیکی ======
-(function initPWA() {
-  // دروستکردنی manifest بە دینامیکی
-  const manifest = {
-    name: "بەرگریکردنی شار - City Defender",
-    short_name: "City Defender",
-    description: "یارییەکی ئاکشنی خۆش بۆ پاراستنی شارەکەت",
-    start_url: window.location.href,
-    scope: "./",
-    display: "standalone",
-    orientation: "portrait",
-    background_color: "#0a0a1a",
-    theme_color: "#0f3460",
-    lang: "ku",
-    dir: "rtl",
-    categories: ["games", "entertainment"],
-    icons: [
-      {
-        src: "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="40" fill="#0f3460"/><circle cx="96" cy="96" r="55" fill="none" stroke="#00b4d8" stroke-width="6" opacity="0.5"/><circle cx="96" cy="96" r="35" fill="#00b4d8"/><circle cx="80" cy="80" r="12" fill="#fff" opacity="0.6"/><text x="96" y="160" text-anchor="middle" font-size="24" fill="#e94560" font-family="sans-serif" font-weight="bold">🛡️</text></svg>`),
-        sizes: "192x192",
-        type: "image/svg+xml",
-        purpose: "any maskable"
-      },
-      {
-        src: "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="#0f3460"/><circle cx="256" cy="256" r="150" fill="none" stroke="#00b4d8" stroke-width="15" opacity="0.5"/><circle cx="256" cy="256" r="95" fill="#00b4d8"/><circle cx="215" cy="215" r="32" fill="#fff" opacity="0.6"/><text x="256" y="430" text-anchor="middle" font-size="64" fill="#e94560" font-family="sans-serif" font-weight="bold">🛡️</text></svg>`),
-        sizes: "512x512",
-        type: "image/svg+xml",
-        purpose: "any maskable"
-      }
-    ]
-  };
-  
-  const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-  const manifestURL = URL.createObjectURL(manifestBlob);
-  const link = document.createElement('link');
-  link.rel = 'manifest';
-  link.href = manifestURL;
-  document.head.appendChild(link);
-  
-  // تۆمارکردنی service worker بە دینامیکی
-  if ('serviceWorker' in navigator) {
-    const swCode = `
-      const CACHE_NAME = 'city-defender-v1';
-      const ASSETS = ['./'];
-      
-      self.addEventListener('install', (event) => {
-        event.waitUntil(
-          caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(ASSETS))
-            .then(() => self.skipWaiting())
-        );
-      });
-      
-      self.addEventListener('activate', (event) => {
-        event.waitUntil(
-          caches.keys().then(keys =>
-            Promise.all(
-              keys.filter(key => key !== CACHE_NAME)
-                  .map(key => caches.delete(key))
-            )
-          ).then(() => self.clients.claim())
-        );
-      });
-      
-      self.addEventListener('fetch', (event) => {
-        event.respondWith(
-          caches.match(event.request)
-            .then(cached => cached || fetch(event.request)
-              .then(response => {
-                if (response.status === 200) {
-                  const clone = response.clone();
-                  caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-                }
-                return response;
-              })
-              .catch(() => caches.match('./'))
-            )
-        );
-      });
-    `;
-    
-    const swBlob = new Blob([swCode], { type: 'application/javascript' });
-    const swURL = URL.createObjectURL(swBlob);
-    
-    navigator.serviceWorker.register(swURL)
-      .then(reg => console.log('SW registered:', reg.scope))
-      .catch(err => console.log('SW error:', err));
-  }
-})();
-
-// ====== ئاگادارکردنەوەی دامەزراندن ======
-let deferredPrompt;
-const installPrompt = document.getElementById('installPrompt');
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  setTimeout(() => installPrompt.classList.add('show'), 3000);
-});
-
-document.getElementById('installBtn').addEventListener('click', async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  console.log('Install outcome:', outcome);
-  deferredPrompt = null;
-  installPrompt.classList.remove('show');
-});
-
-document.getElementById('dismissBtn').addEventListener('click', () => {
-  installPrompt.classList.remove('show');
-});
-
-// ====== یاری ======
+// ====== دۆخی یاری ======
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const gameArea = document.getElementById('gameArea');
 
-const scoreEl = document.getElementById('score');
-const livesEl = document.getElementById('lives');
-const bestEl = document.getElementById('best');
-const finalScoreEl = document.getElementById('finalScore');
-const endMessage = document.getElementById('endMessage');
+const goldEl = document.getElementById('gold');
+const hpFill = document.getElementById('hpFill');
+const hpText = document.getElementById('hpText');
+const dmgEl = document.getElementById('dmg');
+const waveNumEl = document.getElementById('waveNum');
+const toastEl = document.getElementById('toast');
+const waveInfoEl = document.getElementById('waveInfo');
+
 const startScreen = document.getElementById('startScreen');
 const endScreen = document.getElementById('endScreen');
-const soundBtn = document.getElementById('soundBtn');
+const shopScreen = document.getElementById('shopScreen');
+const endTitle = document.getElementById('endTitle');
+const endMessage = document.getElementById('endMessage');
+const finalGold = document.getElementById('finalGold');
+const finalWave = document.getElementById('finalWave');
+const finalKills = document.getElementById('finalKills');
+const shopGold = document.getElementById('shopGold');
+const shopGrid = document.getElementById('shopGrid');
 
-let best = parseInt(localStorage.getItem('cityDefenderBest') || '0');
-bestEl.textContent = best;
-
-let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
-updateSoundBtn();
-
-let gameState = 'menu';
-let score, lives, time, wave, lastTime;
-let enemies = [];
-let particles = [];
-let stars = [];
-let player;
-let spawnTimer;
-let enemySpawnRate;
+let W, H, DPR;
 
 function resizeCanvas() {
   const rect = gameArea.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
+  DPR = window.devicePixelRatio || 1;
+  canvas.width = rect.width * DPR;
+  canvas.height = rect.height * DPR;
   canvas.style.width = rect.width + 'px';
   canvas.style.height = rect.height + 'px';
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  return { w: rect.width, h: rect.height };
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  W = rect.width;
+  H = rect.height;
 }
 
-let W, H;
-function updateSize() {
-  const s = resizeCanvas();
-  W = s.w;
-  H = s.h;
+window.addEventListener('resize', () => { resizeCanvas(); draw(); });
+
+// ====== دۆخی یاری ======
+let gameState = 'menu';
+let player, enemies, particles, trees, mountains, clouds;
+let waves, waveNumber, waveTimer, waveInterval;
+let spawnTimer, spawnRate;
+let attackCooldown, attackAnim;
+let lastTime, time;
+let kills;
+
+// ====== شمشێرەکان ======
+const SWORDS = [
+  { name: 'شمشێری ئاسایی', icon: '🗡️', dmg: 10, color: '#c0c0c0', fire: false, cost: 0 },
+  { name: 'شمشێری ئاسنین', icon: '⚔️', dmg: 18, color: '#a8a8a8', fire: false, cost: 50 },
+  { name: 'شمشێری بەهێز', icon: '⚔️', dmg: 28, color: '#4ecca3', fire: false, cost: 120 },
+  { name: 'شمشێری ئاگرین', icon: '🔥', dmg: 40, color: '#ff6b00', fire: true, cost: 250 },
+  { name: 'شمشێری ئەفسوناوی', icon: '✨', dmg: 60, color: '#a855f7', fire: true, cost: 500 },
+  { name: 'شمشێری خودایی', icon: '🌟', dmg: 90, color: '#f5c518', fire: true, cost: 900 }
+];
+
+let currentSword = 0;
+let upgrades = {
+  hp: 0,
+  hpMax: 3
+};
+
+// ====== ڕێکخستنی یاری ======
+function resetGame() {
+  player = {
+    x: W/2, y: H*0.7,
+    r: 20, vx: 0, vy: 0,
+    hp: 100, maxHp: 100,
+    speed: 4,
+    facing: 1,
+    onGround: true,
+    jumpVy: 0,
+    attacking: false,
+    attackTimer: 0,
+    invuln: 0
+  };
+  
+  enemies = [];
+  particles = [];
+  clouds = [];
+  kills = 0;
+  waveNumber = 1;
+  waveTimer = 0;
+  waveInterval = 20;
+  spawnTimer = 0;
+  spawnRate = 120;
+  attackCooldown = 0;
+  attackAnim = 0;
+  time = 0;
+  
+  currentSword = 0;
+  upgrades = { hp: 0, hpMax: 3 };
+  
+  generateEnvironment();
+  updateHUD();
 }
 
-window.addEventListener('resize', updateSize);
-window.addEventListener('orientationchange', () => setTimeout(updateSize, 200));
+function generateEnvironment() {
+  trees = [];
+  mountains = [];
+  
+  // چیاکان لە پاشبنەما
+  for (let i = 0; i < 5; i++) {
+    mountains.push({
+      x: (i / 4) * W + Math.random() * 60 - 30,
+      baseY: H * 0.55,
+      width: 120 + Math.random() * 100,
+      height: 100 + Math.random() * 80,
+      color: '#3d2817'
+    });
+  }
+  
+  // دارەکان
+  for (let i = 0; i < 8; i++) {
+    trees.push({
+      x: Math.random() * W,
+      y: H * 0.62 + Math.random() * 40,
+      size: 30 + Math.random() * 25,
+      sway: Math.random() * Math.PI * 2
+    });
+  }
+  
+  // هەورەکان
+  for (let i = 0; i < 5; i++) {
+    clouds.push({
+      x: Math.random() * W,
+      y: 30 + Math.random() * 80,
+      size: 40 + Math.random() * 30,
+      speed: 0.2 + Math.random() * 0.3
+    });
+  }
+}
 
-const AudioContext = window.AudioContext || window.webkitAudioContext;
+// ====== HUD ======
+function updateHUD() {
+  goldEl.textContent = player.gold || 0;
+  const pct = Math.max(0, (player.hp / player.maxHp) * 100);
+  hpFill.style.width = pct + '%';
+  hpText.textContent = Math.max(0, Math.floor(player.hp)) + '/' + player.maxHp;
+  dmgEl.textContent = SWORDS[currentSword].dmg;
+  waveNumEl.textContent = waveNumber;
+}
+
+// ====== دەنگ ======
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
 
 function initAudio() {
-  if (!audioCtx) audioCtx = new AudioContext();
+  if (!audioCtx) audioCtx = new AudioCtx();
   if (audioCtx.state === 'suspended') audioCtx.resume();
 }
 
-function playSound(freq, duration = 0.1, type = 'sine', volume = 0.1) {
-  if (!soundEnabled) return;
+function playSound(freq, dur = 0.1, type = 'sine', vol = 0.1) {
   try {
     initAudio();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = type;
     osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start();
-    osc.stop(audioCtx.currentTime + duration);
+    osc.stop(audioCtx.currentTime + dur);
   } catch(e) {}
 }
 
-function updateSoundBtn() {
-  soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
+// ====== تۆست ======
+function showToast(msg, color = '#f5c518') {
+  toastEl.textContent = msg;
+  toastEl.style.color = color;
+  toastEl.classList.add('show');
+  clearTimeout(toastEl._timer);
+  toastEl._timer = setTimeout(() => toastEl.classList.remove('show'), 2000);
 }
 
-soundBtn.addEventListener('click', () => {
-  soundEnabled = !soundEnabled;
-  localStorage.setItem('soundEnabled', soundEnabled);
-  updateSoundBtn();
-  if (soundEnabled) playSound(660, 0.08);
-});
-
-function initStars() {
-  stars = [];
-  for (let i = 0; i < 60; i++) {
-    stars.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 1.5 + 0.5,
-      speed: Math.random() * 0.5 + 0.2,
-      alpha: Math.random() * 0.5 + 0.3
-    });
-  }
-}
-
+// ====== دەستپێکردن ======
 function startGame() {
-  updateSize();
-  initStars();
-  initAudio();
-  
+  resizeCanvas();
+  resetGame();
+  player.gold = 0;
   gameState = 'playing';
-  score = 0;
-  lives = 3;
-  time = 0;
-  wave = 1;
-  enemies = [];
-  particles = [];
-  spawnTimer = 0;
-  enemySpawnRate = 90;
-  
-  player = {
-    x: W / 2,
-    y: H - 60,
-    r: 22,
-    targetX: W / 2,
-    shield: 0,
-    maxShield: 100
-  };
-  
-  scoreEl.textContent = '0';
-  livesEl.textContent = '3';
   startScreen.classList.add('hidden');
   endScreen.classList.add('hidden');
-  
+  shopScreen.classList.add('hidden');
   lastTime = performance.now();
   requestAnimationFrame(gameLoop);
   playSound(440, 0.15, 'triangle', 0.15);
   setTimeout(() => playSound(660, 0.15, 'triangle', 0.15), 100);
+  showWaveInfo('🌊 شەپۆلی ١');
 }
 
 function goHome() {
@@ -474,336 +519,613 @@ function goHome() {
   startScreen.classList.remove('hidden');
 }
 
-let pointerActive = false;
-
-function handlePointer(clientX) {
-  if (gameState !== 'playing' || !player) return;
-  const rect = canvas.getBoundingClientRect();
-  player.targetX = (clientX - rect.left) * (canvas.width / rect.width) / (window.devicePixelRatio || 1);
-  player.targetX = Math.max(player.r, Math.min(W - player.r, player.targetX));
+function showWaveInfo(text) {
+  waveInfoEl.textContent = text;
+  waveInfoEl.classList.add('show');
+  setTimeout(() => waveInfoEl.classList.remove('show'), 2000);
 }
 
-canvas.addEventListener('pointerdown', (e) => {
-  pointerActive = true;
-  handlePointer(e.clientX);
-});
-canvas.addEventListener('pointermove', (e) => {
-  if (pointerActive || e.pointerType === 'mouse') {
-    handlePointer(e.clientX);
-  }
-});
-canvas.addEventListener('pointerup', () => pointerActive = false);
-canvas.addEventListener('pointerleave', () => pointerActive = false);
-
-const keys = {};
-window.addEventListener('keydown', (e) => {
-  keys[e.key] = true;
-  if (e.key === ' ' && gameState === 'playing') e.preventDefault();
-});
-window.addEventListener('keyup', (e) => keys[e.key] = false);
+// ====== دروستکردنی دوژمن ======
+const ENEMY_TYPES = [
+  { name: 'goblin', hp: 30, dmg: 8, speed: 0.8, r: 16, color: '#7cb342', score: 15, gold: 10, icon: '👹' },
+  { name: 'orc', hp: 60, dmg: 15, speed: 0.6, r: 22, color: '#8d6e63', score: 25, gold: 20, icon: '👺' },
+  { name: 'demon', hp: 120, dmg: 25, speed: 0.9, r: 26, color: '#d32f2f', score: 50, gold: 40, icon: '😈' },
+  { name: 'dragon', hp: 300, dmg: 40, speed: 0.5, r: 35, color: '#ff6b00', score: 100, gold: 100, icon: '🐉' }
+];
 
 function spawnEnemy() {
-  const types = ['normal', 'fast', 'tank'];
-  const weights = wave < 3 ? [0.8, 0.15, 0.05] : wave < 6 ? [0.6, 0.3, 0.1] : [0.4, 0.35, 0.25];
+  let typeIndex = 0;
   const rand = Math.random();
-  let type = 'normal';
-  let cum = 0;
-  for (let i = 0; i < types.length; i++) {
-    cum += weights[i];
-    if (rand < cum) { type = types[i]; break; }
-  }
+  if (waveNumber >= 5 && rand < 0.15) typeIndex = 3;
+  else if (waveNumber >= 4 && rand < 0.35) typeIndex = 2;
+  else if (waveNumber >= 2 && rand < 0.6) typeIndex = 1;
+  else if (rand < 0.7) typeIndex = 0;
   
-  const config = {
-    normal: { r: 16, speed: 1.2, hp: 1, color: '#e94560', score: 10 },
-    fast:   { r: 11, speed: 2.5, hp: 1, color: '#f5c518', score: 20 },
-    tank:   { r: 24, speed: 0.7, hp: 3, color: '#4ecca3', score: 30 }
-  }[type];
+  const t = ENEMY_TYPES[typeIndex];
+  const side = Math.random() < 0.5 ? -1 : 1;
   
   enemies.push({
-    x: Math.random() * (W - config.r * 2) + config.r,
-    y: -config.r - 10,
-    vx: (Math.random() - 0.5) * 1.5,
-    vy: config.speed + wave * 0.1,
-    r: config.r,
-    hp: config.hp,
-    maxHp: config.hp,
-    color: config.color,
-    score: config.score,
-    type: type,
+    x: side === -1 ? -t.r - 10 : W + t.r + 10,
+    y: H * 0.7 + Math.random() * 30,
+    r: t.r,
+    hp: t.hp,
+    maxHp: t.hp,
+    dmg: t.dmg,
+    speed: t.speed,
+    color: t.color,
+    icon: t.icon,
+    gold: t.gold,
+    vx: -side * t.speed,
+    attackTimer: 0,
     hitFlash: 0,
-    angle: 0
+    bounce: Math.random() * Math.PI * 2
   });
 }
 
-function createParticles(x, y, color, count = 12, speed = 6) {
+// ====== دروستکردنی تەنۆلکە ======
+function createParticles(x, y, color, count = 15, speed = 6) {
   for (let i = 0; i < count; i++) {
     const ang = Math.random() * Math.PI * 2;
     const spd = Math.random() * speed + 1;
     particles.push({
       x, y,
       vx: Math.cos(ang) * spd,
-      vy: Math.sin(ang) * spd,
+      vy: Math.sin(ang) * spd - 2,
       life: 1,
       decay: 0.02 + Math.random() * 0.03,
       color,
-      size: Math.random() * 3 + 1
+      size: 2 + Math.random() * 4,
+      gravity: 0.3
     });
   }
 }
 
-function fireShield() {
-  if (!player || player.shield < 30) return;
-  player.shield -= 30;
-  playSound(880, 0.2, 'sawtooth', 0.12);
+// ====== شەڕکردن ======
+function attack() {
+  if (gameState !== 'playing' || attackCooldown > 0) return;
+  attackCooldown = 0.4;
+  attackAnim = 0.4;
+  player.attacking = true;
   
+  playSound(600, 0.08, 'sawtooth', 0.1);
+  setTimeout(() => playSound(400, 0.08, 'sawtooth', 0.08), 50);
+  
+  const sword = SWORDS[currentSword];
+  const range = player.r + 50;
+  
+  // پشکنینی دوژمنەکان لە بەردەم
   for (let i = enemies.length - 1; i >= 0; i--) {
     const e = enemies[i];
     const dx = e.x - player.x;
     const dy = e.y - player.y;
-    if (Math.sqrt(dx*dx + dy*dy) < 150) {
-      createParticles(e.x, e.y, e.color, 15);
-      score += e.score;
-      enemies.splice(i, 1);
-      playSound(600 + Math.random() * 300, 0.08, 'square', 0.05);
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const inFront = (player.facing > 0 && dx > -20) || (player.facing < 0 && dx < 20);
+    
+    if (dist < range && inFront) {
+      e.hp -= sword.dmg;
+      e.hitFlash = 0.3;
+      e.vx += player.facing * 3;
+      
+      createParticles(e.x, e.y, sword.color, 10);
+      if (sword.fire) {
+        createParticles(e.x, e.y, '#ff6b00', 8, 8);
+        createParticles(e.x, e.y, '#ffd700', 5, 6);
+      }
+      
+      playSound(700 + Math.random() * 200, 0.06, 'square', 0.08);
+      
+      if (e.hp <= 0) {
+        killEnemy(i);
+      }
     }
-  }
-  scoreEl.textContent = score;
-  
-  for (let i = 0; i < 30; i++) {
-    const ang = (i / 30) * Math.PI * 2;
-    particles.push({
-      x: player.x,
-      y: player.y,
-      vx: Math.cos(ang) * 8,
-      vy: Math.sin(ang) * 8,
-      life: 1,
-      decay: 0.04,
-      color: '#00b4d8',
-      size: 3
-    });
   }
 }
 
+function killEnemy(index) {
+  const e = enemies[index];
+  player.gold = (player.gold || 0) + e.gold;
+  kills++;
+  createParticles(e.x, e.y, e.color, 20, 8);
+  createParticles(e.x, e.y, '#f5c518', 10, 5);
+  playSound(300, 0.2, 'sawtooth', 0.12);
+  setTimeout(() => playSound(500, 0.15, 'sine', 0.1), 100);
+  enemies.splice(index, 1);
+  updateHUD();
+}
+
+// ====== دوکان ======
+const SHOP_ITEMS = [
+  { id: 'sword1', name: 'شمشێری ئاسنین', icon: '⚔️', cost: 50, type: 'sword', value: 1, desc: '+18 زیان' },
+  { id: 'sword2', name: 'شمشێری بەهێز', icon: '⚔️', cost: 120, type: 'sword', value: 2, desc: '+28 زیان' },
+  { id: 'sword3', name: 'شمشێری ئاگرین', icon: '🔥', cost: 250, type: 'sword', value: 3, desc: '+40 زیان + ئاگر' },
+  { id: 'sword4', name: 'شمشێری ئەفسوناوی', icon: '✨', cost: 500, type: 'sword', value: 4, desc: '+60 زیان' },
+  { id: 'sword5', name: 'شمشێری خودایی', icon: '🌟', cost: 900, type: 'sword', value: 5, desc: '+90 زیان' },
+  { id: 'hp1', name: 'دڵی بەهێز', icon: '❤️', cost: 80, type: 'hp', value: 30, desc: '+30 ژیان' },
+  { id: 'hp2', name: 'دڵی پڕ', icon: '💖', cost: 150, type: 'hpMax', value: 50, desc: '+50 ژیانی سەرەکی' },
+  { id: 'heal', name: 'دەرمان', icon: '🧪', cost: 40, type: 'heal', value: 50, desc: '+50 ژیان' }
+];
+
+function openShop() {
+  if (gameState !== 'playing') return;
+  gameState = 'shop';
+  shopScreen.classList.remove('hidden');
+  renderShop();
+}
+
+function closeShop() {
+  gameState = 'playing';
+  shopScreen.classList.add('hidden');
+  lastTime = performance.now();
+  requestAnimationFrame(gameLoop);
+}
+
+function renderShop() {
+  shopGold.textContent = player.gold || 0;
+  shopGrid.innerHTML = '';
+  
+  SHOP_ITEMS.forEach(item => {
+    let disabled = false;
+    let owned = false;
+    
+    if (item.type === 'sword') {
+      if (currentSword >= item.value) owned = true;
+      if (currentSword !== item.value - 1) disabled = true;
+    }
+    
+    if (player.gold < item.cost) disabled = true;
+    if (item.type === 'hp' && player.hp >= player.maxHp) disabled = true;
+    
+    const div = document.createElement('div');
+    div.className = 'shop-item' + (disabled ? ' disabled' : '');
+    div.innerHTML = `
+      <div class="icon">${item.icon}</div>
+      <div class="name">${item.name}</div>
+      <div class="desc">${item.desc}</div>
+      <div class="price">💰 ${item.cost}</div>
+    `;
+    
+    if (!disabled && !owned) {
+      div.onclick = () => buyItem(item);
+    } else if (owned) {
+      div.style.borderColor = '#4ecca3';
+      div.querySelector('.name').style.color = '#4ecca3';
+    }
+    
+    shopGrid.appendChild(div);
+  });
+}
+
+function buyItem(item) {
+  if (player.gold < item.cost) return;
+  
+  player.gold -= item.cost;
+  
+  if (item.type === 'sword') {
+    currentSword = item.value;
+    showToast('⚔️ شمشێر گۆڕدرا بۆ ' + item.name);
+    playSound(880, 0.2, 'sine', 0.15);
+    setTimeout(() => playSound(1100, 0.2, 'sine', 0.12), 100);
+  } else if (item.type === 'hp') {
+    player.hp = Math.min(player.maxHp, player.hp + item.value);
+    showToast('❤️ ژیان زیادکرا');
+    playSound(660, 0.15, 'sine', 0.12);
+  } else if (item.type === 'hpMax') {
+    player.maxHp += item.value;
+    player.hp += item.value;
+    showToast('💖 ژیانی سەرەکی زیادکرا');
+    playSound(440, 0.2, 'sine', 0.15);
+    setTimeout(() => playSound(880, 0.2, 'sine', 0.12), 100);
+  } else if (item.type === 'heal') {
+    player.hp = Math.min(player.maxHp, player.hp + item.value);
+    showToast('🧪 دەرمان بەکارهات');
+    playSound(500, 0.15, 'sine', 0.12);
+  }
+  
+  updateHUD();
+  renderShop();
+}
+
+// ====== کۆنترۆل ======
+const keys = {};
+window.addEventListener('keydown', e => {
+  keys[e.key] = true;
+  if (e.key === ' ') { e.preventDefault(); attack(); }
+  if (e.key === 'ArrowUp' || e.key === 'w') jump();
+});
+window.addEventListener('keyup', e => keys[e.key] = false);
+
+function jump() {
+  if (player && player.onGround && gameState === 'playing') {
+    player.vy = -12;
+    player.onGround = false;
+    playSound(300, 0.1, 'sine', 0.08);
+  }
+}
+
+document.getElementById('btnLeft').addEventListener('pointerdown', () => keys['ArrowLeft'] = true);
+document.getElementById('btnLeft').addEventListener('pointerup', () => keys['ArrowLeft'] = false);
+document.getElementById('btnLeft').addEventListener('pointerleave', () => keys['ArrowLeft'] = false);
+
+document.getElementById('btnRight').addEventListener('pointerdown', () => keys['ArrowRight'] = true);
+document.getElementById('btnRight').addEventListener('pointerup', () => keys['ArrowRight'] = false);
+document.getElementById('btnRight').addEventListener('pointerleave', () => keys['ArrowRight'] = false);
+
+document.getElementById('btnAttack').addEventListener('click', attack);
+document.getElementById('btnShop').addEventListener('click', openShop);
+
+// ====== نوێکردنەوە ======
 function update(dt) {
   if (gameState !== 'playing') return;
   
   time += dt;
+  attackCooldown = Math.max(0, attackCooldown - dt);
+  attackAnim = Math.max(0, attackAnim - dt);
+  if (attackAnim <= 0) player.attacking = false;
   
-  const newWave = Math.floor(time / 30) + 1;
-  if (newWave > wave) {
-    wave = newWave;
-    enemySpawnRate = Math.max(30, 90 - wave * 5);
+  if (player.invuln > 0) player.invuln -= dt;
+  
+  // جووڵاندنی یاریزان
+  if (keys['ArrowLeft'] || keys['a']) { player.vx = -player.speed; player.facing = -1; }
+  else if (keys['ArrowRight'] || keys['d']) { player.vx = player.speed; player.facing = 1; }
+  else player.vx *= 0.7;
+  
+  player.x += player.vx;
+  player.x = Math.max(player.r, Math.min(W - player.r, player.x));
+  
+  // جووڵاندنی بەرز و نزم (بازدان)
+  player.y += player.vy;
+  player.vy += 0.6;
+  
+  const groundY = H * 0.75;
+  if (player.y >= groundY) {
+    player.y = groundY;
+    player.vy = 0;
+    player.onGround = true;
+  }
+  
+  // شەپۆلەکان
+  waveTimer += dt;
+  if (waveTimer >= waveInterval) {
+    waveTimer = 0;
+    waveNumber++;
+    spawnRate = Math.max(50, 120 - waveNumber * 8);
+    showWaveInfo('🌊 شەپۆلی ' + waveNumber);
     playSound(500, 0.3, 'sine', 0.1);
+    updateHUD();
   }
   
-  if (keys['ArrowLeft'] || keys['a']) player.targetX -= 8;
-  if (keys['ArrowRight'] || keys['d']) player.targetX += 8;
-  player.targetX = Math.max(player.r, Math.min(W - player.r, player.targetX));
-  player.x += (player.targetX - player.x) * 0.25;
-  
-  if (player.shield < player.maxShield) {
-    player.shield = Math.min(player.maxShield, player.shield + 0.4);
-  }
-  
+  // دروستکردنی دوژمن
   spawnTimer++;
-  if (spawnTimer >= enemySpawnRate) {
+  if (spawnTimer >= spawnRate) {
     spawnEnemy();
     spawnTimer = 0;
   }
   
+  // نوێکردنەوەی دوژمنەکان
   for (let i = enemies.length - 1; i >= 0; i--) {
     const e = enemies[i];
     e.x += e.vx;
-    e.y += e.vy;
-    e.angle += 0.03;
-    e.hitFlash = Math.max(0, e.hitFlash - 0.1);
+    e.bounce += 0.1;
+    e.hitFlash = Math.max(0, e.hitFlash - dt * 2);
     
-    if (e.x < e.r || e.x > W - e.r) e.vx *= -1;
+    // جووڵاندن بەرەو یاریزان
+    const dx = player.x - e.x;
+    const dy = player.y - e.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
     
-    const dx = e.x - player.x;
-    const dy = e.y - player.y;
-    if (Math.sqrt(dx*dx + dy*dy) < e.r + player.r) {
-      lives--;
-      livesEl.textContent = lives;
-      createParticles(e.x, e.y, '#ff0000', 20, 8);
-      enemies.splice(i, 1);
-      playSound(150, 0.3, 'sawtooth', 0.15);
-      
-      if (lives <= 0) {
-        gameOver();
-        return;
-      }
-      continue;
+    if (dist > 5) {
+      e.vx += (dx / dist) * 0.05;
+      e.vx = Math.max(-3, Math.min(3, e.vx));
     }
     
-    if (e.y > H + e.r) {
-      lives--;
-      livesEl.textContent = lives;
-      enemies.splice(i, 1);
-      playSound(100, 0.4, 'sawtooth', 0.15);
+    // پێکدادان لەگەڵ یاریزان
+    if (dist < e.r + player.r && player.invuln <= 0) {
+      player.hp -= e.dmg;
+      player.invuln = 1;
+      createParticles(player.x, player.y, '#ff0000', 15);
+      playSound(150, 0.25, 'sawtooth', 0.15);
+      e.vx = (dx > 0 ? -1 : 1) * 5;
       
-      if (lives <= 0) {
+      updateHUD();
+      
+      if (player.hp <= 0) {
         gameOver();
         return;
       }
+    }
+    
+    // دوژمنەکان لە دەرەوەی شاشە لەناو بچن
+    if (e.x < -100 || e.x > W + 100) {
+      enemies.splice(i, 1);
     }
   }
   
+  // نوێکردنەوەی تەنۆلکەکان
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
     p.x += p.vx;
     p.y += p.vy;
-    p.vx *= 0.96;
-    p.vy *= 0.96;
-    p.vy += 0.15;
+    p.vy += p.gravity;
+    p.vx *= 0.97;
     p.life -= p.decay;
     if (p.life <= 0) particles.splice(i, 1);
   }
   
-  for (const s of stars) {
-    s.y += s.speed;
-    if (s.y > H) { s.y = 0; s.x = Math.random() * W; }
-  }
+  // هەورەکان
+  clouds.forEach(c => {
+    c.x += c.speed;
+    if (c.x > W + 60) c.x = -60;
+  });
 }
 
+function gameOver() {
+  gameState = 'over';
+  endTitle.textContent = '💀 شکست هێنا!';
+  endMessage.textContent = 'دوژمنەکان زۆر بەهێز بوون... دووبارە هەوڵبدەوە!';
+  finalGold.textContent = player.gold || 0;
+  finalWave.textContent = waveNumber;
+  finalKills.textContent = kills;
+  endScreen.classList.remove('hidden');
+  playSound(200, 0.5, 'sawtooth', 0.15);
+}
+
+// ====== وێنەکێشان ======
 function draw() {
-  const grad = ctx.createRadialGradient(W/2, H, 50, W/2, H, H);
-  grad.addColorStop(0, '#16213e');
-  grad.addColorStop(1, '#0a0a1a');
-  ctx.fillStyle = grad;
+  // ئاسمان
+  const skyGrad = ctx.createLinearGradient(0, 0, 0, H * 0.7);
+  skyGrad.addColorStop(0, '#1a1a3e');
+  skyGrad.addColorStop(0.5, '#4a3a5c');
+  skyGrad.addColorStop(1, '#c97b63');
+  ctx.fillStyle = skyGrad;
   ctx.fillRect(0, 0, W, H);
   
-  for (const s of stars) {
-    ctx.globalAlpha = s.alpha;
+  // خۆر
+  ctx.fillStyle = '#ffb347';
+  ctx.shadowColor = '#ff6b00';
+  ctx.shadowBlur = 40;
+  ctx.beginPath();
+  ctx.arc(W * 0.8, H * 0.2, 40, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  
+  // هەورەکان
+  clouds.forEach(c => {
+    ctx.fillStyle = 'rgba(255, 200, 150, 0.4)';
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+    ctx.arc(c.x + c.size * 0.7, c.y - 5, c.size * 0.8, 0, Math.PI * 2);
+    ctx.arc(c.x - c.size * 0.7, c.y + 5, c.size * 0.7, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  
+  // چیاکان
+  mountains.forEach(m => {
+    ctx.fillStyle = m.color;
+    ctx.beginPath();
+    ctx.moveTo(m.x - m.width/2, m.baseY);
+    ctx.lineTo(m.x, m.baseY - m.height);
+    ctx.lineTo(m.x + m.width/2, m.baseY);
+    ctx.closePath();
+    ctx.fill();
+    
+    // بەفری لوتکە
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.beginPath();
+    ctx.moveTo(m.x - m.width*0.15, m.baseY - m.height*0.75);
+    ctx.lineTo(m.x, m.baseY - m.height);
+    ctx.lineTo(m.x + m.width*0.15, m.baseY - m.height*0.75);
+    ctx.closePath();
+    ctx.fill();
+  });
+  
+  // زەوی
+  const groundY = H * 0.75;
+  const groundGrad = ctx.createLinearGradient(0, groundY, 0, H);
+  groundGrad.addColorStop(0, '#4a5d23');
+  groundGrad.addColorStop(0.3, '#3d4a1c');
+  groundGrad.addColorStop(1, '#2d1b0e');
+  ctx.fillStyle = groundGrad;
+  ctx.fillRect(0, groundY, W, H - groundY);
+  
+  // چیمەن
+  ctx.fillStyle = '#6b8e23';
+  for (let i = 0; i < W; i += 15) {
+    const h = 3 + Math.sin(time + i) * 2;
+    ctx.fillRect(i, groundY - h, 2, h);
+  }
+  
+  // دارەکان
+  trees.forEach(t => {
+    t.sway += 0.02;
+    const swayX = Math.sin(t.sway) * 3;
+    
+    // قەد
+    ctx.fillStyle = '#3d2817';
+    ctx.fillRect(t.x - 3 + swayX, t.y - t.size, 6, t.size);
+    
+    // گەڵا
+    ctx.fillStyle = '#2d5a1e';
+    ctx.beginPath();
+    ctx.arc(t.x + swayX, t.y - t.size, t.size * 0.7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#3d7a2e';
+    ctx.beginPath();
+    ctx.arc(t.x + swayX - t.size * 0.3, t.y - t.size * 0.8, t.size * 0.5, 0, Math.PI * 2);
+    ctx.arc(t.x + swayX + t.size * 0.3, t.y - t.size * 0.9, t.size * 0.45, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  
+  if (gameState === 'menu' || !player) return;
+  
+  // دوژمنەکان
+  enemies.forEach(e => {
+    const bob = Math.sin(e.bounce) * 3;
+    
+    // سێبەر
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(e.x, groundY + 5, e.r * 0.9, e.r * 0.3, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // جەستە
+    ctx.save();
+    ctx.translate(e.x, e.y + bob);
+    
+    if (e.hitFlash > 0) {
+      ctx.shadowColor = '#fff';
+      ctx.shadowBlur = 20;
+    }
+    
+    ctx.fillStyle = e.hitFlash > 0 ? '#fff' : e.color;
+    ctx.beginPath();
+    ctx.arc(0, 0, e.r, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    ctx.shadowBlur = 0;
+    
+    // ئایکۆن
+    ctx.font = (e.r * 1.3) + 'px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(e.icon, 0, 0);
+    
+    ctx.restore();
+    
+    // پێوەری ژیان
+    const hpPct = e.hp / e.maxHp;
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(e.x - e.r, e.y - e.r - 12, e.r * 2, 5);
+    ctx.fillStyle = hpPct > 0.5 ? '#4ecca3' : hpPct > 0.25 ? '#f5c518' : '#e94560';
+    ctx.fillRect(e.x - e.r, e.y - e.r - 12, e.r * 2 * hpPct, 5);
+  });
+  
+  // یاریزان
+  if (player) {
+    const bob = player.onGround ? Math.sin(time * 8) * 1.5 : 0;
+    
+    // سێبەر
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(player.x, groundY + 5, player.r * 0.9, player.r * 0.3, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.save();
+    ctx.translate(player.x, player.y + bob);
+    
+    if (player.invuln > 0 && Math.floor(time * 10) % 2 === 0) {
+      ctx.globalAlpha = 0.5;
+    }
+    
+    // جەستە
+    const bodyGrad = ctx.createRadialGradient(-6, -6, 2, 0, 0, player.r);
+    bodyGrad.addColorStop(0, '#e0e0e0');
+    bodyGrad.addColorStop(0.4, '#3498db');
+    bodyGrad.addColorStop(1, '#1a5276');
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, player.r, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.strokeStyle = '#f5c518';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // چاو
     ctx.fillStyle = '#fff';
     ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.arc(player.facing * 5 - 4, -3, 4, 0, Math.PI * 2);
+    ctx.arc(player.facing * 5 + 6, -3, 4, 0, Math.PI * 2);
     ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-  
-  if (gameState === 'menu') return;
-  
-  for (const e of enemies) {
+    ctx.fillStyle = '#000';
+    ctx.beginPath();
+    ctx.arc(player.facing * 6 - 4, -3, 2, 0, Math.PI * 2);
+    ctx.arc(player.facing * 6 + 6, -3, 2, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // شمشێر
+    const sword = SWORDS[currentSword];
     ctx.save();
-    ctx.translate(e.x, e.y);
-    ctx.rotate(e.angle);
-    
-    ctx.shadowColor = e.color;
-    ctx.shadowBlur = 20;
-    ctx.fillStyle = e.hitFlash > 0 ? '#fff' : e.color;
-    
-    if (e.type === 'tank') {
-      ctx.fillRect(-e.r, -e.r, e.r*2, e.r*2);
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(-e.r, -e.r, e.r*2, e.r*2);
-    } else if (e.type === 'fast') {
-      ctx.beginPath();
-      ctx.moveTo(0, -e.r);
-      ctx.lineTo(-e.r, e.r);
-      ctx.lineTo(e.r, e.r);
-      ctx.closePath();
-      ctx.fill();
-    } else {
-      ctx.beginPath();
-      ctx.arc(0, 0, e.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
+    if (player.attacking) {
+      const angle = player.facing * (Math.PI * 0.7) * (1 - attackAnim / 0.4);
+      ctx.rotate(angle);
     }
+    ctx.translate(player.facing * player.r * 0.8, 0);
+    
+    // چەقۆ
+    ctx.fillStyle = '#8b6914';
+    ctx.fillRect(-3, -3, 8, 6);
+    
+    // تیغی شمشێر
+    const bladeGrad = ctx.createLinearGradient(0, 0, player.facing * 40, 0);
+    bladeGrad.addColorStop(0, sword.color);
+    bladeGrad.addColorStop(1, '#fff');
+    ctx.fillStyle = bladeGrad;
+    
+    if (sword.fire) {
+      ctx.shadowColor = '#ff6b00';
+      ctx.shadowBlur = 15;
+    }
+    
+    ctx.beginPath();
+    ctx.moveTo(5, -3);
+    ctx.lineTo(player.facing * 45, -1);
+    ctx.lineTo(player.facing * 45, 1);
+    ctx.lineTo(5, 3);
+    ctx.closePath();
+    ctx.fill();
     
     ctx.shadowBlur = 0;
     ctx.restore();
     
-    if (e.maxHp > 1) {
-      ctx.fillStyle = 'rgba(0,0,0,0.5)';
-      ctx.fillRect(e.x - e.r, e.y - e.r - 8, e.r*2, 4);
-      ctx.fillStyle = '#4ecca3';
-      ctx.fillRect(e.x - e.r, e.y - e.r - 8, e.r*2 * (e.hp/e.maxHp), 4);
-    }
+    ctx.globalAlpha = 1;
+    ctx.restore();
   }
   
-  for (const p of particles) {
+  // تەنۆلکەکان
+  particles.forEach(p => {
     ctx.globalAlpha = p.life;
     ctx.fillStyle = p.color;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
     ctx.fill();
-  }
+  });
   ctx.globalAlpha = 1;
-  
-  if (player) {
-    const shieldPct = player.shield / player.maxShield;
-    if (player.shield >= 30) {
-      ctx.strokeStyle = `rgba(0, 180, 216, ${0.3 + shieldPct * 0.5})`;
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.arc(player.x, player.y, player.r + 15, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-    
-    const pg = ctx.createRadialGradient(player.x - 6, player.y - 6, 2, player.x, player.y, player.r);
-    pg.addColorStop(0, '#fff');
-    pg.addColorStop(0.3, '#00b4d8');
-    pg.addColorStop(1, '#0f3460');
-    ctx.fillStyle = pg;
-    ctx.shadowColor = '#00b4d8';
-    ctx.shadowBlur = 25;
-    ctx.beginPath();
-    ctx.arc(player.x, player.y, player.r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    
-    if (player.shield >= 30) {
-      ctx.fillStyle = '#00b4d8';
-      ctx.font = 'bold 14px Tahoma';
-      ctx.textAlign = 'center';
-      ctx.fillText('⚡', player.x, player.y + 5);
-    }
-  }
 }
 
+// ====== لوپی یاری ======
 function gameLoop(now) {
+  if (gameState !== 'playing') return;
+  
   const dt = Math.min((now - lastTime) / 1000, 0.1);
   lastTime = now;
   
   update(dt);
   draw();
   
-  if (gameState === 'playing' || gameState === 'paused') {
-    requestAnimationFrame(gameLoop);
-  }
+  requestAnimationFrame(gameLoop);
 }
 
-function gameOver() {
-  gameState = 'over';
-  if (score > best) {
-    best = score;
-    localStorage.setItem('cityDefenderBest', best);
-    bestEl.textContent = best;
-  }
-  finalScoreEl.textContent = score;
-  endMessage.textContent = score >= 300 ? '🏆 نایاب! تۆ شارەزایەکی ڕاستەقینەیت!' :
-                          score >= 150 ? '👍 زۆر باشە! بەردەوام بە!' :
-                          '💪 باشە! دووبارە هەوڵبدەوە!';
-  endScreen.classList.remove('hidden');
-  playSound(200, 0.5, 'sawtooth', 0.15);
-  setTimeout(() => playSound(150, 0.5, 'sawtooth', 0.15), 200);
-}
-
-// دەستپێکردنی سەرەتا
-updateSize();
-initStars();
+// ====== دەستپێکردنی سەرەتا ======
+resizeCanvas();
+player = { x: W/2, y: H*0.75, r: 20, hp: 100, maxHp: 100, gold: 0, facing: 1 };
+generateEnvironment();
+time = 0;
 draw();
 
-window.addEventListener('resize', () => {
-  updateSize();
-  initStars();
-});
+// لۆپ بۆ شاشەی سەرەتا
+function menuLoop(now) {
+  if (gameState !== 'menu') return;
+  time = now / 1000;
+  clouds.forEach(c => { c.x += c.speed; if (c.x > W + 60) c.x = -60; });
+  draw();
+  requestAnimationFrame(menuLoop);
+}
+requestAnimationFrame(menuLoop);
 
-// دەستپێکردنی دەنگی لە یەکەم کلیک
 document.addEventListener('click', () => initAudio(), { once: true });
 </script>
 </body>
