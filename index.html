@@ -2,845 +2,1260 @@
 <html lang="ku" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سەرباز و شمشێر - دوورگەی شەڕ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1a2e">
+<title>⚔️ پاڵەوانی شمشێر</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: #1a1a2e;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    font-family: Tahoma, sans-serif;
-    color: #eee;
-    overflow: hidden;
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; }
+  html, body { width:100%; height:100%; overflow:hidden; font-family:'Segoe UI', Tahoma, sans-serif; background:#0a0a1a; color:#fff; }
+  
+  #game {
+    position:relative; width:100vw; height:100vh; overflow:hidden;
+    background: radial-gradient(circle at 50% 50%, #1e3a2f, #0a1a0f);
   }
-  #gameContainer {
-    position: relative;
-    width: 900px;
-    max-width: 100vw;
-    height: 600px;
-    max-height: 100vh;
-    background: #0f3460;
-    border: 3px solid #e94560;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 40px rgba(233, 69, 96, 0.4);
+  
+  canvas { display:block; width:100%; height:100%; cursor: crosshair; }
+  
+  /* HUD */
+  #hud {
+    position:absolute; top:10px; left:10px; right:10px;
+    display:flex; justify-content:space-between; align-items:flex-start;
+    pointer-events:none; z-index:10; flex-wrap:wrap; gap:8px;
   }
-  canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    cursor: crosshair;
-  }
-  #ui {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px #000;
-  }
-  .ui-panel {
+  
+  .hud-box {
     background: rgba(0,0,0,0.6);
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid #e94560;
-    font-size: 14px;
-  }
-  #message {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    padding: 10px 25px;
-    border-radius: 20px;
-    border: 1px solid #f5c518;
-    color: #f5c518;
-    font-weight: bold;
-    display: none;
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  #shop {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    display: flex;
-    gap: 8px;
-    pointer-events: auto;
-  }
-  .shop-btn {
-    background: #16213e;
-    color: #fff;
-    border: 2px solid #e94560;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,215,0,0.3);
+    border-radius: 12px;
     padding: 8px 14px;
+    font-size: 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+  
+  .hp-bar {
+    width: 140px; height: 16px;
+    background: rgba(0,0,0,0.5);
     border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.2);
+    margin-top: 4px;
+  }
+  
+  .hp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff3333, #ff6666);
+    transition: width 0.2s;
+    border-radius: 8px;
+  }
+  
+  /* پەنجەرەی کڕین */
+  #shop {
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%) scale(0);
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 3px solid #ffd700;
+    border-radius: 20px;
+    padding: 25px;
+    min-width: 320px;
+    z-index: 100;
+    box-shadow: 0 0 50px rgba(255,215,0,0.4);
+    transition: transform 0.3s;
+  }
+  
+  #shop.open { transform: translate(-50%,-50%) scale(1); }
+  
+  #shop h2 {
+    text-align:center; color:#ffd700; margin-bottom:15px;
+    font-size: 24px; text-shadow: 0 0 15px rgba(255,215,0,0.6);
+  }
+  
+  .shop-item {
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 12px; margin-bottom: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+  
+  .shop-item:hover { background: rgba(255,215,0,0.1); }
+  
+  .shop-item-info { display:flex; flex-direction:column; gap:4px; }
+  .shop-item-name { font-weight:bold; color:#fff; font-size:14px; }
+  .shop-item-desc { font-size:11px; color:#aaa; }
+  
+  .shop-item button {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
     cursor: pointer;
     font-size: 13px;
-    font-weight: bold;
-    transition: 0.2s;
+    transition: transform 0.15s;
   }
-  .shop-btn:hover { background: #e94560; }
-  .shop-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #555; }
-  .shop-btn:disabled:hover { background: #16213e; }
-  #restartBtn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #e94560;
-    color: #fff;
-    border: none;
-    padding: 15px 40px;
-    font-size: 20px;
-    font-weight: bold;
-    border-radius: 10px;
+  
+  .shop-item button:hover { transform: scale(1.05); }
+  .shop-item button:disabled {
+    background: #555; color: #888; cursor: not-allowed;
+  }
+  
+  .close-btn {
+    width: 100%; margin-top: 10px;
+    padding: 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; border-radius: 10px;
+    cursor: pointer; font-weight: bold; font-size: 14px;
+  }
+  
+  /* دوگمەکانی کۆنترۆل */
+  #controls {
+    position:absolute; bottom:15px; right:15px;
+    display:flex; gap:10px; z-index: 10;
+  }
+  
+  .ctrl-btn {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: rgba(255,215,0,0.15);
+    border: 2px solid rgba(255,215,0,0.5);
+    color:#ffd700;
+    font-size: 24px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: all 0.15s;
+    backdrop-filter: blur(10px);
+  }
+  
+  .ctrl-btn:hover { background: rgba(255,215,0,0.3); transform: scale(1.1); }
+  .ctrl-btn:active { transform: scale(0.95); }
+  
+  /* شاشەی دەستپێکردن */
+  #startScreen {
+    position:absolute; inset:0;
+    background: radial-gradient(circle, #1a1a2e, #000);
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    z-index: 200; padding: 30px; text-align:center;
+  }
+  
+  #startScreen h1 {
+    font-size: clamp(32px, 8vw, 64px);
+    color:#ffd700;
+    text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,100,0,0.5);
+    margin-bottom: 15px;
+    animation: glow 2s ease-in-out infinite;
+  }
+  
+  @keyframes glow {
+    0%,100% { text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,100,0,0.5); }
+    50% { text-shadow: 0 0 50px rgba(255,215,0,1), 0 0 100px rgba(255,100,0,0.8); }
+  }
+  
+  #startScreen p { color:#aaa; margin-bottom: 25px; font-size: 15px; line-height: 1.8; max-width: 500px; }
+  
+  #startScreen button {
+    padding: 16px 50px;
+    font-size: 20px; font-weight: bold;
+    color: #000;
+    background: linear-gradient(135deg, #ffd700, #ff9500);
+    border: none; border-radius: 40px;
     cursor: pointer;
-    display: none;
-    z-index: 10;
-    box-shadow: 0 0 30px rgba(233,69,96,0.8);
+    box-shadow: 0 6px 25px rgba(255,215,0,0.5);
+    transition: transform 0.2s;
+  }
+  
+  #startScreen button:hover { transform: scale(1.05); }
+  
+  /* ئاگاداری */
+  #toast {
+    position:absolute; top:50%; left:50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: rgba(0,0,0,0.9);
+    border: 2px solid #ffd700;
+    padding: 15px 30px;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffd700;
+    pointer-events: none;
+    z-index: 150;
+    transition: transform 0.3s;
+    text-align: center;
+  }
+  
+  #toast.show { transform: translate(-50%, -50%) scale(1); }
+  
+  /* شاشەی کۆتایی */
+  #gameOver {
+    position:absolute; inset:0;
+    background: rgba(0,0,0,0.9);
+    display:none; flex-direction:column; justify-content:center; align-items:center;
+    z-index: 200; padding: 30px; text-align:center;
+  }
+  
+  #gameOver.show { display:flex; }
+  
+  #gameOver h1 { font-size: 48px; color:#ff3333; margin-bottom: 20px; }
+  #gameOver p { font-size: 20px; color:#aaa; margin-bottom: 25px; }
+  
+  #gameOver button {
+    padding: 15px 40px; font-size: 18px;
+    background: linear-gradient(135deg, #ffd700, #ff9500);
+    color: #000; border: none; border-radius: 30px;
+    cursor: pointer; font-weight: bold;
+  }
+  
+  @media (max-width: 500px) {
+    .hud-box { font-size: 12px; padding: 6px 10px; }
+    .hp-bar { width: 90px; height: 12px; }
+    .ctrl-btn { width: 50px; height: 50px; font-size: 20px; }
   }
 </style>
 </head>
 <body>
-<div id="gameContainer">
-  <canvas id="gameCanvas"></canvas>
-  <div id="ui">
-    <div class="ui-panel">⚔️ ژیان: <span id="hpDisplay">100</span></div>
-    <div class="ui-panel">💰 پارە: <span id="goldDisplay">0</span></div>
-    <div class="ui-panel">🛡️ پاسەوان: <span id="guardDisplay">0</span></div>
-    <div class="ui-panel">🔥 هێز: <span id="powerDisplay">10</span></div>
+<div id="game">
+  <canvas id="canvas"></canvas>
+  
+  <div id="hud">
+    <div>
+      <div class="hud-box">❤️ <span id="hpText">100/100</span>
+        <div class="hp-bar"><div class="hp-fill" id="hpFill" style="width:100%"></div></div>
+      </div>
+      <div class="hud-box" style="margin-top:8px;">💰 <span id="goldText">0</span></div>
+    </div>
+    <div style="text-align:left;">
+      <div class="hud-box">⚔️ زیان: <span id="dmgText">10</span></div>
+      <div class="hud-box" style="margin-top:8px;">🛡️ پاسەوان: <span id="guardText">0</span></div>
+    </div>
   </div>
-  <div id="message"></div>
+  
+  <div id="controls">
+    <button class="ctrl-btn" id="shopBtn" title="فرۆشگا">🛒</button>
+  </div>
+  
   <div id="shop">
-    <button class="shop-btn" id="buyGuardBtn">🛡️ پاسەوان (50)</button>
-    <button class="shop-btn" id="buyPowerBtn">🔥 هێز +5 (80)</button>
-    <button class="shop-btn" id="buyFireSwordBtn">🔥 شمشێری ئاگرین (200)</button>
+    <h2>🏪 فرۆشگا</h2>
+    <div id="shopItems"></div>
+    <button class="close-btn" onclick="closeShop()">داخستن</button>
   </div>
-  <button id="restartBtn">🔄 دووبارە دەستپێکردن</button>
+  
+  <div id="toast"></div>
+  
+  <div id="startScreen">
+    <h1>⚔️ پاڵەوانی شمشێر</h1>
+    <p>
+      🖱️ کلیک لەسەر زەوی بۆ ڕۆیشتن<br>
+      ⚔️ کلیک لەسەر دوژمن بۆ هێرشکردن<br>
+      💰 دوژمنەکان بکوژە و پارە کۆبکەرەوە<br>
+      🛡️ پاسەوان بکڕە بۆ یارمەتیدان<br>
+      🔥 شمشێرەکەت بەرز بکەرەوە بۆ ئاگر
+    </p>
+    <button onclick="startGame()">▶️ دەستپێکردن</button>
+  </div>
+  
+  <div id="gameOver">
+    <h1>💀 تۆ کوژراویت!</h1>
+    <p>پارە کۆکراوە: <span id="finalGold">0</span> 💰</p>
+    <button onclick="restart()">🔄 دووبارە</button>
+  </div>
 </div>
 
 <script>
-const canvas = document.getElementById('gameCanvas');
+// ========== ڕێکخستن ==========
+const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-const container = document.getElementById('gameContainer');
+const hpText = document.getElementById('hpText');
+const hpFill = document.getElementById('hpFill');
+const goldText = document.getElementById('goldText');
+const dmgText = document.getElementById('dmgText');
+const guardText = document.getElementById('guardText');
+const toast = document.getElementById('toast');
+const shopEl = document.getElementById('shop');
+const shopItemsEl = document.getElementById('shopItems');
 
-// ====== گۆڕاوەکان ======
 let W, H;
-let player, enemies, guards, particles, floatingTexts;
-let gold, playerHP, maxHP, power, hasFireSword, gameOver, keys, mouseX, mouseY, lastSpawn, wave, lastTime;
-let cameraX = 0;
-let trees = [];
-let mountains = [];
-let stars = [];
-
-// ====== ڕێکخستنی قەبارە ======
 function resize() {
-  const rect = container.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = rect.height;
-  W = canvas.width;
-  H = canvas.height;
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
 }
 window.addEventListener('resize', resize);
 resize();
 
-// ====== دروستکردنی جیهان ======
+// ========== جیهان ==========
+const WORLD_SIZE = 2400;
+const camera = { x: 0, y: 0 };
+
+let player, enemies, guards, goldCoins, trees, rocks, bushes, water;
+let gameState = 'menu';
+let mouseX = 0, mouseY = 0;
+let keys = {};
+let particles = [];
+let damageNumbers = [];
+let lastAttackTime = 0;
+
+// ========== دروستکردنی جیهان ==========
 function generateWorld() {
   trees = [];
-  mountains = [];
-  stars = [];
-  
-  // ئەستێرەکان
-  for (let i = 0; i < 80; i++) {
-    stars.push({ x: Math.random() * 2000, y: Math.random() * H * 0.6, r: Math.random() * 1.5, a: Math.random() * 0.6 + 0.2 });
-  }
-  
-  // شاخەکان
-  for (let i = 0; i < 15; i++) {
-    mountains.push({
-      x: Math.random() * 2000 - 500,
-      baseY: H * 0.55 + Math.random() * 30,
-      w: 150 + Math.random() * 250,
-      h: 100 + Math.random() * 200
-    });
-  }
-  
-  // دارەکان
-  for (let i = 0; i < 40; i++) {
-    trees.push({
-      x: Math.random() * 2000,
-      y: H * 0.55 + Math.random() * (H * 0.35),
-      size: 20 + Math.random() * 30
-    });
-  }
-}
-generateWorld();
-
-// ====== دەستپێکردن ======
-function init() {
-  resize();
-  generateWorld();
-  player = {
-    x: 300, y: H * 0.7,
-    w: 30, h: 45,
-    speed: 3.5,
-    facing: 1,
-    attackCooldown: 0,
-    maxAttackCooldown: 20,
-    swingAngle: 0,
-    isSwinging: false
-  };
+  rocks = [];
+  bushes = [];
+  water = [];
   enemies = [];
   guards = [];
+  goldCoins = [];
   particles = [];
-  floatingTexts = [];
-  gold = 1000000000;
-  maxHP = 100;
-  playerHP = maxHP;
-  power = 10;
-  hasFireSword = false;
-  gameOver = false;
-  keys = {};
-  mouseX = 0; mouseY = 0;
-  lastSpawn = 0;
-  wave = 1;
-  lastTime = performance.now();
-  cameraX = 0;
+  damageNumbers = [];
   
-  document.getElementById('restartBtn').style.display = 'none';
-  updateUI();
+  // دارەکان
+  for (let i = 0; i < 120; i++) {
+    trees.push({
+      x: Math.random() * WORLD_SIZE,
+      y: Math.random() * WORLD_SIZE,
+      size: 30 + Math.random() * 25,
+      type: Math.floor(Math.random() * 2)
+    });
+  }
+  
+  // بەردەکان
+  for (let i = 0; i < 80; i++) {
+    rocks.push({
+      x: Math.random() * WORLD_SIZE,
+      y: Math.random() * WORLD_SIZE,
+      size: 15 + Math.random() * 20
+    });
+  }
+  
+  // دەوەنەکان
+  for (let i = 0; i < 60; i++) {
+    bushes.push({
+      x: Math.random() * WORLD_SIZE,
+      y: Math.random() * WORLD_SIZE,
+      size: 12 + Math.random() * 10
+    });
+  }
+  
+  // ئاوی دورگە
+  water.push({ x: 400, y: 400, r: 180 });
+  water.push({ x: 1900, y: 1800, r: 220 });
+  water.push({ x: 1700, y: 400, r: 140 });
+  
+  // دوژمنەکان
+  for (let i = 0; i < 25; i++) {
+    spawnEnemy();
+  }
+}
+
+function spawnEnemy(x, y) {
+  const types = [
+    { color: '#8b0000', hp: 30, dmg: 8, speed: 1.2, size: 22, gold: 15, name: 'دوژمن' },
+    { color: '#4a0e4e', hp: 50, dmg: 12, speed: 1.0, size: 26, gold: 25, name: 'جادووگەر' },
+    { color: '#2d5016', hp: 80, dmg: 18, speed: 0.9, size: 30, gold: 40, name: 'ئۆرک' }
+  ];
+  const type = types[Math.floor(Math.random() * types.length)];
+  
+  enemies.push({
+    x: x !== undefined ? x : Math.random() * WORLD_SIZE,
+    y: y !== undefined ? y : Math.random() * WORLD_SIZE,
+    maxHp: type.hp,
+    hp: type.hp,
+    dmg: type.dmg,
+    speed: type.speed,
+    size: type.size,
+    color: type.color,
+    gold: type.gold,
+    name: type.name,
+    attackCooldown: 0,
+    hitFlash: 0,
+    wanderAngle: Math.random() * Math.PI * 2,
+    wanderTimer: 0
+  });
+}
+
+// ========== یاریزان ==========
+function createPlayer() {
+  return {
+    x: WORLD_SIZE / 2,
+    y: WORLD_SIZE / 2,
+    targetX: WORLD_SIZE / 2,
+    targetY: WORLD_SIZE / 2,
+    size: 20,
+    speed: 4,
+    maxHp: 100,
+    hp: 100,
+    swordDmg: 10,
+    swordLevel: 1,
+    attackRange: 70,
+    attackCooldown: 0,
+    facing: 1,
+    moving: false,
+    attackAnim: 0,
+    gold: 0
+  };
+}
+
+// ========== دەستپێکردن ==========
+function startGame() {
+  player = createPlayer();
+  generateWorld();
+  gameState = 'playing';
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('gameOver').classList.remove('show');
+  updateHUD();
   requestAnimationFrame(gameLoop);
 }
 
-// ====== UI ======
-function updateUI() {
-  document.getElementById('hpDisplay').textContent = Math.max(0, Math.floor(playerHP));
-  document.getElementById('goldDisplay').textContent = gold;
-  document.getElementById('guardDisplay').textContent = guards.length;
-  document.getElementById('powerDisplay').textContent = power + (hasFireSword ? ' 🔥' : '');
+function restart() {
+  document.getElementById('gameOver').classList.remove('show');
+  startGame();
+}
+
+function updateHUD() {
+  hpText.textContent = Math.max(0, Math.floor(player.hp)) + '/' + player.maxHp;
+  hpFill.style.width = Math.max(0, (player.hp / player.maxHp) * 100) + '%';
+  goldText.textContent = player.gold;
+  dmgText.textContent = player.swordDmg;
+  guardText.textContent = guards.length;
+}
+
+// ========== کۆنترۆل ==========
+canvas.addEventListener('pointerdown', (e) => {
+  if (gameState !== 'playing') return;
   
-  document.getElementById('buyGuardBtn').disabled = gold < 50;
-  document.getElementById('buyPowerBtn').disabled = gold < 80;
-  document.getElementById('buyFireSwordBtn').disabled = gold < 200 || hasFireSword;
-}
-
-function showMessage(text, color = '#f5c518') {
-  const msg = document.getElementById('message');
-  msg.textContent = text;
-  msg.style.color = color;
-  msg.style.display = 'block';
-  clearTimeout(msg._timeout);
-  msg._timeout = setTimeout(() => { msg.style.display = 'none'; }, 2000);
-}
-
-// ====== کۆنترۆل ======
-window.addEventListener('keydown', e => {
-  keys[e.key.toLowerCase()] = true;
-  if (e.key === ' ') e.preventDefault();
-});
-window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
-
-canvas.addEventListener('mousemove', e => {
   const rect = canvas.getBoundingClientRect();
-  mouseX = e.clientX - rect.left + cameraX;
+  mouseX = e.clientX - rect.left;
+  mouseY = e.clientY - rect.top;
+  
+  const worldX = mouseX + camera.x;
+  const worldY = mouseY + camera.y;
+  
+  // پشکنینی کلیک لەسەر دوژمن
+  let clickedEnemy = null;
+  for (const enemy of enemies) {
+    const dx = enemy.x - worldX;
+    const dy = enemy.y - worldY;
+    if (Math.sqrt(dx*dx + dy*dy) < enemy.size + 15) {
+      clickedEnemy = enemy;
+      break;
+    }
+  }
+  
+  if (clickedEnemy) {
+    // هێرشکردن
+    tryAttack(clickedEnemy);
+  } else {
+    // ڕۆیشتن
+    player.targetX = worldX;
+    player.targetY = worldY;
+  }
+});
+
+canvas.addEventListener('pointermove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  mouseX = e.clientX - rect.left;
   mouseY = e.clientY - rect.top;
 });
 
-canvas.addEventListener('mousedown', e => {
-  if (gameOver) return;
-  if (e.button === 0) attack();
-});
+window.addEventListener('keydown', (e) => keys[e.key] = true);
+window.addEventListener('keyup', (e) => keys[e.key] = false);
 
-// ====== شەڕکردن ======
-function attack() {
-  if (player.attackCooldown > 0 || gameOver) return;
-  player.attackCooldown = player.maxAttackCooldown;
-  player.isSwinging = true;
-  player.swingAngle = 0;
+// ========== هێرشکردن ==========
+function tryAttack(target) {
+  if (player.attackCooldown > 0) return;
+  player.attackCooldown = 0.4;
+  player.attackAnim = 1;
   
-  // مەودای شمشێر
-  const range = hasFireSword ? 120 : 80;
-  const dmg = power * (hasFireSword ? 1.8 : 1);
+  const dx = target.x - player.x;
+  const dy = target.y - player.y;
+  const dist = Math.sqrt(dx*dx + dy*dy);
   
-  let hitSomething = false;
-  
-  // لێدانی دوژمنەکان
-  enemies.forEach(enemy => {
-    if (enemy.dead) return;
-    const dx = enemy.x - player.x;
-    const dy = enemy.y - (player.y - player.h / 2);
-    const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist < player.attackRange) {
+    // زیان
+    target.hp -= player.swordDmg;
+    target.hitFlash = 0.3;
     
-    // پشکنینی ئاراستە
-    const facingDir = player.facing;
-    if (dist < range && (dx * facingDir > -30)) {
-      enemy.hp -= dmg;
-      enemy.hitFlash = 10;
-      hitSomething = true;
-      
-      // ئیفێکتی ئاگر
-      if (hasFireSword) {
-        for (let i = 0; i < 8; i++) {
-          particles.push({
-            x: enemy.x, y: enemy.y - 20,
-            vx: (Math.random() - 0.5) * 4,
-            vy: -Math.random() * 4 - 1,
-            life: 1, decay: 0.03,
-            color: Math.random() > 0.5 ? '#ff6b00' : '#ffcc00',
-            size: 3 + Math.random() * 4
-          });
-        }
-      } else {
-        for (let i = 0; i < 5; i++) {
-          particles.push({
-            x: enemy.x, y: enemy.y - 20,
-            vx: (Math.random() - 0.5) * 4,
-            vy: -Math.random() * 3 - 1,
-            life: 1, decay: 0.04,
-            color: '#ff4444', size: 2 + Math.random() * 3
-          });
-        }
-      }
-      
-      floatingTexts.push({
-        x: enemy.x, y: enemy.y - 40,
-        text: '-' + Math.round(dmg),
-        color: hasFireSword ? '#ff6b00' : '#fff',
-        life: 1, vy: -1
-      });
-      
-      if (enemy.hp <= 0) {
-        enemy.dead = true;
-        gold += enemy.reward;
-        showMessage('💰 +' + enemy.reward + ' پارە!', '#4ecca3');
-      }
-    }
-  });
-  
-  // دەنگی لێدان (بێ دەنگ لەبەر سادەیی)
-  if (hitSomething) updateUI();
-}
-
-// ====== دروستکردنی دوژمن ======
-function spawnEnemy() {
-  const type = Math.random();
-  let enemy;
-  
-  if (type < 0.5) {
-    // سەربازی ئاسایی
-    enemy = {
-      x: W + cameraX + 100 + Math.random() * 200,
-      y: H * 0.65 + Math.random() * (H * 0.25),
-      w: 28, h: 40,
-      hp: 30 + wave * 10,
-      maxHp: 30 + wave * 10,
-      speed: 1 + Math.random() * 0.5,
-      dmg: 8 + wave * 2,
-      reward: 15 + wave * 3,
-      color: '#e94560',
-      hitFlash: 0,
-      dead: false,
-      attackCd: 0
-    };
-  } else if (type < 0.8) {
-    // سەربازی خێرا
-    enemy = {
-      x: W + cameraX + 100 + Math.random() * 200,
-      y: H * 0.65 + Math.random() * (H * 0.25),
-      w: 22, h: 32,
-      hp: 20 + wave * 5,
-      maxHp: 20 + wave * 5,
-      speed: 2.5 + Math.random() * 0.8,
-      dmg: 5 + wave,
-      reward: 20 + wave * 4,
-      color: '#f5c518',
-      hitFlash: 0,
-      dead: false,
-      attackCd: 0
-    };
-  } else {
-    // سەربازی گەورە (تانک)
-    enemy = {
-      x: W + cameraX + 100 + Math.random() * 200,
-      y: H * 0.65 + Math.random() * (H * 0.25),
-      w: 45, h: 55,
-      hp: 100 + wave * 25,
-      maxHp: 100 + wave * 25,
-      speed: 0.6 + Math.random() * 0.3,
-      dmg: 18 + wave * 3,
-      reward: 50 + wave * 8,
-      color: '#4ecca3',
-      hitFlash: 0,
-      dead: false,
-      attackCd: 0
-    };
-  }
-  
-  enemies.push(enemy);
-}
-
-// ====== نوێکردنەوە ======
-function update(dt) {
-  if (gameOver) return;
-  
-  // جووڵاندنی یاریزان
-  let moveX = 0;
-  if (keys['a'] || keys['arrowleft']) moveX -= 1;
-  if (keys['d'] || keys['arrowright']) moveX += 1;
-  
-  player.x += moveX * player.speed * dt * 60;
-  if (moveX !== 0) player.facing = moveX;
-  
-  // سنووری جووڵان
-  player.x = Math.max(50 + cameraX, Math.min(cameraX + W - 50, player.x));
-  
-  // کامێرا بەدوای یاریزاندا
-  const targetCamX = player.x - W * 0.35;
-  cameraX += (targetCamX - cameraX) * 0.08;
-  cameraX = Math.max(-100, cameraX);
-  
-  // کۆتایی هاتنی کاتی شمشێر
-  if (player.attackCooldown > 0) player.attackCooldown--;
-  if (player.isSwinging) {
-    player.swingAngle += 0.3;
-    if (player.swingAngle > Math.PI) {
-      player.isSwinging = false;
-      player.swingAngle = 0;
-    }
-  }
-  
-  // دروستکردنی دوژمن
-  lastSpawn++;
-  if (lastSpawn > Math.max(30, 90 - wave * 5) && enemies.length < 12) {
-    spawnEnemy();
-    lastSpawn = 0;
-    wave = Math.floor(enemies.length / 3) + 1;
-  }
-  
-  // نوێکردنەوەی دوژمنەکان
-  enemies.forEach(enemy => {
-    if (enemy.dead) return;
+    // ئیفێکتی شمشێر
+    createSlashEffect(player.x, player.y, target.x, target.y);
     
-    const dx = player.x - enemy.x;
-    const dy = (player.y - player.h / 2) - (enemy.y - enemy.h / 2);
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    
-    if (dist > 50) {
-      enemy.x += (dx / dist) * enemy.speed * dt * 60;
-      enemy.y += (dy / dist) * enemy.speed * dt * 60;
-    }
-    
-    // لێدانی یاریزان
-    if (dist < 55 && enemy.attackCd <= 0) {
-      enemy.attackCd = 60;
-      playerHP -= enemy.dmg;
-      
-      floatingTexts.push({
-        x: player.x, y: player.y - 60,
-        text: '-' + enemy.dmg,
-        color: '#ff4444',
-        life: 1, vy: -1
-      });
-      
-      for (let i = 0; i < 6; i++) {
-        particles.push({
-          x: player.x, y: player.y - 30,
-          vx: (Math.random() - 0.5) * 5,
-          vy: -Math.random() * 4,
-          life: 1, decay: 0.04,
-          color: '#ff0000', size: 2 + Math.random() * 3
-        });
-      }
-      
-      updateUI();
-    }
-    
-    if (enemy.attackCd > 0) enemy.attackCd--;
-    if (enemy.hitFlash > 0) enemy.hitFlash--;
-    
-    // مردنی یاریزان
-    if (playerHP <= 0) {
-      playerHP = 0;
-      gameOver = true;
-      document.getElementById('restartBtn').style.display = 'block';
-      showMessage('💀 تۆ شکستت هێنا!', '#e94560');
-      updateUI();
-    }
-  });
-  
-  // لابردنی دوژمنە مردووەکان
-  enemies = enemies.filter(e => !e.dead);
-  
-  // پاسەوانەکان بەدوای دوژمندا دەگەڕێن
-  guards.forEach(guard => {
-    const nearestEnemy = enemies.find(e => {
-      const d = Math.sqrt((e.x - guard.x) ** 2 + (e.y - guard.y) ** 2);
-      return d < 300;
+    // ژمارەی زیان
+    damageNumbers.push({
+      x: target.x,
+      y: target.y - 20,
+      value: player.swordDmg,
+      life: 1,
+      vy: -2
     });
     
-    if (nearestEnemy) {
-      const dx = nearestEnemy.x - guard.x;
-      const dy = nearestEnemy.y - guard.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      
-      if (dist > 40) {
-        guard.x += (dx / dist) * 2 * dt * 60;
-        guard.y += (dy / dist) * 2 * dt * 60;
+    // ئەگەر دوژمن کوژرا
+    if (target.hp <= 0) {
+      killEnemy(target);
+    }
+  }
+}
+
+function createSlashEffect(x1, y1, x2, y2) {
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  for (let i = 0; i < 8; i++) {
+    const a = angle + (Math.random() - 0.5) * 1.5;
+    const speed = 3 + Math.random() * 3;
+    particles.push({
+      x: x1 + Math.cos(angle) * 20,
+      y: y1 + Math.sin(angle) * 20,
+      vx: Math.cos(a) * speed,
+      vy: Math.sin(a) * speed,
+      life: 1,
+      decay: 0.05,
+      color: player.swordLevel >= 3 ? '#ff6600' : '#ffd700',
+      size: 3 + Math.random() * 3
+    });
+  }
+}
+
+function killEnemy(enemy) {
+  const idx = enemies.indexOf(enemy);
+  if (idx > -1) enemies.splice(idx, 1);
+  
+  // دروستکردنی پارە
+  goldCoins.push({
+    x: enemy.x,
+    y: enemy.y,
+    value: enemy.gold,
+    life: 15,
+    bob: Math.random() * Math.PI * 2
+  });
+  
+  // ئیفێکتی تەقینەوە
+  for (let i = 0; i < 15; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const s = 2 + Math.random() * 5;
+    particles.push({
+      x: enemy.x,
+      y: enemy.y,
+      vx: Math.cos(a) * s,
+      vy: Math.sin(a) * s,
+      life: 1,
+      decay: 0.03,
+      color: enemy.color,
+      size: 2 + Math.random() * 4
+    });
+  }
+  
+  // دوژمنێکی نوێ لە شوێنێکی دوور دروست بکە
+  setTimeout(() => {
+    if (gameState === 'playing') {
+      spawnEnemy();
+    }
+  }, 2000);
+}
+
+// ========== نوێکردنەوە ==========
+function update(dt) {
+  if (gameState !== 'playing') return;
+  
+  // جووڵەی یاریزان
+  const dx = player.targetX - player.x;
+  const dy = player.targetY - player.y;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  
+  if (dist > 5) {
+    player.x += (dx / dist) * player.speed;
+    player.y += (dy / dist) * player.speed;
+    player.moving = true;
+    player.facing = dx > 0 ? 1 : -1;
+  } else {
+    player.moving = false;
+  }
+  
+  // سنووری جیهان
+  player.x = Math.max(player.size, Math.min(WORLD_SIZE - player.size, player.x));
+  player.y = Math.max(player.size, Math.min(WORLD_SIZE - player.size, player.y));
+  
+  // شمشێر
+  if (player.attackCooldown > 0) player.attackCooldown -= dt;
+  if (player.attackAnim > 0) player.attackAnim -= dt * 3;
+  
+  // دوژمنەکان
+  for (const enemy of enemies) {
+    const ex = player.x - enemy.x;
+    const ey = player.y - enemy.y;
+    const eDist = Math.sqrt(ex*ex + ey*ey);
+    
+    if (eDist < 300) {
+      // بەدوای یاریزاندا بڕۆ
+      if (eDist > enemy.size + player.size) {
+        enemy.x += (ex / eDist) * enemy.speed;
+        enemy.y += (ey / eDist) * enemy.speed;
       } else {
-        // پاسەوان لێدەدات
-        if (guard.attackCd <= 0) {
-          guard.attackCd = 40;
-          nearestEnemy.hp -= 15;
-          nearestEnemy.hitFlash = 5;
+        // هێرشکردن
+        if (enemy.attackCooldown <= 0) {
+          player.hp -= enemy.dmg;
+          enemy.attackCooldown = 1;
+          enemy.hitFlash = 0.2;
+          updateHUD();
           
-          for (let i = 0; i < 4; i++) {
-            particles.push({
-              x: nearestEnemy.x, y: nearestEnemy.y - 20,
-              vx: (Math.random() - 0.5) * 3,
-              vy: -Math.random() * 3,
-              life: 1, decay: 0.05,
-              color: '#00b4d8', size: 2 + Math.random() * 2
-            });
-          }
+          // ژمارەی زیان
+          damageNumbers.push({
+            x: player.x,
+            y: player.y - 20,
+            value: enemy.dmg,
+            life: 1,
+            vy: -2,
+            color: '#ff3333'
+          });
           
-          if (nearestEnemy.hp <= 0) {
-            nearestEnemy.dead = true;
-            gold += nearestEnemy.reward;
+          if (player.hp <= 0) {
+            gameOver();
           }
         }
       }
     } else {
-      // شوێنکەوتنی یاریزان
-      const dx = player.x - 60 - guard.x;
-      const dy = (player.y - 30) - guard.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist > 30) {
-        guard.x += (dx / dist) * 2 * dt * 60;
-        guard.y += (dy / dist) * 2 * dt * 60;
+      // گەڕان
+      enemy.wanderTimer -= dt;
+      if (enemy.wanderTimer <= 0) {
+        enemy.wanderAngle = Math.random() * Math.PI * 2;
+        enemy.wanderTimer = 2 + Math.random() * 3;
+      }
+      enemy.x += Math.cos(enemy.wanderAngle) * enemy.speed * 0.3;
+      enemy.y += Math.sin(enemy.wanderAngle) * enemy.speed * 0.3;
+    }
+    
+    if (enemy.attackCooldown > 0) enemy.attackCooldown -= dt;
+    if (enemy.hitFlash > 0) enemy.hitFlash -= dt;
+    
+    enemy.x = Math.max(enemy.size, Math.min(WORLD_SIZE - enemy.size, enemy.x));
+    enemy.y = Math.max(enemy.size, Math.min(WORLD_SIZE - enemy.size, enemy.y));
+  }
+  
+  // پاسەوانەکان
+  for (const guard of guards) {
+    // دۆزینەوەی نزیکترین دوژمن
+    let nearest = null;
+    let nearestDist = 400;
+    for (const enemy of enemies) {
+      const d = Math.sqrt((enemy.x-guard.x)**2 + (enemy.y-guard.y)**2);
+      if (d < nearestDist) {
+        nearestDist = d;
+        nearest = enemy;
       }
     }
     
-    if (guard.attackCd > 0) guard.attackCd--;
-  });
+    if (nearest) {
+      const gdx = nearest.x - guard.x;
+      const gdy = nearest.y - guard.y;
+      const gd = Math.sqrt(gdx*gdx + gdy*gdy);
+      
+      if (gd > nearest.size + guard.size) {
+        guard.x += (gdx / gd) * guard.speed;
+        guard.y += (gdy / gd) * guard.speed;
+      } else if (guard.attackCooldown <= 0) {
+        nearest.hp -= guard.dmg;
+        nearest.hitFlash = 0.3;
+        guard.attackCooldown = 0.8;
+        
+        damageNumbers.push({
+          x: nearest.x,
+          y: nearest.y - 20,
+          value: guard.dmg,
+          life: 1,
+          vy: -2,
+          color: '#00ff88'
+        });
+        
+        if (nearest.hp <= 0) killEnemy(nearest);
+      }
+    } else {
+      // شوێن یاریزان بکەوە
+      const pdx = player.x - guard.x;
+      const pdy = player.y - guard.y;
+      const pd = Math.sqrt(pdx*pdx + pdy*pdy);
+      
+      if (pd > 80) {
+        guard.x += (pdx / pd) * guard.speed;
+        guard.y += (pdy / pd) * guard.speed;
+      }
+    }
+    
+    if (guard.attackCooldown > 0) guard.attackCooldown -= dt;
+  }
+  
+  // پارەکان
+  for (let i = goldCoins.length - 1; i >= 0; i--) {
+    const c = goldCoins[i];
+    c.life -= dt;
+    c.bob += dt * 5;
+    
+    const cdx = player.x - c.x;
+    const cdy = player.y - c.y;
+    const cd = Math.sqrt(cdx*cdx + cdy*cdy);
+    
+    if (cd < 40) {
+      // کۆکردنەوە
+      player.gold += c.value;
+      goldCoins.splice(i, 1);
+      updateHUD();
+      showToast('+' + c.value + ' 💰');
+      
+      // ئیفێکت
+      for (let j = 0; j < 8; j++) {
+        const a = Math.random() * Math.PI * 2;
+        particles.push({
+          x: c.x,
+          y: c.y,
+          vx: Math.cos(a) * 3,
+          vy: Math.sin(a) * 3 - 2,
+          life: 1,
+          decay: 0.05,
+          color: '#ffd700',
+          size: 3
+        });
+      }
+    } else if (c.life <= 0) {
+      goldCoins.splice(i, 1);
+    }
+  }
   
   // تەنۆلکەکان
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
     p.x += p.vx;
     p.y += p.vy;
-    p.vy += 0.1;
+    p.vx *= 0.95;
+    p.vy *= 0.95;
     p.life -= p.decay;
     if (p.life <= 0) particles.splice(i, 1);
   }
   
-  // دەقەکان
-  for (let i = floatingTexts.length - 1; i >= 0; i--) {
-    const t = floatingTexts[i];
-    t.y += t.vy;
-    t.life -= 0.02;
-    if (t.life <= 0) floatingTexts.splice(i, 1);
+  // ژمارەکانی زیان
+  for (let i = damageNumbers.length - 1; i >= 0; i--) {
+    const d = damageNumbers[i];
+    d.y += d.vy;
+    d.life -= dt * 1.5;
+    if (d.life <= 0) damageNumbers.splice(i, 1);
   }
   
-  updateUI();
+  // کامێرا
+  camera.x = player.x - W / 2;
+  camera.y = player.y - H / 2;
+  camera.x = Math.max(0, Math.min(WORLD_SIZE - W, camera.x));
+  camera.y = Math.max(0, Math.min(WORLD_SIZE - H, camera.y));
 }
 
-// ====== وێنەکێشان ======
+function showToast(text) {
+  toast.textContent = text;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 800);
+}
+
+function gameOver() {
+  gameState = 'over';
+  document.getElementById('finalGold').textContent = player.gold;
+  document.getElementById('gameOver').classList.add('show');
+}
+
+// ========== وێنەکێشان ==========
 function draw() {
-  // ئاسمان
-  const skyGrad = ctx.createLinearGradient(0, 0, 0, H * 0.7);
-  skyGrad.addColorStop(0, '#0a0a1a');
-  skyGrad.addColorStop(0.6, '#16213e');
-  skyGrad.addColorStop(1, '#1a1a3e');
-  ctx.fillStyle = skyGrad;
+  // پاشبنەما - چیمەن
+  ctx.fillStyle = '#2d4a1f';
   ctx.fillRect(0, 0, W, H);
   
-  // ئەستێرەکان
-  stars.forEach(s => {
-    ctx.globalAlpha = s.a;
-    ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.arc(s.x - cameraX * 0.1, s.y, s.r, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  ctx.globalAlpha = 1;
+  // نەخشەی چیمەن
+  ctx.save();
+  ctx.translate(-camera.x, -camera.y);
   
-  // مانگ
-  ctx.fillStyle = '#f5f5dc';
-  ctx.shadowColor = '#f5f5dc';
-  ctx.shadowBlur = 30;
-  ctx.beginPath();
-  ctx.arc(W * 0.8 - cameraX * 0.05, H * 0.15, 35, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.shadowBlur = 0;
+  // خاڵەکانی چیمەن
+  const gridSize = 80;
+  const startX = Math.floor(camera.x / gridSize) * gridSize;
+  const startY = Math.floor(camera.y / gridSize) * gridSize;
   
-  // شاخەکان
-  mountains.forEach(m => {
-    ctx.fillStyle = '#1a1a3e';
+  for (let x = startX; x < camera.x + W + gridSize; x += gridSize) {
+    for (let y = startY; y < camera.y + H + gridSize; y += gridSize) {
+      const shade = ((Math.floor(x/gridSize) + Math.floor(y/gridSize)) % 2) === 0;
+      ctx.fillStyle = shade ? '#2d4a1f' : '#324f22';
+      ctx.fillRect(x, y, gridSize, gridSize);
+    }
+  }
+  
+  // ئاوەکان
+  for (const w of water) {
+    const grad = ctx.createRadialGradient(w.x, w.y, w.r * 0.3, w.x, w.y, w.r);
+    grad.addColorStop(0, '#4a90b8');
+    grad.addColorStop(0.7, '#2a6090');
+    grad.addColorStop(1, '#1a4060');
+    ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.moveTo(m.x - cameraX * 0.3, m.baseY);
-    ctx.lineTo(m.x - cameraX * 0.3 + m.w / 2, m.baseY - m.h);
-    ctx.lineTo(m.x - cameraX * 0.3 + m.w, m.baseY);
-    ctx.closePath();
+    ctx.arc(w.x, w.y, w.r, 0, Math.PI * 2);
     ctx.fill();
     
-    // لوتکەی بەفر
-    ctx.fillStyle = '#2a2a4e';
-    ctx.beginPath();
-    ctx.moveTo(m.x - cameraX * 0.3 + m.w * 0.3, m.baseY - m.h * 0.6);
-    ctx.lineTo(m.x - cameraX * 0.3 + m.w / 2, m.baseY - m.h);
-    ctx.lineTo(m.x - cameraX * 0.3 + m.w * 0.7, m.baseY - m.h * 0.6);
-    ctx.closePath();
-    ctx.fill();
-  });
+    // شەپۆل
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 2;
+    const t = Date.now() / 1000;
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.arc(w.x, w.y, w.r * 0.5 + i * 20 + Math.sin(t + i) * 5, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
   
-  // زەوی
-  const groundY = H * 0.7;
-  const groundGrad = ctx.createLinearGradient(0, groundY, 0, H);
-  groundGrad.addColorStop(0, '#1e3a2e');
-  groundGrad.addColorStop(1, '#0f1f18');
-  ctx.fillStyle = groundGrad;
-  ctx.fillRect(0, groundY, W, H - groundY);
+  // دەوەنەکان
+  for (const b of bushes) {
+    if (!isVisible(b.x, b.y, 50)) continue;
+    ctx.fillStyle = '#1e3a0f';
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#3d6b1f';
+    ctx.beginPath();
+    ctx.arc(b.x - b.size*0.2, b.y - b.size*0.2, b.size*0.7, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  
+  // بەردەکان
+  for (const r of rocks) {
+    if (!isVisible(r.x, r.y, 50)) continue;
+    ctx.fillStyle = '#555';
+    ctx.beginPath();
+    ctx.ellipse(r.x, r.y, r.size, r.size * 0.8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#777';
+    ctx.beginPath();
+    ctx.ellipse(r.x - r.size*0.2, r.y - r.size*0.2, r.size*0.6, r.size*0.5, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
   
   // دارەکان
-  trees.forEach(t => {
-    const tx = t.x - cameraX * 0.7;
-    if (tx < -100 || tx > W + 100) return;
+  for (const t of trees) {
+    if (!isVisible(t.x, t.y, 100)) continue;
+    
+    // سێبەر
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(t.x, t.y + t.size*0.7, t.size*0.9, t.size*0.4, 0, 0, Math.PI * 2);
+    ctx.fill();
     
     // قەد
-    ctx.fillStyle = '#3d2b1f';
-    ctx.fillRect(tx - 4, t.y - t.size, 8, t.size);
+    ctx.fillStyle = '#4a2810';
+    ctx.fillRect(t.x - 5, t.y, 10, t.size);
     
     // گەڵا
-    ctx.fillStyle = '#1a4a2e';
-    ctx.beginPath();
-    ctx.arc(tx, t.y - t.size - 10, t.size * 0.8, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#2a5a3e';
-    ctx.beginPath();
-    ctx.arc(tx - 8, t.y - t.size - 15, t.size * 0.6, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(tx + 10, t.y - t.size - 8, t.size * 0.5, 0, Math.PI * 2);
-    ctx.fill();
-  });
+    if (t.type === 0) {
+      ctx.fillStyle = '#2d5016';
+      ctx.beginPath();
+      ctx.arc(t.x, t.y - t.size*0.2, t.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#3d6b1f';
+      ctx.beginPath();
+      ctx.arc(t.x - t.size*0.3, t.y - t.size*0.5, t.size*0.7, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.fillStyle = '#1e3a0f';
+      ctx.beginPath();
+      ctx.moveTo(t.x, t.y - t.size);
+      ctx.lineTo(t.x - t.size*0.8, t.y - t.size*0.2);
+      ctx.lineTo(t.x + t.size*0.8, t.y - t.size*0.2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#2d5016';
+      ctx.beginPath();
+      ctx.moveTo(t.x, t.y - t.size*0.7);
+      ctx.lineTo(t.x - t.size*0.6, t.y);
+      ctx.lineTo(t.x + t.size*0.6, t.y);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
   
-  // پاسەوانەکان
-  guards.forEach(guard => {
-    const gx = guard.x - cameraX;
+  // پارەکان
+  for (const c of goldCoins) {
+    if (!isVisible(c.x, c.y, 50)) continue;
+    const bobY = Math.sin(c.bob) * 3;
+    ctx.save();
+    ctx.translate(c.x, c.y + bobY);
     
-    // جەستە
-    ctx.fillStyle = '#00b4d8';
-    ctx.fillRect(gx - 10, guard.y - 35, 20, 30);
+    // درەوشانەوە
+    ctx.shadowColor = '#ffd700';
+    ctx.shadowBlur = 15;
     
-    // سەر
-    ctx.fillStyle = '#00b4d8';
+    ctx.fillStyle = '#ffd700';
     ctx.beginPath();
-    ctx.arc(gx, guard.y - 45, 10, 0, Math.PI * 2);
+    ctx.arc(0, 0, 10, 0, Math.PI * 2);
     ctx.fill();
-    
-    // شمشێر
-    ctx.strokeStyle = '#ccc';
-    ctx.lineWidth = 3;
+    ctx.fillStyle = '#ffaa00';
     ctx.beginPath();
-    ctx.moveTo(gx + 12, guard.y - 30);
-    ctx.lineTo(gx + 25, guard.y - 55);
-    ctx.stroke();
-  });
+    ctx.arc(0, 0, 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#ffd700';
+    ctx.font = 'bold 12px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('$', 0, 1);
+    
+    ctx.restore();
+  }
   
   // دوژمنەکان
-  enemies.forEach(enemy => {
-    if (enemy.dead) return;
-    const ex = enemy.x - cameraX;
+  for (const e of enemies) {
+    if (!isVisible(e.x, e.y, 60)) continue;
+    
+    // سێبەر
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(e.x, e.y + e.size*0.8, e.size*0.8, e.size*0.3, 0, 0, Math.PI * 2);
+    ctx.fill();
     
     // جەستە
-    ctx.fillStyle = enemy.hitFlash > 0 ? '#fff' : enemy.color;
-    ctx.fillRect(ex - enemy.w / 2, enemy.y - enemy.h, enemy.w, enemy.h);
-    
-    // سەر
+    ctx.fillStyle = e.hitFlash > 0 ? '#fff' : e.color;
+    ctx.shadowColor = e.color;
+    ctx.shadowBlur = 15;
     ctx.beginPath();
-    ctx.arc(ex, enemy.y - enemy.h - 10, 12, 0, Math.PI * 2);
+    ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
     ctx.fill();
+    ctx.shadowBlur = 0;
+    
+    // چاوەکان
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(e.x - e.size*0.3, e.y - e.size*0.2, e.size*0.2, 0, Math.PI * 2);
+    ctx.arc(e.x + e.size*0.3, e.y - e.size*0.2, e.size*0.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#f00';
+    ctx.beginPath();
+    ctx.arc(e.x - e.size*0.3, e.y - e.size*0.2, e.size*0.1, 0, Math.PI * 2);
+    ctx.arc(e.x + e.size*0.3, e.y - e.size*0.2, e.size*0.1, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // شمشێری دوژمن
+    ctx.strokeStyle = '#666';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(e.x + e.size*0.6, e.y);
+    ctx.lineTo(e.x + e.size*1.2, e.y - e.size*0.6);
+    ctx.stroke();
+    
+    // HP bar
+    const hpPct = e.hp / e.maxHp;
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(e.x - e.size, e.y - e.size - 12, e.size*2, 5);
+    ctx.fillStyle = hpPct > 0.5 ? '#4ecca3' : hpPct > 0.25 ? '#f5c518' : '#e94560';
+    ctx.fillRect(e.x - e.size, e.y - e.size - 12, e.size*2*hpPct, 5);
+  }
+  
+  // پاسەوانەکان
+  for (const g of guards) {
+    if (!isVisible(g.x, g.y, 50)) continue;
+    
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(g.x, g.y + g.size*0.8, g.size*0.7, g.size*0.3, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // جەستە
+    ctx.fillStyle = '#4a90b8';
+    ctx.shadowColor = '#00b4d8';
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    ctx.arc(g.x, g.y, g.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
     
     // چاو
     ctx.fillStyle = '#fff';
     ctx.beginPath();
-    ctx.arc(ex - 4, enemy.y - enemy.h - 12, 3, 0, Math.PI * 2);
-    ctx.arc(ex + 4, enemy.y - enemy.h - 12, 3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#000';
-    ctx.beginPath();
-    ctx.arc(ex - 4, enemy.y - enemy.h - 12, 1.5, 0, Math.PI * 2);
-    ctx.arc(ex + 4, enemy.y - enemy.h - 12, 1.5, 0, Math.PI * 2);
+    ctx.arc(g.x - 4, g.y - 4, 3, 0, Math.PI * 2);
+    ctx.arc(g.x + 4, g.y - 4, 3, 0, Math.PI * 2);
     ctx.fill();
     
-    // شەمشێر
-    ctx.strokeStyle = '#888';
+    // شمشێر
+    ctx.strokeStyle = '#c0c0c0';
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.moveTo(ex + enemy.w / 2, enemy.y - enemy.h / 2);
-    ctx.lineTo(ex + enemy.w / 2 + 15, enemy.y - enemy.h / 2 - 15);
+    ctx.moveTo(g.x - g.size*0.8, g.y);
+    ctx.lineTo(g.x - g.size*1.4, g.y - g.size*0.6);
     ctx.stroke();
-    
-    // ژیان
-    const hpPct = enemy.hp / enemy.maxHp;
-    ctx.fillStyle = 'rgba(0,0,0,0.6)';
-    ctx.fillRect(ex - enemy.w / 2, enemy.y - enemy.h - 30, enemy.w, 5);
-    ctx.fillStyle = hpPct > 0.5 ? '#4ecca3' : hpPct > 0.25 ? '#f5c518' : '#e94560';
-    ctx.fillRect(ex - enemy.w / 2, enemy.y - enemy.h - 30, enemy.w * hpPct, 5);
-  });
-  
-  // یاریزان
-  const px = player.x - cameraX;
-  
-  // جەستە
-  ctx.fillStyle = '#00b4d8';
-  ctx.fillRect(px - 15, player.y - 45, 30, 40);
-  
-  // سەر
-  ctx.fillStyle = '#00b4d8';
-  ctx.beginPath();
-  ctx.arc(px, player.y - 58, 14, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // چاو
-  ctx.fillStyle = '#fff';
-  ctx.beginPath();
-  ctx.arc(px - 5 + player.facing * 3, player.y - 60, 4, 0, Math.PI * 2);
-  ctx.arc(px + 5 + player.facing * 3, player.y - 60, 4, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = '#000';
-  ctx.beginPath();
-  ctx.arc(px - 5 + player.facing * 4, player.y - 60, 2, 0, Math.PI * 2);
-  ctx.arc(px + 5 + player.facing * 4, player.y - 60, 2, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // شمشێر
-  ctx.save();
-  ctx.translate(px + player.facing * 18, player.y - 30);
-  
-  if (player.isSwinging) {
-    ctx.rotate(player.facing * (player.swingAngle - Math.PI / 2));
-  } else {
-    ctx.rotate(player.facing * 0.5);
   }
   
-  // تیغی شمشێر
-  if (hasFireSword) {
-    // ئاگر
-    ctx.shadowColor = '#ff6b00';
-    ctx.shadowBlur = 25;
-    ctx.fillStyle = '#ff6b00';
-    ctx.fillRect(-3, -50, 6, 50);
-    ctx.fillStyle = '#ffcc00';
-    ctx.fillRect(-1, -45, 2, 40);
-    ctx.shadowBlur = 0;
+  // یاریزان
+  drawPlayer();
+  
+  // تەنۆلکەکان
+  for (const p of particles) {
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.shadowColor = p.color;
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+  
+  // ژمارەکانی زیان
+  for (const d of damageNumbers) {
+    ctx.globalAlpha = d.life;
+    ctx.fillStyle = d.color || '#ff6666';
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 3;
+    ctx.font = 'bold 20px Tahoma';
+    ctx.textAlign = 'center';
+    ctx.strokeText(d.value, d.x, d.y);
+    ctx.fillText(d.value, d.x, d.y);
+  }
+  ctx.globalAlpha = 1;
+  
+  // نیشانەی ماوس
+  if (gameState === 'playing') {
+    const wmx = mouseX + camera.x;
+    const wmy = mouseY + camera.y;
     
-    // تەنۆلکەی ئاگر
-    if (Math.random() < 0.5) {
-      particles.push({
-        x: player.x + player.facing * 18, y: player.y - 60,
-        vx: (Math.random() - 0.5) * 2,
-        vy: -Math.random() * 3 - 1,
-        life: 1, decay: 0.05,
-        color: Math.random() > 0.5 ? '#ff6b00' : '#ffcc00',
-        size: 2 + Math.random() * 3
-      });
+    let hoverEnemy = false;
+    for (const e of enemies) {
+      if (Math.sqrt((e.x-wmx)**2 + (e.y-wmy)**2) < e.size + 15) {
+        hoverEnemy = true;
+        break;
+      }
     }
-  } else {
-    ctx.fillStyle = '#ccc';
-    ctx.fillRect(-2, -45, 4, 45);
-    ctx.fillStyle = '#ddd';
-    ctx.fillRect(-1, -45, 2, 45);
+    
+    ctx.strokeStyle = hoverEnemy ? '#ff3333' : '#ffd700';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(wmx, wmy, 8, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(wmx - 12, wmy);
+    ctx.lineTo(wmx - 4, wmy);
+    ctx.moveTo(wmx + 4, wmy);
+    ctx.lineTo(wmx + 12, wmy);
+    ctx.moveTo(wmx, wmy - 12);
+    ctx.lineTo(wmx, wmy - 4);
+    ctx.moveTo(wmx, wmy + 4);
+    ctx.lineTo(wmx, wmy + 12);
+    ctx.stroke();
   }
   
   ctx.restore();
-  
-  // دەستی شمشێر
-  ctx.fillStyle = '#8B4513';
-  ctx.fillRect(px + player.facing * 15, player.y - 35, 6, 8);
-  
-  // تەنۆلکەکان
-  particles.forEach(p => {
-    ctx.globalAlpha = p.life;
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.arc(p.x - cameraX, p.y, p.size, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  ctx.globalAlpha = 1;
-  
-  // دەقەکان
-  floatingTexts.forEach(t => {
-    ctx.globalAlpha = t.life;
-    ctx.fillStyle = t.color;
-    ctx.font = 'bold 16px Tahoma';
-    ctx.textAlign = 'center';
-    ctx.fillText(t.text, t.x - cameraX, t.y);
-  });
-  ctx.globalAlpha = 1;
-  
-  // ڕێنمایی
-  ctx.fillStyle = 'rgba(255,255,255,0.15)';
-  ctx.font = '14px Tahoma';
-  ctx.textAlign = 'center';
-  ctx.fillText('A/D یان فلێچکەکان: جووڵان | کلیکی چەپ: شمشێر | دوگمەکان: کڕین', W / 2, H - 15);
 }
 
-// ====== لوپ ======
+function drawPlayer() {
+  const p = player;
+  
+  // سێبەر
+  ctx.fillStyle = 'rgba(0,0,0,0.4)';
+  ctx.beginPath();
+  ctx.ellipse(p.x, p.y + p.size*0.8, p.size*0.8, p.size*0.3, 0, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // جەستەی یاریزان
+  const grad = ctx.createRadialGradient(p.x - 5, p.y - 5, 2, p.x, p.y, p.size);
+  grad.addColorStop(0, '#ffffff');
+  grad.addColorStop(0.3, '#4a90b8');
+  grad.addColorStop(1, '#1a4060');
+  ctx.fillStyle = grad;
+  ctx.shadowColor = '#00b4d8';
+  ctx.shadowBlur = 20;
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  
+  // شمشێر
+  const swordAngle = p.attackAnim > 0 
+    ? Math.atan2(mouseY + camera.y - p.y, mouseX + camera.x - p.x) 
+    : (p.facing > 0 ? -0.3 : Math.PI + 0.3);
+  
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.rotate(swordAngle);
+  
+  // تیغی شمشێر
+  if (p.swordLevel >= 2) {
+    // ئاگر
+    const time = Date.now() / 100;
+    ctx.shadowColor = p.swordLevel >= 3 ? '#ff4400' : '#ff8800';
+    ctx.shadowBlur = 25 + Math.sin(time) * 10;
+    ctx.fillStyle = p.swordLevel >= 3 ? '#ff4400' : '#ff8800';
+  } else {
+    ctx.shadowColor = '#c0c0c0';
+    ctx.shadowBlur = 10;
+    ctx.fillStyle = '#e0e0e0';
+  }
+  
+  // تیغ
+  ctx.beginPath();
+  ctx.moveTo(15, -3);
+  ctx.lineTo(p.attackRange * 0.7, -2);
+  ctx.lineTo(p.attackRange * 0.7 + 5, 0);
+  ctx.lineTo(p.attackRange * 0.7, 2);
+  ctx.lineTo(15, 3);
+  ctx.closePath();
+  ctx.fill();
+  
+  // دەستگیر
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#8b4513';
+  ctx.fillRect(8, -5, 10, 10);
+  
+  // گۆچان
+  ctx.fillStyle = '#ffd700';
+  ctx.beginPath();
+  ctx.arc(8, 0, 5, 0, Math.PI * 2);
+  ctx.fill();
+  
+  ctx.restore();
+  
+  // چاوەکان
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.arc(p.x - 6, p.y - 5, 4, 0, Math.PI * 2);
+  ctx.arc(p.x + 6, p.y - 5, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#000';
+  ctx.beginPath();
+  ctx.arc(p.x - 6 + p.facing*2, p.y - 5, 2, 0, Math.PI * 2);
+  ctx.arc(p.x + 6 + p.facing*2, p.y - 5, 2, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function isVisible(x, y, margin) {
+  return x > camera.x - margin && x < camera.x + W + margin &&
+         y > camera.y - margin && y < camera.y + H + margin;
+}
+
+// ========== فرۆشگا ==========
+function openShop() {
+  if (gameState !== 'playing') return;
+  shopEl.classList.add('open');
+  renderShop();
+}
+
+function closeShop() {
+  shopEl.classList.remove('open');
+}
+
+document.getElementById('shopBtn').addEventListener('click', openShop);
+
+function renderShop() {
+  const items = [
+    {
+      id: 'guard',
+      name: '🛡️ پاسەوان',
+      desc: 'پاسەوانێک بۆ یارمەتیدان لە شەڕ',
+      price: 50,
+      canBuy: player.gold >= 50
+    },
+    {
+      id: 'sword1',
+      name: '🔥 شمشێری ئاگر (ئاستی ٢)',
+      desc: 'زیان +5، ئاگر لەسەر شمشێر',
+      price: 100,
+      canBuy: player.gold >= 100 && player.swordLevel < 2
+    },
+    {
+      id: 'sword2',
+      name: '⚡ شمشێری بروسکە (ئاستی ٣)',
+      desc: 'زیان +10، ئاگری توندتر',
+      price: 250,
+      canBuy: player.gold >= 250 && player.swordLevel < 3
+    },
+    {
+      id: 'hp',
+      name: '❤️ زیادکردنی ژیان',
+      desc: 'ژیانی تەواو (100)',
+      price: 30,
+      canBuy: player.gold >= 30 && player.hp < player.maxHp
+    },
+    {
+      id: 'maxhp',
+      name: '💪 زیادکردنی ژیانی زۆرترین',
+      desc: '+20 ژیانی زۆرترین',
+      price: 80,
+      canBuy: player.gold >= 80
+    }
+  ];
+  
+  shopItemsEl.innerHTML = '';
+  for (const item of items) {
+    const div = document.createElement('div');
+    div.className = 'shop-item';
+    div.innerHTML = `
+      <div class="shop-item-info">
+        <div class="shop-item-name">${item.name}</div>
+        <div class="shop-item-desc">${item.desc}</div>
+      </div>
+      <button ${item.canBuy ? '' : 'disabled'} onclick="buyItem('${item.id}', ${item.price})">
+        ${item.price} 💰
+      </button>
+    `;
+    shopItemsEl.appendChild(div);
+  }
+}
+
+function buyItem(id, price) {
+  if (player.gold < price) return;
+  
+  if (id === 'guard') {
+    player.gold -= price;
+    guards.push({
+      x: player.x + 40,
+      y: player.y + 40,
+      size: 16,
+      speed: 3,
+      dmg: 8,
+      attackCooldown: 0
+    });
+    showToast('پاسەوان زیادکرا! 🛡️');
+  } else if (id === 'sword1') {
+    if (player.swordLevel >= 2) return;
+    player.gold -= price;
+    player.swordLevel = 2;
+    player.swordDmg = 15;
+    showToast('شمشێری ئاگر! 🔥');
+  } else if (id === 'sword2') {
+    if (player.swordLevel >= 3) return;
+    player.gold -= price;
+    player.swordLevel = 3;
+    player.swordDmg = 25;
+    showToast('شمشێری بروسکە! ⚡');
+  } else if (id === 'hp') {
+    player.gold -= price;
+    player.hp = player.maxHp;
+    showToast('ژیان پڕکرایەوە! ❤️');
+  } else if (id === 'maxhp') {
+    player.gold -= price;
+    player.maxHp += 20;
+    player.hp += 20;
+    showToast('ژیانی زۆرترین! 💪');
+  }
+  
+  updateHUD();
+  renderShop();
+}
+
+// ========== لوپی یاری ==========
+let lastTime = performance.now();
+
 function gameLoop(now) {
-  const dt = Math.min((now - lastTime) / 1000, 0.05);
+  const dt = Math.min((now - lastTime) / 1000, 0.1);
   lastTime = now;
   
   update(dt);
   draw();
   
-  if (!gameOver) {
+  if (gameState === 'playing' || gameState === 'over') {
     requestAnimationFrame(gameLoop);
   }
 }
 
-// ====== کڕین ======
-document.getElementById('buyGuardBtn').addEventListener('click', () => {
-  if (gold < 50 || gameOver) return;
-  gold -= 50;
-  guards.push({
-    x: player.x - 60,
-    y: player.y - 10,
-    attackCd: 0
-  });
-  showMessage('🛡️ پاسەوانێک زیادکرا!', '#00b4d8');
-  updateUI();
+// دەستپێکردنی سەرەتا
+window.addEventListener('load', () => {
+  // شاشەی پێشوو
 });
-
-document.getElementById('buyPowerBtn').addEventListener('click', () => {
-  if (gold < 80 || gameOver) return;
-  gold -= 80;
-  power += 5;
-  showMessage('🔥 هێزت زیادکرا! (+5)', '#ff6b00');
-  updateUI();
-});
-
-document.getElementById('buyFireSwordBtn').addEventListener('click', () => {
-  if (gold < 200 || hasFireSword || gameOver) return;
-  gold -= 200;
-  hasFireSword = true;
-  showMessage('🔥 شمشێری ئاگرینت کڕی!', '#ff6b00');
-  updateUI();
-});
-
-document.getElementById('restartBtn').addEventListener('click', () => {
-  init();
-});
-
-// ====== دەستپێکردن ======
-init();
 </script>
 </body>
 </html>
