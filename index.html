@@ -2,20 +2,18 @@
 <html lang="ku" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0e27">
-<title>⚔️ شەری قەڵاکان v2.0</title>
+<title>⚔️ شەری قەڵاکان - Castle Wars</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+  * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
   
   html, body {
     width: 100%; height: 100%; overflow: hidden;
-    font-family: -apple-system, 'Segoe UI', Tahoma, sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
     background: #000;
-    position: fixed;
     touch-action: none;
   }
   
@@ -25,30 +23,29 @@
     touch-action: none;
   }
   
-  /* ============ HUD ============ */
+  /* HUD - سەرەوە */
   #hud {
     position: fixed; top: 0; left: 0; right: 0;
     padding: 8px 12px;
-    padding-top: max(8px, env(safe-area-inset-top));
     display: flex; justify-content: space-between; align-items: flex-start;
     background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 70%, transparent 100%);
     color: #fff; z-index: 10;
     pointer-events: none;
     font-weight: bold;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.9);
-    gap: 6px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+    gap: 8px;
   }
   
   .hud-side {
     display: flex; flex-direction: column; gap: 4px;
-    flex: 1; min-width: 0;
+    flex: 1; max-width: 280px;
   }
   
   .hud-side.right { align-items: flex-end; text-align: right; }
   
   .castle-label {
-    font-size: 12px; letter-spacing: 0.5px;
-    display: flex; align-items: center; gap: 4px;
+    font-size: 13px; letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 6px;
     white-space: nowrap;
   }
   
@@ -56,253 +53,279 @@
   .castle-label.red { color: #ff4d4d; }
   
   .hp-bar {
-    width: 100%; max-width: 130px; height: 12px;
+    width: 100%; max-width: 240px; height: 14px;
     background: rgba(0,0,0,0.7);
-    border: 1.5px solid rgba(255,255,255,0.3);
-    border-radius: 6px; overflow: hidden;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.9);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 8px; overflow: hidden;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
     position: relative;
   }
   
   .hp-fill {
     height: 100%; width: 100%;
     transition: width 0.3s ease;
-    border-radius: 4px;
+    border-radius: 6px;
   }
   
   .hp-fill.blue { background: linear-gradient(90deg, #1e5aa8, #4da3ff, #7dc4ff); }
   .hp-fill.red { background: linear-gradient(90deg, #ff7d7d, #ff4d4d, #a81e1e); }
   
   .hp-text {
-    position: absolute; inset: 0;
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     display: flex; align-items: center; justify-content: center;
     font-size: 9px; color: #fff; text-shadow: 0 1px 2px #000;
   }
   
   .stats {
-    font-size: 10px; opacity: 0.9;
-    display: flex; gap: 8px;
+    font-size: 11px; opacity: 0.95;
+    display: flex; gap: 8px; flex-wrap: wrap;
     background: rgba(0,0,0,0.5);
-    padding: 2px 6px; border-radius: 4px;
-    flex-wrap: wrap;
+    padding: 3px 8px; border-radius: 6px;
   }
   
-  .stats span { display: flex; align-items: center; gap: 2px; }
+  .stats span { display: flex; align-items: center; gap: 3px; }
   
-  /* Gold + Timer */
-  .center-hud {
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    flex: 0 0 auto;
+  /* ناوەند - زێڕ و کات */
+  #centerHud {
+    position: fixed; top: 8px; left: 50%; transform: translateX(-50%);
+    z-index: 12; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    pointer-events: none;
   }
   
   #goldDisplay {
-    font-size: 16px; color: #ffd700;
-    display: flex; align-items: center; gap: 4px;
-    text-shadow: 0 0 10px rgba(255,215,0,0.7);
-    background: rgba(0,0,0,0.5);
-    padding: 3px 12px; border-radius: 10px;
-    border: 1px solid rgba(255,215,0,0.3);
+    font-size: 20px; color: #ffd700;
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(0,0,0,0.7); padding: 4px 14px;
+    border-radius: 20px; border: 2px solid rgba(255,215,0,0.4);
+    text-shadow: 0 0 12px rgba(255,215,0,0.6);
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(255,215,0,0.3);
   }
   
   #timeDisplay {
-    font-size: 11px; color: #aac;
-    display: flex; align-items: center; gap: 3px;
-    background: rgba(0,0,0,0.5);
-    padding: 2px 10px; border-radius: 8px;
+    font-size: 12px; color: #aac;
+    background: rgba(0,0,0,0.6); padding: 2px 12px;
+    border-radius: 12px;
   }
   
-  .day-night-icon {
-    font-size: 14px;
-  }
-  
-  /* ============ Bottom Panel ============ */
+  /* تەبلیتی کۆنترۆڵی خوارەوە - وەک Stick War */
   #controlPanel {
     position: fixed; bottom: 0; left: 0; right: 0;
-    background: linear-gradient(0deg, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0.75) 85%, transparent 100%);
-    z-index: 10;
-    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    padding: 8px 8px 12px;
+    background: linear-gradient(0deg, rgba(10,14,40,0.98) 0%, rgba(20,30,60,0.95) 85%, transparent 100%);
+    z-index: 15;
+    border-top: 2px solid rgba(100,150,255,0.4);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
   }
   
-  #tabs {
-    display: flex; overflow-x: auto;
-    padding: 6px 8px 4px;
-    gap: 4px;
-    scrollbar-width: none;
+  #controlPanel::before {
+    content: '';
+    position: absolute; top: -2px; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, #4da3ff, #ff4d4d, #4da3ff, transparent);
+    animation: shimmer 3s linear infinite;
   }
-  #tabs::-webkit-scrollbar { display: none; }
+  
+  @keyframes shimmer {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+  }
+  
+  .panel-tabs {
+    display: flex; gap: 4px; margin-bottom: 8px;
+    justify-content: center;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 2px;
+  }
+  
+  .panel-tabs::-webkit-scrollbar { display: none; }
   
   .tab {
-    flex: 0 0 auto;
-    padding: 5px 12px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 14px;
-    color: #9ab;
+    padding: 6px 14px;
+    background: rgba(40,60,100,0.6);
+    border: 1px solid rgba(100,150,255,0.3);
+    border-radius: 16px;
+    color: #8ab;
     font-size: 11px; font-weight: bold;
     cursor: pointer; font-family: inherit;
-    display: flex; align-items: center; gap: 4px;
-    transition: all 0.15s;
     white-space: nowrap;
+    transition: all 0.2s;
   }
   
   .tab.active {
-    background: linear-gradient(180deg, #4da3ff, #1e5aa8);
-    border-color: #7dc4ff;
-    color: #fff;
-    box-shadow: 0 0 12px rgba(77,163,255,0.6);
+    background: linear-gradient(180deg, #4da3ff 0%, #1e5aa8 100%);
+    border-color: #7dc4ff; color: #fff;
+    box-shadow: 0 0 12px rgba(77,163,255,0.5);
   }
   
-  #buttonGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
-    gap: 4px;
-    padding: 4px 8px 6px;
-    max-height: 180px;
+  .tab-content {
+    display: none;
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+    gap: 6px;
+    max-height: 160px;
     overflow-y: auto;
-    scrollbar-width: none;
+    padding: 4px 4px 8px;
   }
-  #buttonGrid::-webkit-scrollbar { display: none; }
   
-  .btn {
-    padding: 6px 4px;
-    background: linear-gradient(180deg, #2a3a5a 0%, #1a2a4a 100%);
-    border: 1px solid rgba(100,150,255,0.35);
-    border-radius: 7px;
-    color: #cde;
+  .tab-content.active { display: grid; }
+  
+  .unit-btn {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 8px 4px;
+    background: linear-gradient(180deg, rgba(40,60,100,0.9) 0%, rgba(20,30,60,0.9) 100%);
+    border: 1px solid rgba(100,150,255,0.4);
+    border-radius: 8px; color: #cde;
     font-size: 10px; font-weight: bold;
     cursor: pointer; font-family: inherit;
-    display: flex; flex-direction: column; align-items: center; gap: 2px;
     transition: all 0.15s;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
     position: relative;
-    min-height: 52px;
+    min-height: 62px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
   }
   
-  .btn .icon { font-size: 18px; line-height: 1; }
-  .btn .name { font-size: 9px; text-align: center; line-height: 1.1; }
-  .btn .cost {
-    font-size: 9px; color: #ffd700;
-    background: rgba(0,0,0,0.5); padding: 0 4px; border-radius: 3px;
-  }
-  
-  .btn:active, .btn.active {
+  .unit-btn:active, .unit-btn.pressed {
     transform: scale(0.94);
-    background: linear-gradient(180deg, #4da3ff 0%, #1e5aa8 100%);
-    border-color: #7dc4ff;
+    background: linear-gradient(180deg, rgba(77,163,255,0.7) 0%, rgba(30,90,168,0.7) 100%);
   }
   
-  .btn.active { box-shadow: 0 0 16px rgba(77,163,255,0.8); }
-  
-  .btn:disabled { opacity: 0.35; }
-  
-  .btn-soldier { border-color: rgba(100,255,150,0.4); }
-  .btn-archer { border-color: rgba(255,200,100,0.4); }
-  .btn-cannon { border-color: rgba(255,100,100,0.4); }
-  .btn-sword {
-    border-color: rgba(255,120,50,0.6);
-    background: linear-gradient(180deg, #6a2a1a, #4a1a0a);
-  }
-  .btn-sword.active {
-    background: linear-gradient(180deg, #ff7d3a, #d04a1a);
-    border-color: #ffb07d;
-    box-shadow: 0 0 20px rgba(255,140,60,0.9);
+  .unit-btn.disabled {
+    opacity: 0.4; cursor: not-allowed;
+    filter: grayscale(0.7);
   }
   
-  .btn-wall { border-color: rgba(150,150,150,0.5); }
-  .btn-mine { border-color: rgba(255,100,200,0.5); }
-  .btn-trap { border-color: rgba(200,100,255,0.5); }
-  .btn-plane { border-color: rgba(100,200,255,0.5); }
-  .btn-heal { border-color: rgba(100,255,150,0.6); }
-  .btn-buff { border-color: rgba(255,220,100,0.6); }
+  .unit-btn .icon { font-size: 22px; line-height: 1; margin-bottom: 2px; }
+  .unit-btn .name { font-size: 9px; line-height: 1.1; text-align: center; }
+  .unit-btn .cost { font-size: 9px; color: #ffd700; margin-top: 2px; }
+  
+  .unit-btn.soldier { border-color: rgba(100,255,150,0.5); }
+  .unit-btn.archer { border-color: rgba(255,200,100,0.5); }
+  .unit-btn.cannon { border-color: rgba(255,100,100,0.5); }
+  .unit-btn.tank { border-color: rgba(150,150,200,0.5); }
+  .unit-btn.mage { border-color: rgba(180,100,255,0.5); }
+  .unit-btn.air { border-color: rgba(100,200,255,0.5); }
+  .unit-btn.heal { border-color: rgba(100,255,200,0.5); }
+  .unit-btn.wall { border-color: rgba(150,150,150,0.6); }
+  .unit-btn.mine { border-color: rgba(255,80,80,0.6); }
+  .unit-btn.upgrade { border-color: rgba(255,215,0,0.5); }
   
   .divider { display: none; }
   
-  /* ============ Crosshair ============ */
-  #crosshair {
-    position: fixed; pointer-events: none; z-index: 5;
-    width: 26px; height: 26px;
-    border: 2px solid rgba(255,140,60,0.8);
+  /* شمشێر - دوگمەی سەرەکی */
+  #swordBtn {
+    position: fixed; bottom: 180px; right: 12px;
+    width: 68px; height: 68px;
     border-radius: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-    box-shadow: 0 0 12px rgba(255,140,60,0.6);
+    background: radial-gradient(circle, #8a2a1a 0%, #4a1a0a 100%);
+    border: 3px solid rgba(255,120,50,0.7);
+    color: #fff; cursor: pointer;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 16;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,255,0.2);
+    transition: all 0.2s;
+    font-family: inherit;
   }
   
-  #crosshair::before, #crosshair::after {
-    content: ''; position: absolute; background: rgba(255,140,60,0.9);
-  }
-  #crosshair::before { left: 50%; top: -5px; width: 2px; height: 7px; transform: translateX(-50%); }
-  #crosshair::after { left: 50%; bottom: -5px; width: 2px; height: 7px; transform: translateX(-50%); }
+  #swordBtn .icon { font-size: 26px; }
+  #swordBtn .label { font-size: 8px; font-weight: bold; }
   
-  /* ============ Start Menu ============ */
+  #swordBtn.active {
+    background: radial-gradient(circle, #ff7d3a 0%, #d04a1a 100%);
+    border-color: #ffb07d;
+    box-shadow: 0 0 30px rgba(255,140,60,0.8), inset 0 2px 4px rgba(255,255,255,0.3);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  /* دوگمەی هێرش بۆ مۆبایل */
+  #attackBtn {
+    position: fixed; bottom: 180px; left: 12px;
+    width: 68px; height: 68px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #2a4a8a 0%, #1a2a5a 100%);
+    border: 3px solid rgba(100,150,255,0.7);
+    color: #fff; cursor: pointer;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 16;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,255,0.2);
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  
+  #attackBtn:active { transform: scale(0.92); }
+  #attackBtn .icon { font-size: 26px; }
+  #attackBtn .label { font-size: 8px; font-weight: bold; }
+  
+  /* مێنیوی سەرەتا */
   #startMenu {
     position: fixed; inset: 0;
-    background: radial-gradient(ellipse at center, rgba(20,30,60,0.95) 0%, rgba(5,10,25,0.98) 100%);
+    background: radial-gradient(ellipse at center, rgba(20,30,60,0.97) 0%, rgba(5,10,25,0.99) 100%);
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     z-index: 100; color: #fff;
     padding: 20px;
-    padding-top: max(20px, env(safe-area-inset-top));
-    padding-bottom: max(20px, env(safe-area-inset-bottom));
     overflow-y: auto;
-    backdrop-filter: blur(4px);
   }
   
   #startMenu h1 {
-    font-size: clamp(28px, 8vw, 48px); margin-bottom: 8px;
+    font-size: 40px; margin-bottom: 8px;
     background: linear-gradient(180deg, #ffd700 0%, #ff8c00 50%, #ff4d00 100%);
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 40px rgba(255,140,0,0.5);
     letter-spacing: 2px;
-    text-align: center;
     animation: glow 2s ease-in-out infinite alternate;
+    text-align: center;
   }
   
   @keyframes glow {
-    from { filter: drop-shadow(0 0 15px rgba(255,140,0,0.4)); }
-    to { filter: drop-shadow(0 0 30px rgba(255,200,0,0.9)); }
+    from { filter: drop-shadow(0 0 20px rgba(255,140,0,0.4)); }
+    to { filter: drop-shadow(0 0 40px rgba(255,200,0,0.9)); }
   }
   
   #startMenu .subtitle {
-    font-size: clamp(12px, 3.5vw, 16px); color: #aac;
-    margin-bottom: 24px; text-align: center;
-    max-width: 500px; line-height: 1.6;
+    font-size: 13px; color: #aac; margin-bottom: 24px;
+    text-align: center; line-height: 1.7; max-width: 500px;
   }
   
   #startMenu .btn-start {
-    padding: 16px 50px; font-size: clamp(16px, 4.5vw, 20px);
+    padding: 16px 50px; font-size: 18px;
     background: linear-gradient(180deg, #4da3ff 0%, #1e5aa8 100%);
     border: 2px solid #7dc4ff; border-radius: 12px;
     color: #fff; cursor: pointer; font-family: inherit; font-weight: bold;
-    letter-spacing: 1.5px;
-    box-shadow: 0 0 30px rgba(77,163,255,0.5), inset 0 2px 0 rgba(255,255,255,0.3);
-    transition: all 0.2s;
-    margin-bottom: 24px;
+    letter-spacing: 1px;
+    box-shadow: 0 0 40px rgba(77,163,255,0.5), inset 0 2px 0 rgba(255,255,255,0.3);
+    transition: all 0.3s;
+    margin-bottom: 20px;
   }
   
-  #startMenu .btn-start:active { transform: scale(0.96); }
+  #startMenu .btn-start:active { transform: scale(0.97); }
   
   .instructions {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 8px 12px; font-size: 11px; color: #8ab;
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    font-size: 12px; color: #8ab;
     max-width: 500px; width: 100%;
+    margin-top: 10px;
   }
   
   .instructions div {
-    display: flex; align-items: center; gap: 6px;
-    background: rgba(255,255,255,0.05); padding: 8px 10px; border-radius: 6px;
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px;
     border: 1px solid rgba(255,255,255,0.1);
-    font-size: 10px;
+    line-height: 1.5;
   }
   
   .key {
-    background: #2a3a5a; padding: 2px 7px; border-radius: 3px;
+    background: #2a3a5a; padding: 3px 10px; border-radius: 4px;
     border: 1px solid #4da3ff; color: #7dc4ff; font-weight: bold;
-    font-size: 10px; min-width: 24px; text-align: center;
+    font-size: 11px; min-width: 30px; text-align: center;
     flex-shrink: 0;
   }
   
-  /* ============ Game Over ============ */
+  /* ئەنجام */
   #gameOver {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.92);
@@ -310,92 +333,58 @@
     z-index: 200; color: #fff; padding: 20px;
   }
   
-  #gameOver h1 { font-size: clamp(32px, 9vw, 60px); margin-bottom: 16px; text-align: center; }
+  #gameOver h1 { font-size: 44px; margin-bottom: 16px; text-align: center; }
   #gameOver h1.win { color: #ffd700; text-shadow: 0 0 40px rgba(255,215,0,0.8); }
   #gameOver h1.lose { color: #ff4d4d; text-shadow: 0 0 40px rgba(255,77,77,0.8); }
   
   #gameOver .stats-final {
-    font-size: 13px; color: #aac; margin-bottom: 16px; text-align: center;
-    line-height: 1.8;
+    font-size: 14px; color: #aac; margin-bottom: 20px;
+    text-align: center; line-height: 1.8;
   }
   
   #gameOver button {
-    padding: 14px 40px; font-size: 15px; margin-top: 12px;
+    padding: 14px 44px; font-size: 16px;
     background: linear-gradient(180deg, #4da3ff 0%, #1e5aa8 100%);
     border: 2px solid #7dc4ff; border-radius: 10px;
     color: #fff; cursor: pointer; font-family: inherit; font-weight: bold;
   }
   
-  /* ============ Placement Mode Indicator ============ */
-  #placementIndicator {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.85);
-    border: 2px solid #ffd700;
-    border-radius: 12px;
-    padding: 12px 20px;
-    color: #ffd700; font-weight: bold;
-    font-size: 13px;
+  /* خاڵی یاریزان */
+  #crosshair {
+    position: fixed; pointer-events: none; z-index: 5;
+    width: 30px; height: 30px;
+    border: 2px solid rgba(255,140,60,0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
     display: none;
-    z-index: 30;
-    text-align: center;
-    pointer-events: none;
-    box-shadow: 0 0 30px rgba(255,215,0,0.5);
-    max-width: 80vw;
+    box-shadow: 0 0 15px rgba(255,140,60,0.6);
   }
   
-  #placementIndicator .hint { font-size: 10px; color: #aac; margin-top: 4px; font-weight: normal; }
-  
-  /* ============ Toast notifications ============ */
-  #toast {
-    position: fixed; top: 100px; left: 50%; transform: translateX(-50%);
-    background: rgba(0,0,0,0.9);
-    border: 1px solid #ffd700;
-    border-radius: 10px;
-    padding: 10px 20px;
-    color: #ffd700; font-weight: bold;
-    font-size: 12px;
-    z-index: 50;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(255,215,0,0.4);
+  #crosshair::before, #crosshair::after {
+    content: ''; position: absolute; background: rgba(255,140,60,0.9);
   }
+  #crosshair::before { left: 50%; top: -6px; width: 2px; height: 8px; transform: translateX(-50%); }
+  #crosshair::after { left: 50%; bottom: -6px; width: 2px; height: 8px; transform: translateX(-50%); }
   
-  #toast.show { opacity: 1; }
-  
-  /* ============ Mobile-friendly sizes ============ */
-  @media (max-width: 500px) {
-    #hud { padding: 6px 8px; padding-top: max(6px, env(safe-area-inset-top)); }
-    .castle-label { font-size: 10px; }
-    .hp-bar { height: 10px; }
-    .hp-text { font-size: 8px; }
-    .stats { font-size: 9px; gap: 5px; }
-    #goldDisplay { font-size: 13px; padding: 2px 8px; }
-    #timeDisplay { font-size: 9px; }
-    .btn .icon { font-size: 16px; }
-    .btn .name { font-size: 8px; }
-    #buttonGrid { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 3px; max-height: 150px; }
-  }
-  
-  @media (max-height: 600px) {
-    #buttonGrid { max-height: 130px; }
-    #tabs { padding: 4px 6px 2px; }
-  }
-  
-  /* Landscape hint for mobile */
-  #rotateHint {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.95);
+  /* ئاگاداری بۆ مۆبایل */
+  .mobile-hint {
     display: none;
-    flex-direction: column; justify-content: center; align-items: center;
-    z-index: 9999; color: #fff; text-align: center; padding: 20px;
+    font-size: 11px; color: #ffd700; margin-top: 4px;
+    text-align: center; opacity: 0.8;
   }
   
-  #rotateHint .icon { font-size: 60px; margin-bottom: 16px; animation: rotateAnim 2s infinite; }
-  @keyframes rotateAnim {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(90deg); }
+  @media (max-width: 768px) {
+    .mobile-hint { display: block; }
+    #attackBtn, #swordBtn { bottom: 210px; width: 60px; height: 60px; }
+    #attackBtn .icon, #swordBtn .icon { font-size: 22px; }
+    .unit-btn { min-height: 58px; }
+    .tab-content { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); max-height: 140px; }
+  }
+  
+  @media (min-width: 769px) {
+    #attackBtn { display: none; }
+    .panel-tabs { justify-content: flex-start; padding-right: 20px; }
+    .tab-content { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); max-height: 180px; }
   }
 </style>
 </head>
@@ -406,10 +395,10 @@
 <!-- HUD -->
 <div id="hud">
   <div class="hud-side">
-    <div class="castle-label blue">🛡️ قەڵای A</div>
+    <div class="castle-label blue">🛡️ قەڵای تۆ</div>
     <div class="hp-bar">
       <div class="hp-fill blue" id="hpBlue"></div>
-      <div class="hp-text" id="hpBlueText">1000/1000</div>
+      <div class="hp-text" id="hpBlueText">1000 / 1000</div>
     </div>
     <div class="stats">
       <span>⚔️<b id="blueSoldiers">0</b></span>
@@ -418,16 +407,13 @@
     </div>
   </div>
   
-  <div class="center-hud">
-    <div id="goldDisplay">💰 <span id="gold">500</span></div>
-    <div id="timeDisplay"><span class="day-night-icon" id="dayIcon">☀️</span> <span id="timeText">ڕۆژ</span></div>
-  </div>
+  <div id="centerHud" style="display:none"></div>
   
   <div class="hud-side right">
-    <div class="castle-label red">قەڵای B 🛡️</div>
+    <div class="castle-label red">قەڵای دوژمن 🛡️</div>
     <div class="hp-bar">
       <div class="hp-fill red" id="hpRed"></div>
-      <div class="hp-text" id="hpRedText">1000/1000</div>
+      <div class="hp-text" id="hpRedText">1000 / 1000</div>
     </div>
     <div class="stats">
       <span>⚔️<b id="redSoldiers">0</b></span>
@@ -437,209 +423,192 @@
   </div>
 </div>
 
-<!-- Placement indicator -->
-<div id="placementIndicator"></div>
-
-<!-- Toast -->
-<div id="toast"></div>
-
-<!-- Crosshair -->
-<div id="crosshair"></div>
-
-<!-- Control Panel -->
-<div id="controlPanel">
-  <div id="tabs">
-    <button class="tab active" data-tab="units">⚔️ یەکەکان</button>
-    <button class="tab" data-tab="defense">🛡️ بەرگری</button>
-    <button class="tab" data-tab="power">⚡ هێز</button>
-  </div>
-  <div id="buttonGrid"></div>
+<!-- زێڕ و کات -->
+<div id="centerHud" style="position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:12;display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none">
+  <div id="goldDisplay">💰 <span id="gold">500</span></div>
+  <div id="timeDisplay">⏱️ <span id="timeVal">00:00</span></div>
 </div>
 
-<!-- Start Menu -->
+<!-- دوگمەی شمشێر و هێرش -->
+<button id="swordBtn" title="شمشێری ئاگرین">
+  <div class="icon">🔥</div>
+  <div class="label">شمشێر</div>
+</button>
+
+<button id="attackBtn" title="هێرش">
+  <div class="icon">⚔️</div>
+  <div class="label">هێرش</div>
+</button>
+
+<!-- پانێڵی کۆنترۆڵ -->
+<div id="controlPanel">
+  <div class="panel-tabs">
+    <button class="tab active" data-tab="army">🛡️ سوپا</button>
+    <button class="tab" data-tab="magic">✨ سحر</button>
+    <button class="tab" data-tab="defense">🧱 بەرگری</button>
+    <button class="tab" data-tab="upgrade">⬆️ بەرزکردنەوە</button>
+  </div>
+  
+  <div class="tab-content active" id="tab-army">
+    <button class="unit-btn soldier" data-unit="soldier">
+      <div class="icon">⚔️</div>
+      <div class="name">سەرباز</div>
+      <div class="cost">💰 50</div>
+    </button>
+    <button class="unit-btn archer" data-unit="archer">
+      <div class="icon">🏹</div>
+      <div class="name">تیرهاوێژ</div>
+      <div class="cost">💰 80</div>
+    </button>
+    <button class="unit-btn tank" data-unit="tank">
+      <div class="icon">🛡️</div>
+      <div class="name">پارێزەر</div>
+      <div class="cost">💰 120</div>
+    </button>
+    <button class="unit-btn cannon" data-unit="cannon">
+      <div class="icon">💣</div>
+      <div class="name">تۆپهاوێژ</div>
+      <div class="cost">💰 150</div>
+    </button>
+    <button class="unit-btn air" data-unit="air">
+      <div class="icon">✈️</div>
+      <div class="name">فڕۆکە</div>
+      <div class="cost">💰 250</div>
+    </button>
+  </div>
+  
+  <div class="tab-content" id="tab-magic">
+    <button class="unit-btn mage" data-unit="mage">
+      <div class="icon">🧙</div>
+      <div class="name">جادووگەر</div>
+      <div class="cost">💰 180</div>
+    </button>
+    <button class="unit-btn heal" data-action="heal">
+      <div class="icon">💊</div>
+      <div class="name">چاککردن</div>
+      <div class="cost">💰 100</div>
+    </button>
+  </div>
+  
+  <div class="tab-content" id="tab-defense">
+    <button class="unit-btn wall" data-action="wall">
+      <div class="icon">🧱</div>
+      <div class="name">دیوار</div>
+      <div class="cost">💰 60</div>
+    </button>
+    <button class="unit-btn mine" data-action="mine">
+      <div class="icon">💥</div>
+      <div class="name">مین</div>
+      <div class="cost">💰 40</div>
+    </button>
+  </div>
+  
+  <div class="tab-content" id="tab-upgrade">
+    <button class="unit-btn upgrade" data-action="upgrade">
+      <div class="icon">⬆️</div>
+      <div class="name">قەڵا</div>
+      <div class="cost">💰 200</div>
+    </button>
+  </div>
+</div>
+
+<div id="crosshair"></div>
+
+<!-- مێنیوی سەرەتا -->
 <div id="startMenu">
   <h1>⚔️ شەری قەڵاکان ⚔️</h1>
   <p class="subtitle">
-    شەری مێژوویی! قەڵاکەت بپارێزە، دوژمن تێکبشکێنە، مین و دیوار دابنێ، فڕۆکەی جەنگی و دەرمانی سحراوی بەکاربهێنە!<br>
-    <b>v2.0</b> - مۆبایل و ئەپ ئامادە
+    سوپاکەت بنیات بنێ، قەڵاکەت بپارێزە، و قەڵای دوژمن تێکبشکێنە!<br>
+    دیوار و مین دابنێ، سەرباز و جادووگەر ڕابکێشە، و بە شمشێری ئاگرین شەڕ بکە.
   </p>
   <button class="btn-start" onclick="startGame()">🚀 دەستپێکردنی یاری</button>
   
   <div class="instructions">
-    <div><span class="key">👆</span> بە ماوس/پەنجە بجووڵێ</div>
-    <div><span class="key">⚔️</span> شمشێری ئاگرین</div>
-    <div><span class="key">1/2/3</span> یەکە زیادبکە</div>
-    <div><span class="key">🌙</span> شەو و ڕۆژ</div>
-    <div><span class="key">🧱</span> دیوار دابنێ</div>
-    <div><span class="key">💥</span> مین و تەڵە</div>
+    <div><span class="key">👆</span> تاچ/ماوس بۆ جووڵە و ئاراستەکردن</div>
+    <div><span class="key">⚔️</span> شمشێر بۆ هێرشکردن بە نزیک</div>
+    <div><span class="key">🛒</span> پانێڵی خوارەوە بۆ کڕینی یەکە</div>
+    <div class="mobile-hint">📱 لەسەر مۆبایل: تاچ بکە و ڕابکێشە بۆ جووڵە</div>
   </div>
 </div>
 
-<!-- Game Over -->
+<!-- ئەنجام -->
 <div id="gameOver">
   <h1 id="resultText"></h1>
   <div class="stats-final" id="finalStats"></div>
   <button onclick="location.reload()">🔄 یاری نوێ</button>
 </div>
 
-<!-- Rotate Hint -->
-<div id="rotateHint">
-  <div class="icon">📱</div>
-  <div style="font-size:18px; margin-bottom:10px;">تکایە مۆبایلەکەت بە ئاراستەی ئاسۆیی بکە</div>
-  <div style="font-size:13px; color:#aac;">بۆ ئەزموونی باشتر لە یاری</div>
-</div>
-
 <script>
 // ============================================================
-// ⚔️ شەری قەڵاکان v2.0 - Enhanced Engine
+// ⚔️ شەری قەڵاکان - Game Engine v2.0
 // ============================================================
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const crosshair = document.getElementById('crosshair');
-const placementIndicator = document.getElementById('placementIndicator');
-const toastEl = document.getElementById('toast');
 
 let W = canvas.width = window.innerWidth;
 let H = canvas.height = window.innerHeight;
-let DPR = Math.min(window.devicePixelRatio || 1, 2);
-let GROUND_Y = H * 0.78;
-let isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+let GROUND_Y = H * 0.68;
 
-function resizeCanvas() {
-  W = window.innerWidth;
-  H = window.innerHeight;
-  DPR = Math.min(window.devicePixelRatio || 1, 2);
-  canvas.width = W * DPR;
-  canvas.height = H * DPR;
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
-  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  GROUND_Y = H * 0.78;
+// Detect mobile
+const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || W < 768;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  GROUND_Y = H * 0.68;
   generateBackground();
-  recalcCastlePositions();
+  if (gameRunning) {
+    blueCastle.x = W * 0.08;
+    blueCastle.y = GROUND_Y - 180;
+    redCastle.x = W * 0.92;
+    redCastle.y = GROUND_Y - 180;
+  }
 }
-
-window.addEventListener('resize', resizeCanvas);
-window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 200));
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', () => setTimeout(resize, 200));
 
 // ============================================================
-// Game State
+// State
 // ============================================================
 let gameRunning = false;
 let lastTime = 0;
 let gameTime = 0;
-let gameDuration = 0;
+let dayNightCycle = 0; // 0-1, 0 = noon, 0.5 = midnight
 let mouse = { x: W/2, y: H/2 };
 let keys = {};
+let touchActive = false;
 
-let gold = 800;
-let dayPhase = 0; // 0 to 1, cycles
-let dayCycleDuration = 90; // seconds for full day+night
-
-let blueCastle = { x: 0, y: 0, hp: 1500, maxHp: 1500, level: 1 };
-let redCastle  = { x: 0, y: 0, hp: 1500, maxHp: 1500, level: 1 };
+let gold = 500;
+let blueCastle = { x: W*0.08, y: GROUND_Y - 180, hp: 1500, maxHp: 1500, level: 1, color: '#4da3ff' };
+let redCastle  = { x: W*0.92, y: GROUND_Y - 180, hp: 1500, maxHp: 1500, level: 1, color: '#ff4d4d' };
 
 let units = [];
 let projectiles = [];
 let particles = [];
 let floatingTexts = [];
 let bloodStains = [];
+let walls = [];
+let mines = [];
+let explosions = [];
+
 let trees = [];
+let grass = [];
 let clouds = [];
 let mountains = [];
 let stars = [];
-let birds = [];
 
-// Defenses & structures
-let walls = [];
-let mines = [];
-let traps = [];
-let structures = []; // towers, heal tents, etc
-
-// Player
 let swordActive = false;
-let player = {
-  x: 0, y: 0, vx: 0, vy: 0, facing: 1,
-  attackCooldown: 0, attackAnim: 0, hurtFlash: 0, walkPhase: 0,
-  hp: 200, maxHp: 200, regenTimer: 0
-};
+let player = { x: W/2, y: GROUND_Y - 40, vx: 0, vy: 0, facing: 1, attackCooldown: 0, attackAnim: 0, hurtFlash: 0, walkPhase: 0, hp: 500, maxHp: 500, invuln: 0 };
+let playerLightningTimer = 0;
 
-// Active placement mode
-let placementMode = null; // { type, cost, icon, name }
-
-// Plane
-let planes = [];
-
-// AI
-let redSpawnTimer = 3;
-const AI_UNIT_QUEUE = ['soldier', 'soldier', 'archer', 'soldier', 'cannon', 'archer', 'soldier', 'cannon', 'soldier', 'archer'];
-let aiQueueIdx = 0;
-let aiDifficulty = 1;
-let lastPlaneAttack = 0;
-
-// Battle stats
-let stats = { kills: 0, unitsSpawned: 0, goldEarned: 0, damageDealt: 0 };
-
-// ============================================================
-// Castle positioning (far apart)
-// ============================================================
-function recalcCastlePositions() {
-  blueCastle.x = Math.max(70, W * 0.08);
-  blueCastle.y = GROUND_Y - 180;
-  redCastle.x = Math.min(W - 70, W * 0.92);
-  redCastle.y = GROUND_Y - 180;
-  if (player.x === 0) {
-    player.x = W / 2;
-    player.y = GROUND_Y - 40;
-  }
-}
-recalcCastlePositions();
-
-// ============================================================
-// Background generation
-// ============================================================
-function generateBackground() {
-  stars = [];
-  for (let i = 0; i < 200; i++) {
-    stars.push({ x: Math.random()*W, y: Math.random()*GROUND_Y*0.7, r: Math.random()*1.5 + 0.3, tw: Math.random()*Math.PI*2 });
-  }
-  
-  clouds = [];
-  for (let i = 0; i < 10; i++) {
-    clouds.push({
-      x: Math.random()*W, y: 40 + Math.random()*180,
-      w: 100 + Math.random()*220, h: 30 + Math.random()*30,
-      speed: 3 + Math.random()*10, alpha: 0.08 + Math.random()*0.15
-    });
-  }
-  
-  mountains = [];
-  for (let layer = 0; layer < 3; layer++) {
-    for (let i = 0; i < 7; i++) {
-      mountains.push({
-        x: (i / 7) * W + Math.random()*150 - 75,
-        w: 250 + Math.random()*450,
-        h: 120 + Math.random()*220,
-        layer
-      });
-    }
-  }
-  
-  trees = [];
-  for (let i = 0; i < 18; i++) {
-    const x = Math.random() * W;
-    if (x > W*0.05 && x < W*0.15) continue;
-    if (x > W*0.85 && x < W*0.95) continue;
-    trees.push({ x, h: 50 + Math.random()*60, phase: Math.random()*Math.PI*2, type: Math.random() > 0.5 ? 'pine' : 'oak' });
-  }
-  
-  birds = [];
-  for (let i = 0; i < 8; i++) {
-    birds.push({ x: Math.random()*W, y: 80 + Math.random()*150, speed: 20 + Math.random()*30, phase: Math.random()*Math.PI*2, size: 5 + Math.random()*4 });
-  }
-}
-generateBackground();
+let redSpawnTimer = 0;
+let buildMode = null; // 'wall' | 'mine'
+let selectedAction = null;
+let totalKills = 0;
+let totalGoldEarned = 0;
+let gameStartTime = 0;
 
 // ============================================================
 // Audio
@@ -651,8 +620,7 @@ function initAudio() {
   }
   if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
 }
-
-function playSound(type, freq = 400, dur = 0.15, vol = 0.15) {
+function playSound(type, freq = 400, dur = 0.15, vol = 0.12) {
   if (!audioCtx) return;
   try {
     const osc = audioCtx.createOscillator();
@@ -666,274 +634,105 @@ function playSound(type, freq = 400, dur = 0.15, vol = 0.15) {
   } catch(e) {}
 }
 
-function playExplosion() {
-  if (!audioCtx) return;
-  try {
-    const bufferSize = audioCtx.sampleRate * 0.3;
-    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = (Math.random() * 2 - 1) * (1 - i/bufferSize);
-    }
-    const source = audioCtx.createBufferSource();
-    source.buffer = buffer;
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-    source.connect(gain); gain.connect(audioCtx.destination);
-    source.start();
-  } catch(e) {}
-}
-
 // ============================================================
-// UNIT DEFINITIONS
+// Background
 // ============================================================
-const UNIT_STATS = {
-  soldier: { hp: 100, dmg: 12, speed: 40, range: 50, attackRate: 1.1, color: '#7dc4ff', cost: 50, size: 22, icon: '⚔️', name: 'سەرباز' },
-  archer:  { hp: 70,  dmg: 8,  speed: 30, range: 340, attackRate: 1.6, color: '#ffd700', cost: 80, size: 20, projectile: 'arrow', icon: '🏹', name: 'تیرهاوێژ' },
-  cannon:  { hp: 150, dmg: 38, speed: 16, range: 300, attackRate: 3.2, color: '#ff7d7d', cost: 150, size: 28, projectile: 'cannonball', icon: '💣', name: 'تۆپهاوێژ' }
-};
-
-const DEFENSE_DEFS = {
-  wall:  { cost: 40, icon: '🧱', name: 'دیوار', desc: 'بلۆککردنی ڕێگا' },
-  mine:  { cost: 60, icon: '💥', name: 'مین', desc: 'تەقینەوە بۆ دوژمن' },
-  trap:  { cost: 50, icon: '🕸️', name: 'تەڵە', desc: 'دەستگیرکردنی دوژمن' }
-};
-
-const POWER_DEFS = {
-  sword:  { cost: 0, icon: '🔥', name: 'شمشێری ئاگرین', desc: 'چالاک/ناچالاک' },
-  plane:  { cost: 250, icon: '✈️', name: 'فڕۆکەی جەنگی', desc: 'بۆمباردمانی ئاسمانی' },
-  heal:   { cost: 150, icon: '💚', name: 'دەرمانی سحراوی', desc: 'چاککردنەوەی خێرا' },
-  buff:   { cost: 200, icon: '⚡', name: 'هێزی جەیش', desc: 'بەهێزکردنی یەکەکان' },
-  upgrade:{ cost: 300, icon: '⬆️', name: 'بەرزکردنەوەی قەڵا', desc: 'HP + سەربازی زیاتر' }
-};
-
-const UNIT_DEFS = {
-  soldier: UNIT_STATS.soldier,
-  archer: UNIT_STATS.archer,
-  cannon: UNIT_STATS.cannon
-};
-
-// ============================================================
-// UI - Tabs & Buttons
-// ============================================================
-let activeTab = 'units';
-
-function renderButtons() {
-  const grid = document.getElementById('buttonGrid');
-  grid.innerHTML = '';
-  
-  if (activeTab === 'units') {
-    for (const [key, def] of Object.entries(UNIT_DEFS)) {
-      const btn = document.createElement('button');
-      btn.className = `btn btn-${key}`;
-      btn.innerHTML = `<span class="icon">${def.icon}</span><span class="name">${def.name}</span><span class="cost">💰${def.cost}</span>`;
-      btn.onclick = () => trySpawn(key);
-      grid.appendChild(btn);
-    }
-  } else if (activeTab === 'defense') {
-    for (const [key, def] of Object.entries(DEFENSE_DEFS)) {
-      const btn = document.createElement('button');
-      btn.className = `btn btn-${key}`;
-      btn.innerHTML = `<span class="icon">${def.icon}</span><span class="name">${def.name}</span><span class="cost">💰${def.cost}</span>`;
-      btn.onclick = () => startPlacement(key);
-      grid.appendChild(btn);
-    }
-  } else if (activeTab === 'power') {
-    for (const [key, def] of Object.entries(POWER_DEFS)) {
-      const btn = document.createElement('button');
-      btn.className = `btn btn-${key}`;
-      if (key === 'sword' && swordActive) btn.classList.add('active');
-      btn.innerHTML = `<span class="icon">${def.icon}</span><span class="name">${def.name}</span><span class="cost">${def.cost > 0 ? '💰'+def.cost : 'بەخۆڕایی'}</span>`;
-      btn.onclick = () => activatePower(key);
-      grid.appendChild(btn);
-    }
-  }
-}
-
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    activeTab = tab.dataset.tab;
-    renderButtons();
-  });
-});
-
-function showToast(msg, duration = 1800) {
-  toastEl.textContent = msg;
-  toastEl.classList.add('show');
-  clearTimeout(toastEl._t);
-  toastEl._t = setTimeout(() => toastEl.classList.remove('show'), duration);
-}
-
-// ============================================================
-// Actions
-// ============================================================
-function trySpawn(type) {
-  if (!gameRunning) return;
-  initAudio();
-  const def = UNIT_STATS[type];
-  if (gold < def.cost) { playSound('square', 150, 0.2, 0.1); showToast('❌ زێڕی پێویست نییە'); return; }
-  gold -= def.cost;
-  spawnUnit('blue', type);
-  stats.unitsSpawned++;
-  playSound('sine', 600, 0.15, 0.1);
-}
-
-function startPlacement(type) {
-  if (!gameRunning) return;
-  initAudio();
-  const def = DEFENSE_DEFS[type];
-  if (gold < def.cost) { playSound('square', 150, 0.2, 0.1); showToast('❌ زێڕی پێویست نییە'); return; }
-  placementMode = { type, ...def };
-  showToast(`📍 ${def.icon} ${def.name} - کلیک بکە بۆ دانان`);
-  updatePlacementIndicator();
-  playSound('triangle', 700, 0.1, 0.1);
-}
-
-function updatePlacementIndicator() {
-  if (placementMode) {
-    placementIndicator.innerHTML = `${placementMode.icon} ${placementMode.name} - شوێنی دیاری بکە<div class="hint">کلیک بکە بۆ دانان • دووجار = پاشگەزبوون</div>`;
-    placementIndicator.style.display = 'block';
-  } else {
-    placementIndicator.style.display = 'none';
-  }
-}
-
-function cancelPlacement() {
-  placementMode = null;
-  updatePlacementIndicator();
-}
-
-function placeDefense(x, y) {
-  if (!placementMode) return;
-  if (gold < placementMode.cost) { showToast('❌ زێڕی پێویست نییە'); cancelPlacement(); return; }
-  
-  // Restrict placement to battlefield area (not on castles)
-  if (x < blueCastle.x + 100 || x > redCastle.x - 100) {
-    showToast('⚠️ لە ناوچەی شەر دابنێ');
-    return;
-  }
-  
-  gold -= placementMode.cost;
-  
-  if (placementMode.type === 'wall') {
-    walls.push({ x, y: GROUND_Y - 25, hp: 300, maxHp: 300, team: 'blue' });
-  } else if (placementMode.type === 'mine') {
-    mines.push({ x, y: GROUND_Y - 8, armed: true, radius: 40, dmg: 80, team: 'blue', blink: 0 });
-  } else if (placementMode.type === 'trap') {
-    traps.push({ x, y: GROUND_Y - 10, life: 30, radius: 50, team: 'blue' });
-  }
-  
-  spawnParticles(x, GROUND_Y - 20, 15, '#ffd700', 3, 0.6);
-  playSound('sine', 900, 0.2, 0.15);
-  cancelPlacement();
-}
-
-function activatePower(key) {
-  if (!gameRunning) return;
-  initAudio();
-  const def = POWER_DEFS[key];
-  
-  if (key === 'sword') {
-    toggleSword();
-    return;
-  }
-  
-  if (gold < def.cost) { showToast('❌ زێڕی پێویست نییە'); playSound('square', 150, 0.2, 0.1); return; }
-  gold -= def.cost;
-  
-  if (key === 'plane') {
-    // Launch plane from blue castle toward red
-    planes.push({
-      x: blueCastle.x, y: 80, vx: 180, targetX: redCastle.x,
-      bombs: 3, dropTimer: 0, active: true, team: 'blue'
+function generateBackground() {
+  stars = [];
+  for (let i = 0; i < 220; i++) {
+    stars.push({ 
+      x: Math.random()*W, 
+      y: Math.random()*GROUND_Y*0.65, 
+      r: Math.random()*1.6 + 0.3, 
+      tw: Math.random()*Math.PI*2,
+      brightness: 0.5 + Math.random()*0.5
     });
-    showToast('✈️ فڕۆکە بەرزبووەوە!');
-    playSound('sawtooth', 400, 0.4, 0.15);
-  } else if (key === 'heal') {
-    // Heal all blue units + player + castle
-    for (const u of units) if (u.team === 'blue') { u.hp = Math.min(u.maxHp, u.hp + 60); spawnParticles(u.x, u.y - 20, 8, '#7dff7d', 3); }
-    blueCastle.hp = Math.min(blueCastle.maxHp, blueCastle.hp + 200);
-    player.hp = Math.min(player.maxHp, player.hp + 80);
-    spawnParticles(blueCastle.x, blueCastle.y + 90, 25, '#7dff7d', 4, 0.8);
-    spawnFloatingText(blueCastle.x, blueCastle.y + 30, '+200 HP', '#7dff7d');
-    showToast('💚 دەرمانی سحراوی بەکارهات!');
-    playSound('sine', 800, 0.4, 0.15);
-  } else if (key === 'buff') {
-    // Damage buff to all blue units temporarily
-    for (const u of units) if (u.team === 'blue') { u.buffTimer = 8; u.dmg *= 1.8; }
-    showToast('⚡ هێزی جەیش بۆ ٨ چرکە!');
-    playSound('sawtooth', 600, 0.3, 0.15);
-  } else if (key === 'upgrade') {
-    blueCastle.level++;
-    blueCastle.maxHp += 400;
-    blueCastle.hp = Math.min(blueCastle.maxHp, blueCastle.hp + 400);
-    spawnFloatingText(blueCastle.x, blueCastle.y - 50, '⬆️ LEVEL ' + blueCastle.level, '#ffd700');
-    showToast(`⬆️ قەڵا بەرزکرایەوە بۆ ئاستی ${blueCastle.level}!`);
-    playSound('sine', 800, 0.4, 0.15);
+  }
+  
+  clouds = [];
+  for (let i = 0; i < 10; i++) {
+    clouds.push({
+      x: Math.random()*W, y: 40 + Math.random()*180,
+      w: 100 + Math.random()*220, h: 35 + Math.random()*35,
+      speed: 3 + Math.random()*10, alpha: 0.08 + Math.random()*0.15,
+      puffs: Math.floor(3 + Math.random()*3)
+    });
+  }
+  
+  mountains = [];
+  for (let i = 0; i < 8; i++) {
+    mountains.push({
+      x: (i / 8) * W * 1.3 - W * 0.15 + Math.random()*80 - 40,
+      w: 280 + Math.random()*400,
+      h: 140 + Math.random()*200,
+      layer: i % 3
+    });
+  }
+  
+  trees = [];
+  for (let i = 0; i < 14; i++) {
+    const x = Math.random() * W;
+    if (x > W*0.15 && x < W*0.85) continue;
+    trees.push({ x, h: 70 + Math.random()*60, phase: Math.random()*Math.PI*2, type: Math.random() > 0.5 ? 'pine' : 'oak' });
+  }
+  
+  grass = [];
+  for (let i = 0; i < 120; i++) {
+    grass.push({
+      x: Math.random() * W,
+      h: 8 + Math.random()*12,
+      phase: Math.random()*Math.PI*2
+    });
   }
 }
-
-function toggleSword() {
-  swordActive = !swordActive;
-  playSound('sawtooth', swordActive ? 300 : 200, 0.3, 0.15);
-  renderButtons();
-  if (swordActive) {
-    showToast('🔥 شمشێری ئاگرین چالاکە!');
-    for (let i = 0; i < 40; i++) {
-      const a = Math.random() * Math.PI * 2;
-      particles.push({
-        x: player.x, y: player.y - 20,
-        vx: Math.cos(a) * (100 + Math.random()*200),
-        vy: Math.sin(a) * (100 + Math.random()*200),
-        life: 0.8, maxLife: 0.8,
-        color: Math.random() > 0.5 ? '#ff7d3a' : '#ffd700',
-        size: 3 + Math.random()*4
-      });
-    }
-  } else {
-    showToast('⚔️ شمشێر ناچالاک');
-  }
-}
+generateBackground();
 
 // ============================================================
 // Units
 // ============================================================
+const UNIT_STATS = {
+  soldier: { hp: 100, dmg: 12, speed: 38, range: 45, attackRate: 1.0, color: '#4da3ff', cost: 50, size: 22 },
+  archer:  { hp: 70,  dmg: 10, speed: 28, range: 320, attackRate: 1.5, color: '#ffd700', cost: 80, size: 20, projectile: 'arrow' },
+  tank:    { hp: 280, dmg: 18, speed: 22, range: 50, attackRate: 1.4, color: '#9999cc', cost: 120, size: 26 },
+  cannon:  { hp: 150, dmg: 40, speed: 16, range: 300, attackRate: 2.8, color: '#ff7d7d', cost: 150, size: 28, projectile: 'cannonball' },
+  mage:    { hp: 80,  dmg: 25, speed: 24, range: 260, attackRate: 2.2, color: '#b464ff', cost: 180, size: 22, projectile: 'magic' },
+  air:     { hp: 200, dmg: 30, speed: 60, range: 200, attackRate: 1.8, color: '#64c8ff', cost: 250, size: 30, projectile: 'bomb', flying: true }
+};
+
 function spawnUnit(team, type) {
-  const def = UNIT_STATS[type];
+  const stats = UNIT_STATS[type];
   const castle = team === 'blue' ? blueCastle : redCastle;
   const dir = team === 'blue' ? 1 : -1;
   
   const u = {
     team, type,
     x: castle.x + dir * 70,
-    y: GROUND_Y - def.size/2,
-    hp: def.hp, maxHp: def.hp,
-    dmg: def.dmg, speed: def.speed,
-    range: def.range, attackRate: def.attackRate,
-    attackTimer: Math.random() * def.attackRate,
-    size: def.size,
-    color: def.color,
+    y: GROUND_Y - stats.size/2,
+    hp: stats.hp, maxHp: stats.hp,
+    dmg: stats.dmg, speed: stats.speed,
+    range: stats.range, attackRate: stats.attackRate,
+    attackTimer: Math.random() * stats.attackRate,
+    size: stats.size,
+    color: stats.color,
     dir,
     walkPhase: Math.random()*Math.PI*2,
-    projectileType: def.projectile || null,
-    flash: 0,
-    buffTimer: 0
+    flash: 0, dead: false,
+    projectileType: stats.projectile || null,
+    flying: stats.flying || false,
+    vx: 0, vy: 0
   };
   units.push(u);
-  playSound('sine', team === 'blue' ? 350 : 280, 0.1, 0.06);
+  playSound('sine', 300, 0.1, 0.06);
 }
 
-// ============================================================
-// Projectiles
-// ============================================================
 function spawnProjectile(from, target, type) {
   const dx = target.x - from.x;
   const dy = target.y - from.y;
-  const dist = Math.hypot(dx, dy);
-  const speed = type === 'arrow' ? 750 : 420;
+  const dist = Math.hypot(dx, dy) || 1;
+  let speed = 700;
+  if (type === 'cannonball') speed = 450;
+  if (type === 'magic') speed = 500;
+  if (type === 'bomb') speed = 350;
   
   projectiles.push({
     x: from.x, y: from.y - from.size,
@@ -942,21 +741,19 @@ function spawnProjectile(from, target, type) {
     dmg: from.dmg,
     team: from.team,
     type,
-    life: 3,
-    rotation: Math.atan2(dy, dx)
+    life: 4,
+    rotation: Math.atan2(dy, dx),
+    x0: from.x, y0: from.y
   });
-  playSound('square', type === 'arrow' ? 900 : 180, 0.06, 0.05);
+  playSound('square', type === 'arrow' ? 900 : type === 'magic' ? 700 : 180, 0.08, 0.05);
 }
 
-// ============================================================
-// Particles & Effects
-// ============================================================
 function spawnParticles(x, y, count, color, spread = 3, life = 0.8) {
   for (let i = 0; i < count; i++) {
     particles.push({
       x, y,
-      vx: (Math.random()-0.5)*spread*70,
-      vy: (Math.random()-0.5)*spread*70 - 30,
+      vx: (Math.random()-0.5)*spread*80,
+      vy: (Math.random()-0.5)*spread*80 - 40,
       life, maxLife: life,
       color, size: 2 + Math.random()*3
     });
@@ -964,17 +761,17 @@ function spawnParticles(x, y, count, color, spread = 3, life = 0.8) {
 }
 
 function spawnFloatingText(x, y, text, color) {
-  floatingTexts.push({ x, y, text, color, life: 1.4, maxLife: 1.4, vy: -55 });
+  floatingTexts.push({ x, y, text, color, life: 1.2, maxLife: 1.2, vy: -50 });
 }
 
-function explosion(x, y, radius, color = '#ff7d3a') {
-  spawnParticles(x, y, 30, color, 6, 0.7);
-  spawnParticles(x, y, 15, '#ffd700', 4, 0.5);
-  playExplosion();
+function spawnExplosion(x, y, radius, color = '#ff7d3a') {
+  explosions.push({ x, y, radius, maxRadius: radius, life: 0.5, maxLife: 0.5, color });
+  spawnParticles(x, y, 25, color, 6, 0.8);
+  playSound('sawtooth', 120, 0.3, 0.15);
 }
 
 // ============================================================
-// Player Attack
+// Player
 // ============================================================
 function playerAttack() {
   if (!swordActive || player.attackCooldown > 0) return;
@@ -983,55 +780,46 @@ function playerAttack() {
   
   const range = 100;
   let hit = false;
-  
   for (const u of units) {
-    if (u.team !== 'blue') {
+    if (u.team !== 'blue' && !u.flying) {
       const d = Math.hypot(u.x - player.x, u.y - player.y);
       if (d < range) {
-        const dmg = 50;
-        u.hp -= dmg;
+        u.hp -= 55;
         u.flash = 0.3;
-        u.vx = (u.x - player.x) / Math.max(d, 1) * 220;
-        u.vy = -130;
+        u.vx = (u.x - player.x) / (d||1) * 220;
+        u.vy = -140;
         hit = true;
-        spawnParticles(u.x, u.y - u.size/2, 10, '#ff7d3a', 4);
-        spawnFloatingText(u.x, u.y - u.size*2, '-' + dmg, '#ff7d3a');
-        stats.damageDealt += dmg;
+        spawnParticles(u.x, u.y - u.size/2, 8, '#ff7d3a', 4);
+        spawnFloatingText(u.x, u.y - u.size*2, '-55', '#ff7d3a');
         bloodStains.push({ x: u.x, y: GROUND_Y, r: 8 + Math.random()*6, alpha: 0.5, team: 'red' });
-        if (u.hp <= 0) killUnit(u);
+        if (u.hp <= 0 && !u.dead) {
+          u.dead = true; totalKills++;
+          spawnParticles(u.x, u.y - u.size/2, 18, '#ff4d4d', 5);
+          bloodStains.push({ x: u.x, y: GROUND_Y, r: 14 + Math.random()*10, alpha: 0.7, team: 'red' });
+          playSound('sawtooth', 200, 0.25, 0.1);
+        }
       }
     }
   }
   
-  // Walls
-  for (let i = walls.length - 1; i >= 0; i--) {
-    const w = walls[i];
-    if (w.team !== 'blue' && Math.hypot(w.x - player.x, w.y - player.y) < range) {
-      w.hp -= 30;
-      spawnParticles(w.x, w.y, 10, '#888', 3);
-      if (w.hp <= 0) { explosion(w.x, w.y, 30, '#888'); walls.splice(i, 1); }
-    }
-  }
-  
-  // Castle
+  // Hit enemy castle
   const cDist = Math.hypot(redCastle.x - player.x, redCastle.y + 90 - player.y);
   if (cDist < 160) {
     redCastle.hp = Math.max(0, redCastle.hp - 30);
-    spawnParticles(redCastle.x, redCastle.y + 90, 14, '#ff7d3a', 4);
+    spawnParticles(redCastle.x, redCastle.y + 90, 12, '#ff7d3a', 4);
     spawnFloatingText(redCastle.x, redCastle.y + 60, '-30', '#ff7d3a');
-    stats.damageDealt += 30;
     hit = true;
   }
   
   if (hit) {
-    playSound('triangle', 500, 0.2, 0.12);
-    for (let i = 0; i < 18; i++) {
-      const a = -Math.PI/2 + (Math.random()-0.5) * 1.8;
+    playSound('triangle', 500, 0.2, 0.1);
+    for (let i = 0; i < 15; i++) {
+      const a = -Math.PI/2 + (Math.random()-0.5) * 1.5;
       particles.push({
-        x: player.x + player.facing * 35,
+        x: player.x + player.facing * 30,
         y: player.y - 30,
-        vx: Math.cos(a) * (100 + Math.random()*120),
-        vy: Math.sin(a) * (100 + Math.random()*120),
+        vx: Math.cos(a) * (80 + Math.random()*100),
+        vy: Math.sin(a) * (80 + Math.random()*100),
         life: 0.6, maxLife: 0.6,
         color: Math.random() > 0.5 ? '#ff7d3a' : '#ffd700',
         size: 2 + Math.random()*3
@@ -1040,130 +828,127 @@ function playerAttack() {
   }
 }
 
-function killUnit(u) {
-  u.dead = true;
-  spawnParticles(u.x, u.y - u.size/2, 15, '#ff4d4d', 4);
-  bloodStains.push({ x: u.x, y: GROUND_Y, r: 10 + Math.random()*8, alpha: 0.6, team: u.team });
-  if (u.team === 'red') { stats.kills++; gold += 15; stats.goldEarned += 15; }
-  playSound('sawtooth', 200, 0.2, 0.08);
-}
+// ============================================================
+// AI
+// ============================================================
+const AI_QUEUE = ['soldier', 'soldier', 'archer', 'soldier', 'tank', 'archer', 'cannon', 'mage', 'soldier', 'air'];
+let aiQueueIdx = 0;
 
 // ============================================================
 // Update
 // ============================================================
 function update(dt) {
   gameTime += dt;
-  gameDuration += dt;
-  
-  // Day/night cycle
-  dayPhase = (gameDuration % dayCycleDuration) / dayCycleDuration;
+  dayNightCycle = (gameTime / 120) % 1; // 2 minutes full cycle
   
   // Player movement
   if (gameRunning) {
-    const targetX = Math.max(40, Math.min(W - 40, mouse.x));
+    const targetX = Math.max(60, Math.min(W - 60, mouse.x));
     const targetY = Math.max(GROUND_Y - 220, Math.min(GROUND_Y - 20, mouse.y));
     const dx = targetX - player.x;
     const dy = targetY - player.y;
     const dist = Math.hypot(dx, dy);
     const maxSpeed = 420;
-    if (dist > 4) {
+    if (dist > 5) {
       const s = Math.min(1, (maxSpeed * dt) / dist);
       player.x += dx * s;
       player.y += dy * s;
-      player.walkPhase += dt * 14;
-      if (Math.abs(dx) > 2) player.facing = dx > 0 ? 1 : -1;
+      player.walkPhase += dt * 12;
+      if (Math.abs(dx) > 3) player.facing = dx > 0 ? 1 : -1;
     }
   }
   
   if (player.attackCooldown > 0) player.attackCooldown -= dt;
   if (player.attackAnim > 0) player.attackAnim -= dt;
   if (player.hurtFlash > 0) player.hurtFlash -= dt;
+  if (player.invuln > 0) player.invuln -= dt;
   
-  // Player regen
-  player.regenTimer += dt;
-  if (player.regenTimer > 3 && player.hp < player.maxHp) {
-    player.hp = Math.min(player.maxHp, player.hp + 20 * dt);
-  }
-  
-  // Auto-attack in sword mode
+  // Auto attack
   if (swordActive && player.attackCooldown <= 0) {
     for (const u of units) {
-      if (u.team !== 'blue' && Math.hypot(u.x - player.x, u.y - player.y) < 80) {
+      if (u.team !== 'blue' && !u.flying && Math.hypot(u.x - player.x, u.y - player.y) < 80) {
         playerAttack();
         break;
       }
     }
   }
   
-  // Gold generation - faster
-  gold += dt * 18;
-  stats.goldEarned += dt * 18;
+  // Sword lightning
+  if (swordActive) {
+    playerLightningTimer -= dt;
+    if (playerLightningTimer <= 0) {
+      playerLightningTimer = 0.06 + Math.random()*0.12;
+      particles.push({
+        x: player.x + player.facing * 35 + (Math.random()-0.5)*24,
+        y: player.y - 35 + (Math.random()-0.5)*24,
+        vx: (Math.random()-0.5)*80,
+        vy: (Math.random()-0.5)*80 - 30,
+        life: 0.4, maxLife: 0.4,
+        color: Math.random() > 0.5 ? '#ff7d3a' : '#ffd700',
+        size: 1.5 + Math.random()*2
+      });
+    }
+  }
   
-  // AI spawn
+  // Gold
+  gold += dt * 15;
+  totalGoldEarned += dt * 15;
+  
+  // Red AI spawn
   redSpawnTimer -= dt;
   if (redSpawnTimer <= 0) {
-    const baseInterval = Math.max(1.5, 4.5 - gameDuration * 0.015);
-    redSpawnTimer = baseInterval + Math.random()*1.5;
-    const type = AI_UNIT_QUEUE[aiQueueIdx % AI_UNIT_QUEUE.length];
+    redSpawnTimer = 3.0 + Math.random()*2;
+    const type = AI_QUEUE[aiQueueIdx % AI_QUEUE.length];
     aiQueueIdx++;
     spawnUnit('red', type);
-    // AI also builds defenses occasionally
-    if (Math.random() < 0.15 && gameDuration > 20) {
-      const midX = W * 0.6 + Math.random() * W * 0.25;
-      if (Math.random() < 0.5) {
-        walls.push({ x: midX, y: GROUND_Y - 25, hp: 250, maxHp: 250, team: 'red' });
-      } else {
-        mines.push({ x: midX, y: GROUND_Y - 8, armed: true, radius: 40, dmg: 60, team: 'red', blink: 0 });
-      }
-    }
   }
   
   // Units update
   for (let i = units.length - 1; i >= 0; i--) {
     const u = units[i];
     if (u.flash > 0) u.flash -= dt;
-    if (u.buffTimer > 0) {
-      u.buffTimer -= dt;
-      if (u.buffTimer <= 0) u.dmg /= 1.8;
-    }
     
-    // Knockback
-    if (u.vx) { u.x += u.vx * dt; u.vx *= 0.88; if (Math.abs(u.vx) < 5) u.vx = 0; }
-    if (u.vy) { u.y += u.vy * dt; u.vy += 600 * dt; if (u.y > GROUND_Y - u.size/2) { u.y = GROUND_Y - u.size/2; u.vy = 0; } }
+    if (u.vx) { u.x += u.vx * dt; u.vx *= 0.9; if (Math.abs(u.vx) < 5) u.vx = 0; }
+    if (u.vy) { 
+      u.y += u.vy * dt; 
+      u.vy += 600 * dt; 
+      const groundLevel = u.flying ? GROUND_Y - 120 : GROUND_Y - u.size/2;
+      if (u.y > groundLevel) { u.y = groundLevel; u.vy = 0; } 
+    }
     
     const enemyTeam = u.team === 'blue' ? 'red' : 'blue';
     const enemyCastle = u.team === 'blue' ? redCastle : blueCastle;
     
-    // Target selection: closest enemy unit OR wall
-    let target = null;
-    let targetDist = Infinity;
-    let targetIsCastle = false;
-    let targetIsWall = false;
+    // Find target
+    let target = null, targetDist = Infinity, targetIsCastle = false;
     
+    // Don't attack flying with melee
     for (const other of units) {
       if (other.team === enemyTeam && !other.dead) {
+        if (!u.flying && other.flying) continue;
         const d = Math.hypot(other.x - u.x, other.y - u.y);
-        if (d < targetDist) { targetDist = d; target = other; targetIsCastle = false; targetIsWall = false; }
+        if (d < targetDist) { targetDist = d; target = other; targetIsCastle = false; }
       }
     }
     
-    // Enemy walls block movement
-    for (const w of walls) {
-      if (w.team === enemyTeam) {
-        const d = Math.hypot(w.x - u.x, w.y - u.y);
-        if (d < u.range + 20 && d < targetDist) {
-          targetDist = d; target = { x: w.x, y: w.y, isWall: true, ref: w }; targetIsWall = true; targetIsCastle = false;
-        }
-      }
-    }
-    
-    // Enemy castle
     const castleDist = Math.hypot(enemyCastle.x - u.x, (enemyCastle.y + 90) - u.y);
     if (castleDist < targetDist) {
-      target = { x: enemyCastle.x, y: enemyCastle.y + 90, isCastle: true };
+      target = { x: enemyCastle.x, y: enemyCastle.y + 90, isCastle: true, team: enemyTeam };
       targetDist = castleDist;
       targetIsCastle = true;
-      targetIsWall = false;
+    }
+    
+    // Check walls blocking
+    for (const wall of walls) {
+      if (wall.team === u.team || wall.hp <= 0) continue;
+      if (Math.abs(wall.x - u.x) < u.size + wall.w/2 && u.team === 'blue' && u.x < wall.x) {
+        // hit wall if in range
+        if (Math.abs(wall.x - u.x) < u.range + wall.w/2) {
+          target = { x: wall.x, y: wall.y, isCastle: false, isWall: true, wall };
+          targetDist = Math.abs(wall.x - u.x);
+          targetIsCastle = false;
+        }
+      }
     }
     
     u.attackTimer -= dt;
@@ -1172,37 +957,35 @@ function update(dt) {
       if (targetDist <= u.range) {
         if (u.attackTimer <= 0) {
           u.attackTimer = u.attackRate;
-          if (u.projectileType && !targetIsCastle) {
-            spawnProjectile(u, target, u.projectileType);
-          } else if (u.projectileType && targetIsCastle) {
+          if (u.projectileType) {
             spawnProjectile(u, target, u.projectileType);
           } else {
-            // Melee
             if (targetIsCastle) {
               if (enemyTeam === 'red') redCastle.hp = Math.max(0, redCastle.hp - u.dmg);
               else blueCastle.hp = Math.max(0, blueCastle.hp - u.dmg);
               spawnParticles(target.x + (u.team === 'blue' ? -30 : 30), target.y, 6, u.color, 3);
               spawnFloatingText(target.x, target.y - 80, '-' + u.dmg, u.team === 'blue' ? '#7dc4ff' : '#ff7d7d');
-            } else if (targetIsWall) {
-              target.ref.hp -= u.dmg;
-              spawnParticles(target.x, target.y, 5, '#888', 2);
-              if (target.ref.hp <= 0) {
-                explosion(target.x, target.y, 30, '#888');
-                const idx = walls.indexOf(target.ref);
-                if (idx >= 0) walls.splice(idx, 1);
+            } else if (target.isWall) {
+              target.wall.hp -= u.dmg;
+              spawnParticles(target.wall.x, target.wall.y, 6, '#888', 3);
+              if (target.wall.hp <= 0) {
+                spawnExplosion(target.wall.x, target.wall.y, 40, '#666');
               }
             } else {
               target.hp -= u.dmg;
               target.flash = 0.2;
-              target.vx = (target.x > u.x ? 1 : -1) * 90;
-              target.vy = -90;
+              target.vx = (target.x > u.x ? 1 : -1) * 80;
+              target.vy = -80;
               spawnParticles(target.x, target.y - target.size/2, 5, u.color, 3);
-              if (target.hp <= 0 && !target.dead) killUnit(target);
+              if (target.hp <= 0 && !target.dead) {
+                target.dead = true;
+                spawnParticles(target.x, target.y - target.size/2, 12, '#ff4d4d', 4);
+                bloodStains.push({ x: target.x, y: GROUND_Y, r: 10 + Math.random()*8, alpha: 0.6, team: target.team });
+              }
             }
           }
         }
       } else {
-        // Move toward target
         const dx = target.x - u.x;
         const dist = Math.abs(dx);
         const moveAmt = u.speed * dt;
@@ -1214,35 +997,13 @@ function update(dt) {
       }
     }
     
-    // Check mines (enemy mines trigger)
-    for (let mi = mines.length - 1; mi >= 0; mi--) {
-      const m = mines[mi];
-      if (m.team !== u.team && m.armed) {
-        const d = Math.hypot(m.x - u.x, m.y - u.y);
-        if (d < m.radius) {
-          // Explode
-          explosion(m.x, m.y, m.radius, '#ff3030');
-          for (const u2 of units) {
-            if (u2.team !== m.team && Math.hypot(u2.x - m.x, u2.y - m.y) < m.radius * 1.5) {
-              u2.hp -= m.dmg;
-              u2.flash = 0.3;
-              if (u2.hp <= 0 && !u2.dead) killUnit(u2);
-            }
-          }
-          mines.splice(mi, 1);
-        }
-      }
+    if (u.hp <= 0 && !u.dead) {
+      u.dead = true;
+      if (u.team === 'red') totalKills++;
+      spawnParticles(u.x, u.y - u.size/2, 10, '#ff4d4d', 4);
+      bloodStains.push({ x: u.x, y: GROUND_Y, r: 8 + Math.random()*6, alpha: 0.5, team: u.team });
     }
     
-    // Check traps (slow enemy)
-    for (const t of traps) {
-      if (t.team !== u.team) {
-        const d = Math.hypot(t.x - u.x, t.y - u.y);
-        if (d < t.radius) { u.speed = Math.min(u.speed, 15); }
-      }
-    }
-    
-    if (u.hp <= 0 && !u.dead) killUnit(u);
     if (u.dead) units.splice(i, 1);
   }
   
@@ -1252,42 +1013,54 @@ function update(dt) {
     p.x += p.vx * dt;
     p.y += p.vy * dt;
     p.life -= dt;
-    if (p.type === 'cannonball') p.vy += 300 * dt;
+    
+    if (p.type === 'cannonball' || p.type === 'bomb') p.vy += 400 * dt;
     if (p.type === 'arrow') p.vy += 200 * dt;
+    if (p.type === 'magic') p.vy += 50 * dt;
     
     let hitSomething = false;
+    
     for (const u of units) {
       if (u.team === p.team) continue;
       if (Math.hypot(u.x - p.x, u.y - p.y) < u.size * 0.9) {
         u.hp -= p.dmg;
         u.flash = 0.2;
         hitSomething = true;
-        if (p.type === 'cannonball') {
-          explosion(p.x, p.y, 60);
+        if (p.type === 'cannonball' || p.type === 'bomb') {
+          spawnExplosion(p.x, p.y, 80, '#ff7d3a');
           for (const u2 of units) {
-            if (u2.team !== p.team && u2 !== u && Math.hypot(u2.x - p.x, u2.y - p.y) < 70) {
+            if (u2.team !== p.team && u2 !== u && Math.hypot(u2.x - p.x, u2.y - p.y) < 80) {
               u2.hp -= p.dmg * 0.5;
               u2.flash = 0.2;
-              if (u2.hp <= 0 && !u2.dead) killUnit(u2);
             }
           }
+        } else if (p.type === 'magic') {
+          spawnParticles(p.x, p.y, 15, '#b464ff', 5);
         } else {
           spawnParticles(p.x, p.y, 5, '#ffd700', 3);
         }
-        if (u.hp <= 0 && !u.dead) killUnit(u);
+        if (u.hp <= 0 && !u.dead) {
+          u.dead = true;
+          if (u.team === 'red') totalKills++;
+          spawnParticles(u.x, u.y - u.size/2, 12, '#ff4d4d', 4);
+        }
         break;
       }
     }
     
-    // Walls
     if (!hitSomething) {
-      for (let wi = walls.length - 1; wi >= 0; wi--) {
-        const w = walls[wi];
-        if (w.team === p.team) continue;
-        if (Math.abs(p.x - w.x) < 25 && Math.abs(p.y - w.y) < 30) {
-          w.hp -= p.dmg;
-          spawnParticles(p.x, p.y, 6, '#888', 3);
-          if (w.hp <= 0) { explosion(w.x, w.y, 30, '#888'); walls.splice(wi, 1); }
+      // Mines
+      for (const m of mines) {
+        if (m.team === p.team || m.exploded) continue;
+        if (Math.hypot(p.x - m.x, p.y - m.y) < 30) {
+          m.exploded = true;
+          spawnExplosion(m.x, m.y, 100, '#ff4d3a');
+          for (const u of units) {
+            if (u.team !== m.team && Math.hypot(u.x - m.x, u.y - m.y) < 100) {
+              u.hp -= 80;
+              u.flash = 0.4;
+            }
+          }
           hitSomething = true;
           break;
         }
@@ -1296,11 +1069,12 @@ function update(dt) {
     
     if (!hitSomething) {
       const enemyCastle = p.team === 'blue' ? redCastle : blueCastle;
-      if (Math.abs(p.x - enemyCastle.x) < 65 && p.y > enemyCastle.y && p.y < enemyCastle.y + 200) {
-        if (p.team === 'blue') redCastle.hp = Math.max(0, redCastle.hp - p.dmg);
-        else blueCastle.hp = Math.max(0, blueCastle.hp - p.dmg);
-        spawnFloatingText(enemyCastle.x, enemyCastle.y + 40, '-' + p.dmg, p.team === 'blue' ? '#7dc4ff' : '#ff7d7d');
-        if (p.type === 'cannonball') explosion(p.x, p.y, 50);
+      if (Math.abs(p.x - enemyCastle.x) < 60 && p.y > enemyCastle.y && p.y < enemyCastle.y + 200) {
+        const dmg = p.dmg;
+        if (p.team === 'blue') redCastle.hp = Math.max(0, redCastle.hp - dmg);
+        else blueCastle.hp = Math.max(0, blueCastle.hp - dmg);
+        spawnFloatingText(enemyCastle.x, enemyCastle.y + 40, '-' + dmg, p.team === 'blue' ? '#7dc4ff' : '#ff7d7d');
+        if (p.type === 'cannonball' || p.type === 'bomb') spawnExplosion(p.x, p.y, 60, '#ff7d3a');
         else spawnParticles(p.x, p.y, 6, '#ffd700', 3);
         hitSomething = true;
       }
@@ -1311,41 +1085,55 @@ function update(dt) {
     }
   }
   
-  // Planes
-  for (let i = planes.length - 1; i >= 0; i--) {
-    const pl = planes[i];
-    pl.x += pl.vx * dt;
-    pl.dropTimer -= dt;
-    if (pl.bombs > 0 && pl.dropTimer <= 0 && pl.x > W * 0.3 && pl.x < W * 0.95) {
-      pl.dropTimer = 0.5;
-      pl.bombs--;
-      // Drop bomb
-      projectiles.push({
-        x: pl.x, y: pl.y, vx: 0, vy: 200,
-        dmg: 100, team: pl.team, type: 'cannonball',
-        life: 5, rotation: Math.PI/2
-      });
+  // Mines detonation by enemy units
+  for (let i = mines.length - 1; i >= 0; i--) {
+    const m = mines[i];
+    m.life -= dt;
+    if (m.exploded || m.life <= 0) {
+      if (m.exploded) mines.splice(i, 1);
+      else if (m.life <= 0 && !m.exploded) {
+        // remove silently
+        mines.splice(i, 1);
+      }
+      continue;
     }
-    if (pl.x > W + 100) planes.splice(i, 1);
+    for (const u of units) {
+      if (u.team === m.team) continue;
+      if (Math.hypot(u.x - m.x, u.y - m.y) < 40) {
+        m.exploded = true;
+        spawnExplosion(m.x, m.y, 110, '#ff4d3a');
+        for (const u2 of units) {
+          if (u2.team !== m.team && Math.hypot(u2.x - m.x, u2.y - m.y) < 110) {
+            u2.hp -= 100;
+            u2.flash = 0.4;
+          }
+        }
+        setTimeout(() => {
+          const idx = mines.indexOf(m);
+          if (idx >= 0) mines.splice(idx, 1);
+        }, 100);
+        break;
+      }
+    }
   }
   
   // Player collision
   for (const u of units) {
     if (u.team === 'red') {
       const d = Math.hypot(u.x - player.x, u.y - player.y);
-      if (d < 35) {
-        player.hurtFlash = 0.15;
-        player.hp = Math.max(0, player.hp - 5 * dt);
-        if (player.hp <= 0) {
-          // Respawn player
-          player.x = blueCastle.x + 80;
-          player.y = GROUND_Y - 40;
-          player.hp = player.maxHp;
-          showToast('💀 لێدراویت! گەڕایتەوە بۆ قەڵا');
-        }
+      if (d < 40 && swordActive && Math.random() < 0.05) u.hp -= 5;
+      if (d < 30 && player.invuln <= 0) {
+        player.hurtFlash = 0.3;
+        player.invuln = 1.0;
+        player.hp = Math.max(0, player.hp - 20);
+        playSound('sawtooth', 150, 0.2, 0.1);
+        if (player.hp <= 0) { endGame(false); return; }
       }
     }
   }
+  
+  // Player regen
+  if (player.hp < player.maxHp) player.hp += dt * 5;
   
   // Particles
   for (let i = particles.length - 1; i >= 0; i--) {
@@ -1366,49 +1154,29 @@ function update(dt) {
     if (t.life <= 0) floatingTexts.splice(i, 1);
   }
   
+  // Explosions
+  for (let i = explosions.length - 1; i >= 0; i--) {
+    const e = explosions[i];
+    e.life -= dt;
+    e.radius = e.maxRadius * (1 - e.life / e.maxLife);
+    if (e.life <= 0) explosions.splice(i, 1);
+  }
+  
   // Clouds
   for (const c of clouds) {
     c.x += c.speed * dt;
     if (c.x - c.w > W) c.x = -c.w;
   }
   
-  // Birds
-  for (const b of birds) {
-    b.x += b.speed * dt;
-    b.phase += dt * 8;
-    if (b.x > W + 30) { b.x = -30; b.y = 80 + Math.random()*150; }
+  // Walls cleanup
+  for (let i = walls.length - 1; i >= 0; i--) {
+    if (walls[i].hp <= 0) walls.splice(i, 1);
   }
   
-  // Traps decay
-  for (let i = traps.length - 1; i >= 0; i--) {
-    traps[i].life -= dt;
-    if (traps[i].life <= 0) traps.splice(i, 1);
-  }
-  
-  // Mines blink
-  for (const m of mines) m.blink += dt;
-  
-  // Win/lose
   if (blueCastle.hp <= 0) endGame(false);
   else if (redCastle.hp <= 0) endGame(true);
   
   updateHUD();
-  updateTimeDisplay();
-}
-
-function updateTimeDisplay() {
-  const icon = document.getElementById('dayIcon');
-  const text = document.getElementById('timeText');
-  // dayPhase: 0-0.5 = day, 0.5-1 = night (roughly)
-  if (dayPhase < 0.15 || dayPhase > 0.85) {
-    icon.textContent = '🌅'; text.textContent = 'بەیان';
-  } else if (dayPhase < 0.5) {
-    icon.textContent = '☀️'; text.textContent = 'ڕۆژ';
-  } else if (dayPhase < 0.65) {
-    icon.textContent = '🌇'; text.textContent = 'ئێوارە';
-  } else {
-    icon.textContent = '🌙'; text.textContent = 'شەو';
-  }
 }
 
 function updateHUD() {
@@ -1416,19 +1184,24 @@ function updateHUD() {
   const hpRPct = Math.max(0, redCastle.hp / redCastle.maxHp * 100);
   document.getElementById('hpBlue').style.width = hpBPct + '%';
   document.getElementById('hpRed').style.width = hpRPct + '%';
-  document.getElementById('hpBlueText').textContent = Math.ceil(blueCastle.hp) + '/' + blueCastle.maxHp;
-  document.getElementById('hpRedText').textContent = Math.ceil(redCastle.hp) + '/' + redCastle.maxHp;
+  document.getElementById('hpBlueText').textContent = Math.ceil(blueCastle.hp) + ' / ' + blueCastle.maxHp;
+  document.getElementById('hpRedText').textContent = Math.ceil(redCastle.hp) + ' / ' + redCastle.maxHp;
   document.getElementById('gold').textContent = Math.floor(gold);
+  
+  const elapsed = Math.floor((performance.now() - gameStartTime) / 1000);
+  const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
+  const secs = (elapsed % 60).toString().padStart(2, '0');
+  document.getElementById('timeVal').textContent = mins + ':' + secs;
   
   let bs = 0, ba = 0, bc = 0, rs = 0, ra = 0, rc = 0;
   for (const u of units) {
     if (u.team === 'blue') {
-      if (u.type === 'soldier') bs++;
-      else if (u.type === 'archer') ba++;
+      if (u.type === 'soldier' || u.type === 'tank') bs++;
+      else if (u.type === 'archer' || u.type === 'mage') ba++;
       else bc++;
     } else {
-      if (u.type === 'soldier') rs++;
-      else if (u.type === 'archer') ra++;
+      if (u.type === 'soldier' || u.type === 'tank') rs++;
+      else if (u.type === 'archer' || u.type === 'mage') ra++;
       else rc++;
     }
   }
@@ -1441,164 +1214,130 @@ function updateHUD() {
 }
 
 // ============================================================
-// Sky colors based on day phase
+// Render
 // ============================================================
 function getSkyColors() {
-  // dayPhase 0 = dawn, 0.25 = noon, 0.5 = dusk, 0.75 = night, 1 = dawn
-  const p = dayPhase;
+  // dayNightCycle: 0 = noon, 0.25 = sunset, 0.5 = midnight, 0.75 = sunrise
+  const t = dayNightCycle;
+  let top, bottom, sunAlpha, moonAlpha, starAlpha;
   
-  // Transitions
-  const dawnColors = { top: '#2a1a3a', mid: '#8a4a5a', bot: '#ff9a6a' };
-  const dayColors = { top: '#4a8acc', mid: '#7ab4e0', bot: '#b8d8f0' };
-  const duskColors = { top: '#2a1a4a', mid: '#8a3a5a', bot: '#ff6a4a' };
-  const nightColors = { top: '#050818', mid: '#0d1530', bot: '#1a2348' };
-  
-  let c1, c2, c3;
-  
-  if (p < 0.15) {
-    // dawn -> day
-    const t = p / 0.15;
-    c1 = lerpColor(dawnColors.top, dayColors.top, t);
-    c2 = lerpColor(dawnColors.mid, dayColors.mid, t);
-    c3 = lerpColor(dawnColors.bot, dayColors.bot, t);
-  } else if (p < 0.4) {
-    // day
-    c1 = dayColors.top; c2 = dayColors.mid; c3 = dayColors.bot;
-  } else if (p < 0.5) {
-    // day -> dusk
-    const t = (p - 0.4) / 0.1;
-    c1 = lerpColor(dayColors.top, duskColors.top, t);
-    c2 = lerpColor(dayColors.mid, duskColors.mid, t);
-    c3 = lerpColor(dayColors.bot, duskColors.bot, t);
-  } else if (p < 0.6) {
-    // dusk -> night
-    const t = (p - 0.5) / 0.1;
-    c1 = lerpColor(duskColors.top, nightColors.top, t);
-    c2 = lerpColor(duskColors.mid, nightColors.mid, t);
-    c3 = lerpColor(duskColors.bot, nightColors.bot, t);
-  } else if (p < 0.9) {
-    // night
-    c1 = nightColors.top; c2 = nightColors.mid; c3 = nightColors.bot;
+  if (t < 0.25) {
+    // noon to sunset
+    const p = t / 0.25;
+    top = lerpColor('#1a4a8a', '#ff6a3a', p);
+    bottom = lerpColor('#4a8aca', '#ffaa6a', p);
+    sunAlpha = 1; moonAlpha = 0;
+    starAlpha = p * 0.3;
+  } else if (t < 0.5) {
+    // sunset to midnight
+    const p = (t - 0.25) / 0.25;
+    top = lerpColor('#ff6a3a', '#050818', p);
+    bottom = lerpColor('#ffaa6a', '#0d1530', p);
+    sunAlpha = 1 - p; moonAlpha = p;
+    starAlpha = 0.3 + p * 0.7;
+  } else if (t < 0.75) {
+    // midnight to sunrise
+    const p = (t - 0.5) / 0.25;
+    top = lerpColor('#050818', '#4a2a5a', p);
+    bottom = lerpColor('#0d1530', '#ff8855', p);
+    sunAlpha = p; moonAlpha = 1 - p;
+    starAlpha = 1 - p;
   } else {
-    // night -> dawn
-    const t = (p - 0.9) / 0.1;
-    c1 = lerpColor(nightColors.top, dawnColors.top, t);
-    c2 = lerpColor(nightColors.mid, dawnColors.mid, t);
-    c3 = lerpColor(nightColors.bot, dawnColors.bot, t);
+    // sunrise to noon
+    const p = (t - 0.75) / 0.25;
+    top = lerpColor('#4a2a5a', '#1a4a8a', p);
+    bottom = lerpColor('#ff8855', '#4a8aca', p);
+    sunAlpha = p; moonAlpha = 1 - p;
+    starAlpha = (1 - p) * 0.5;
   }
   
-  return { top: c1, mid: c2, bot: c3 };
+  return { top, bottom, sunAlpha, moonAlpha, starAlpha };
 }
 
-function lerpColor(a, b, t) {
-  const ah = a.match(/\w\w/g).map(x => parseInt(x, 16));
-  const bh = b.match(/\w\w/g).map(x => parseInt(x, 16));
-  const r = Math.round(ah[0] + (bh[0]-ah[0])*t);
-  const g = Math.round(ah[1] + (bh[1]-ah[1])*t);
-  const bl = Math.round(ah[2] + (bh[2]-ah[2])*t);
-  return '#' + [r,g,bl].map(x => x.toString(16).padStart(2, '0')).join('');
+function lerpColor(c1, c2, t) {
+  const hex = (h) => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+  const [r1,g1,b1] = hex(c1);
+  const [r2,g2,b2] = hex(c2);
+  return `rgb(${Math.round(r1+(r2-r1)*t)},${Math.round(g1+(g2-g1)*t)},${Math.round(b1+(b2-b1)*t)})`;
 }
 
-function isNight() {
-  return dayPhase > 0.5 && dayPhase < 0.95;
-}
-
-// ============================================================
-// RENDER
-// ============================================================
 function drawSky() {
-  const colors = getSkyColors();
+  const { top, bottom, sunAlpha, moonAlpha, starAlpha } = getSkyColors();
+  
   const skyGrad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
-  skyGrad.addColorStop(0, colors.top);
-  skyGrad.addColorStop(0.5, colors.mid);
-  skyGrad.addColorStop(1, colors.bot);
+  skyGrad.addColorStop(0, top);
+  skyGrad.addColorStop(1, bottom);
   ctx.fillStyle = skyGrad;
   ctx.fillRect(0, 0, W, GROUND_Y + 10);
   
-  // Stars - only at night
-  const nightFactor = Math.max(0, Math.min(1, (dayPhase - 0.55) / 0.1)) * Math.max(0, Math.min(1, (0.95 - dayPhase) / 0.1));
-  if (nightFactor > 0.01) {
-    for (const s of stars) {
-      const tw = 0.5 + 0.5 * Math.sin(gameTime * 2 + s.tw);
-      ctx.globalAlpha = nightFactor * (0.4 + tw * 0.6);
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
+  // Stars
+  for (const s of stars) {
+    const tw = 0.5 + 0.5 * Math.sin(gameTime * 2 + s.tw);
+    ctx.globalAlpha = (0.3 + tw * 0.7) * starAlpha * s.brightness;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  
+  // Sun
+  if (sunAlpha > 0.01) {
+    const sunAngle = (dayNightCycle < 0.5 ? dayNightCycle : dayNightCycle - 1) * Math.PI * 2;
+    const sunX = W/2 + Math.cos(sunAngle - Math.PI/2) * W * 0.4;
+    const sunY = GROUND_Y * 0.4 + Math.sin(sunAngle - Math.PI/2) * GROUND_Y * 0.45;
+    const sunGrad = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 90);
+    sunGrad.addColorStop(0, `rgba(255,240,180,${sunAlpha})`);
+    sunGrad.addColorStop(0.4, `rgba(255,220,120,${sunAlpha*0.6})`);
+    sunGrad.addColorStop(1, `rgba(255,200,80,0)`);
+    ctx.fillStyle = sunGrad;
+    ctx.beginPath(); ctx.arc(sunX, sunY, 90, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = `rgba(255,250,220,${sunAlpha})`;
+    ctx.beginPath(); ctx.arc(sunX, sunY, 35, 0, Math.PI*2); ctx.fill();
   }
   
-  // Sun or moon
-  if (dayPhase < 0.5) {
-    // Sun
-    const sunProgress = dayPhase / 0.5;
-    const sunX = W * (0.1 + sunProgress * 0.8);
-    const sunY = H * 0.5 - Math.sin(sunProgress * Math.PI) * H * 0.35;
-    const sunGrad = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 120);
-    sunGrad.addColorStop(0, 'rgba(255,250,200,1)');
-    sunGrad.addColorStop(0.3, 'rgba(255,240,150,0.6)');
-    sunGrad.addColorStop(1, 'rgba(255,220,100,0)');
-    ctx.fillStyle = sunGrad;
-    ctx.beginPath(); ctx.arc(sunX, sunY, 120, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#fffbe0';
-    ctx.beginPath(); ctx.arc(sunX, sunY, 35, 0, Math.PI*2); ctx.fill();
-  } else if (nightFactor > 0.01) {
-    // Moon
-    const moonProgress = (dayPhase - 0.5) / 0.5;
-    const moonX = W * (0.9 - moonProgress * 0.8);
-    const moonY = H * 0.5 - Math.sin(moonProgress * Math.PI) * H * 0.35;
+  // Moon
+  if (moonAlpha > 0.01) {
+    const moonAngle = (dayNightCycle - 0.5) * Math.PI * 2;
+    const moonX = W/2 + Math.cos(moonAngle - Math.PI/2) * W * 0.4;
+    const moonY = GROUND_Y * 0.4 + Math.sin(moonAngle - Math.PI/2) * GROUND_Y * 0.45;
     const moonGrad = ctx.createRadialGradient(moonX, moonY, 10, moonX, moonY, 80);
-    moonGrad.addColorStop(0, 'rgba(255,250,220,1)');
-    moonGrad.addColorStop(0.4, 'rgba(255,245,200,0.5)');
+    moonGrad.addColorStop(0, `rgba(255,250,220,${moonAlpha})`);
+    moonGrad.addColorStop(0.4, `rgba(255,245,200,${moonAlpha*0.5})`);
     moonGrad.addColorStop(1, 'rgba(255,240,180,0)');
     ctx.fillStyle = moonGrad;
     ctx.beginPath(); ctx.arc(moonX, moonY, 80, 0, Math.PI*2); ctx.fill();
-    ctx.globalAlpha = nightFactor;
-    ctx.fillStyle = '#fffbe0';
-    ctx.beginPath(); ctx.arc(moonX, moonY, 30, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = 'rgba(200,190,160,0.3)';
-    ctx.beginPath(); ctx.arc(moonX - 8, moonY - 6, 5, 0, Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(moonX + 10, moonY + 4, 3, 0, Math.PI*2); ctx.fill();
-    ctx.globalAlpha = 1;
+    ctx.fillStyle = `rgba(255,251,224,${moonAlpha})`;
+    ctx.beginPath(); ctx.arc(moonX, moonY, 32, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = `rgba(200,190,160,${moonAlpha*0.3})`;
+    ctx.beginPath(); ctx.arc(moonX - 10, moonY - 8, 6, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(moonX + 12, moonY + 5, 4, 0, Math.PI*2); ctx.fill();
   }
   
   // Clouds
   for (const c of clouds) {
-    const cloudColor = isNight() ? '180,190,220' : '255,255,255';
+    const cloudColor = dayNightCycle < 0.25 || dayNightCycle > 0.75 ? '255,255,255' : '180,190,220';
     ctx.fillStyle = `rgba(${cloudColor},${c.alpha})`;
-    ctx.beginPath();
-    ctx.ellipse(c.x, c.y, c.w/2, c.h/2, 0, 0, Math.PI*2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(c.x - c.w*0.2, c.y + 5, c.w*0.25, c.h*0.4, 0, 0, Math.PI*2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(c.x + c.w*0.2, c.y + 3, c.w*0.28, c.h*0.45, 0, 0, Math.PI*2);
-    ctx.fill();
-  }
-  
-  // Birds
-  if (!isNight()) {
-    for (const b of birds) {
-      const flap = Math.sin(b.phase) * 3;
-      ctx.strokeStyle = 'rgba(20,20,40,0.7)';
-      ctx.lineWidth = 1.5;
+    for (let i = 0; i < c.puffs; i++) {
+      const px = c.x + (i - c.puffs/2) * (c.w / c.puffs);
+      const py = c.y + Math.sin(i * 2) * 5;
       ctx.beginPath();
-      ctx.moveTo(b.x - b.size, b.y + flap);
-      ctx.lineTo(b.x, b.y);
-      ctx.lineTo(b.x + b.size, b.y + flap);
-      ctx.stroke();
+      ctx.ellipse(px, py, c.w/c.puffs * 0.7, c.h/2, 0, 0, Math.PI*2);
+      ctx.fill();
     }
   }
 }
 
 function drawMountains() {
+  const { starAlpha } = getSkyColors();
+  const nightFactor = 1 - starAlpha;
   for (let layer = 0; layer < 3; layer++) {
-    const nightMul = isNight() ? 0.4 : 1;
-    const colors = ['#0f1630', '#1a2040', '#252a4a'];
-    ctx.fillStyle = colors[layer];
-    const heightMul = 1 - layer * 0.25;
+    const baseBrightness = 0.15 + layer * 0.1;
+    const r = Math.round(30 * baseBrightness * nightFactor + 10);
+    const g = Math.round(50 * baseBrightness * nightFactor + 15);
+    const b = Math.round(80 * baseBrightness * nightFactor + 25);
+    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    const heightMul = [1, 0.75, 0.55][layer];
     for (const m of mountains) {
       if (m.layer !== layer) continue;
       const peakY = GROUND_Y - m.h * heightMul;
@@ -1610,76 +1349,71 @@ function drawMountains() {
       ctx.fill();
       
       if (layer === 0) {
-        ctx.fillStyle = `rgba(220,230,255,${0.15 * nightMul})`;
+        ctx.fillStyle = `rgba(220,230,255,${0.15 * nightFactor})`;
         ctx.beginPath();
         ctx.moveTo(m.x - m.w*0.15, peakY + m.h*0.25);
         ctx.lineTo(m.x, peakY);
         ctx.lineTo(m.x + m.w*0.15, peakY + m.h*0.25);
         ctx.closePath();
         ctx.fill();
-        ctx.fillStyle = colors[layer];
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
       }
     }
   }
 }
 
 function drawGround() {
-  const nightMul = isNight() ? 0.5 : 1;
   const gGrad = ctx.createLinearGradient(0, GROUND_Y, 0, H);
-  gGrad.addColorStop(0, '#2a3828');
-  gGrad.addColorStop(0.3, '#1a2818');
-  gGrad.addColorStop(1, '#0a120a');
+  gGrad.addColorStop(0, '#1e3a18');
+  gGrad.addColorStop(0.3, '#132510');
+  gGrad.addColorStop(1, '#050805');
   ctx.fillStyle = gGrad;
   ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
   
-  // Ground texture
-  ctx.strokeStyle = `rgba(80,120,60,${0.15 * nightMul})`;
-  ctx.lineWidth = 1;
-  for (let y = GROUND_Y + 10; y < H; y += 12) {
+  // Grass blades
+  for (const g of grass) {
+    const sway = Math.sin(gameTime * 2 + g.phase) * 2;
+    ctx.strokeStyle = 'rgba(80,140,60,0.5)';
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(W, y);
+    ctx.moveTo(g.x, GROUND_Y);
+    ctx.quadraticCurveTo(g.x + sway, GROUND_Y - g.h/2, g.x + sway*1.5, GROUND_Y - g.h);
     ctx.stroke();
   }
   
-  // Small grass tufts
-  for (let i = 0; i < 40; i++) {
-    const gx = (i * 137.5) % W;
-    const gy = GROUND_Y + 5 + (i * 23) % (H - GROUND_Y - 10);
-    ctx.strokeStyle = `rgba(60,100,50,${0.4 * nightMul})`;
-    ctx.beginPath();
-    ctx.moveTo(gx, gy);
-    ctx.lineTo(gx - 2, gy - 4);
-    ctx.moveTo(gx, gy);
-    ctx.lineTo(gx + 2, gy - 5);
-    ctx.stroke();
-  }
-  
-  // Blood stains
+  // Blood
   for (const b of bloodStains) {
-    ctx.fillStyle = b.team === 'blue' ? `rgba(60,120,200,${b.alpha * 0.7})` : `rgba(180,30,30,${b.alpha * 0.7})`;
+    ctx.fillStyle = b.team === 'blue' ? `rgba(60,120,200,${b.alpha})` : `rgba(180,30,30,${b.alpha})`;
     ctx.beginPath();
     ctx.ellipse(b.x, b.y + 5, b.r, b.r*0.4, 0, 0, Math.PI*2);
     ctx.fill();
   }
   
+  // Ground edge
   ctx.strokeStyle = 'rgba(120,180,100,0.3)';
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(0, GROUND_Y);
   ctx.lineTo(W, GROUND_Y);
   ctx.stroke();
+  
+  // Center line indicator (middle zone)
+  ctx.strokeStyle = 'rgba(255,215,0,0.1)';
+  ctx.setLineDash([10, 15]);
+  ctx.beginPath();
+  ctx.moveTo(W/2, GROUND_Y);
+  ctx.lineTo(W/2, H);
+  ctx.stroke();
+  ctx.setLineDash([]);
 }
 
 function drawTrees() {
-  const nightMul = isNight() ? 0.4 : 1;
   for (const t of trees) {
     const sway = Math.sin(gameTime * 1.2 + t.phase) * 3;
-    ctx.fillStyle = `rgba(42,26,16,${nightMul})`;
-    ctx.fillRect(t.x - 4, GROUND_Y - t.h*0.3, 8, t.h*0.3);
-    
     if (t.type === 'pine') {
-      ctx.fillStyle = `rgba(15,40,24,${nightMul})`;
+      ctx.fillStyle = '#2a1a10';
+      ctx.fillRect(t.x - 4, GROUND_Y - t.h*0.3, 8, t.h*0.3);
+      ctx.fillStyle = '#0f2818';
       for (let i = 0; i < 3; i++) {
         const y = GROUND_Y - t.h*0.3 - i * t.h*0.22;
         const w = t.h*0.3 - i * t.h*0.06;
@@ -1691,34 +1425,97 @@ function drawTrees() {
         ctx.fill();
       }
     } else {
-      // oak
-      ctx.fillStyle = `rgba(30,50,25,${nightMul})`;
+      ctx.fillStyle = '#3a2a10';
+      ctx.fillRect(t.x - 5, GROUND_Y - t.h*0.5, 10, t.h*0.5);
+      ctx.fillStyle = '#1a3a20';
       ctx.beginPath();
-      ctx.arc(t.x + sway, GROUND_Y - t.h*0.6, t.h*0.4, 0, Math.PI*2);
+      ctx.arc(t.x + sway, GROUND_Y - t.h*0.7, t.h*0.35, 0, Math.PI*2);
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(t.x + sway - t.h*0.2, GROUND_Y - t.h*0.4, t.h*0.3, 0, Math.PI*2);
+      ctx.arc(t.x + sway - t.h*0.15, GROUND_Y - t.h*0.55, t.h*0.28, 0, Math.PI*2);
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(t.x + sway + t.h*0.2, GROUND_Y - t.h*0.4, t.h*0.3, 0, Math.PI*2);
+      ctx.arc(t.x + sway + t.h*0.15, GROUND_Y - t.h*0.55, t.h*0.28, 0, Math.PI*2);
       ctx.fill();
     }
   }
 }
 
-function drawCastle(c, isBlue) {
+function drawWalls() {
+  for (const w of walls) {
+    const pct = Math.max(0, w.hp / w.maxHp);
+    ctx.fillStyle = w.team === 'blue' ? '#3a5a8a' : '#8a3a3a';
+    ctx.fillRect(w.x - w.w/2, w.y - w.h, w.w, w.h);
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(w.x - w.w/2, w.y - w.h, w.w, w.h);
+    // Brick texture
+    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+    ctx.lineWidth = 1;
+    for (let row = 0; row < 5; row++) {
+      const ry = w.y - w.h + row * (w.h/5);
+      ctx.beginPath();
+      ctx.moveTo(w.x - w.w/2, ry);
+      ctx.lineTo(w.x + w.w/2, ry);
+      ctx.stroke();
+    }
+    // HP bar
+    if (pct < 1) {
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
+      ctx.fillRect(w.x - 25, w.y - w.h - 12, 50, 5);
+      ctx.fillStyle = w.team === 'blue' ? '#4da3ff' : '#ff4d4d';
+      ctx.fillRect(w.x - 25, w.y - w.h - 12, 50 * pct, 5);
+    }
+  }
+}
+
+function drawMines() {
+  for (const m of mines) {
+    if (m.exploded) continue;
+    const pulse = 0.5 + 0.5 * Math.sin(gameTime * 6);
+    // glow
+    const glow = ctx.createRadialGradient(m.x, m.y, 3, m.x, m.y, 25);
+    glow.addColorStop(0, `rgba(255,80,40,${0.4 * pulse})`);
+    glow.addColorStop(1, 'rgba(255,80,40,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath(); ctx.arc(m.x, m.y, 25, 0, Math.PI*2); ctx.fill();
+    // body
+    ctx.fillStyle = m.team === 'blue' ? '#2a4a7a' : '#7a2a2a';
+    ctx.beginPath();
+    ctx.arc(m.x, m.y, 10, 0, Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle = '#ff4d3a';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // spikes
+    for (let i = 0; i < 6; i++) {
+      const a = i * Math.PI/3 + gameTime;
+      ctx.strokeStyle = '#ff4d3a';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(m.x + Math.cos(a)*8, m.y + Math.sin(a)*8);
+      ctx.lineTo(m.x + Math.cos(a)*13, m.y + Math.sin(a)*13);
+      ctx.stroke();
+    }
+    // blink
+    if (pulse > 0.7) {
+      ctx.fillStyle = '#ff4d3a';
+      ctx.beginPath(); ctx.arc(m.x, m.y, 4, 0, Math.PI*2); ctx.fill();
+    }
+  }
+}
+
+function drawCastle(c) {
+  const isBlue = c.color === '#4da3ff';
   const x = c.x, y = c.y;
-  const w = 110, h = 170;
-  const nightMul = isNight() ? 0.6 : 1;
+  const w = 120, h = 180;
   
-  // Glow
-  const glow = ctx.createRadialGradient(x, y + 80, 10, x, y + 80, 180);
+  const glow = ctx.createRadialGradient(x, y + 80, 10, x, y + 80, 170);
   glow.addColorStop(0, isBlue ? 'rgba(77,163,255,0.35)' : 'rgba(255,77,77,0.35)');
   glow.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = glow;
-  ctx.fillRect(x - 180, y - 100, 360, 340);
+  ctx.fillRect(x - 170, y - 80, 340, 340);
   
-  // Body
   const bodyGrad = ctx.createLinearGradient(x - w/2, y, x + w/2, y);
   bodyGrad.addColorStop(0, isBlue ? '#0a2a4a' : '#4a0a0a');
   bodyGrad.addColorStop(0.5, isBlue ? '#1a4a7a' : '#7a1a1a');
@@ -1726,211 +1523,93 @@ function drawCastle(c, isBlue) {
   ctx.fillStyle = bodyGrad;
   ctx.fillRect(x - w/2, y, w, h);
   
-  // Stone lines
-  ctx.strokeStyle = `rgba(0,0,0,${0.3 * nightMul})`;
+  ctx.strokeStyle = 'rgba(0,0,0,0.3)';
   ctx.lineWidth = 1;
-  for (let row = 0; row < 11; row++) {
+  for (let row = 0; row < 12; row++) {
     const ry = y + row * 15 + 5;
-    ctx.beginPath(); ctx.moveTo(x - w/2, ry); ctx.lineTo(x + w/2, ry); ctx.stroke();
-  }
-  for (let col = -2; col <= 2; col++) {
-    for (let row = 0; row < 11; row++) {
-      if ((row + Math.abs(col)) % 2 === 0) {
-        ctx.beginPath();
-        ctx.moveTo(x + col * 22, y + row * 15 + 5);
-        ctx.lineTo(x + col * 22, y + row * 15 + 20);
-        ctx.stroke();
-      }
-    }
+    ctx.beginPath();
+    ctx.moveTo(x - w/2, ry);
+    ctx.lineTo(x + w/2, ry);
+    ctx.stroke();
   }
   
-  // Crenellations
   for (let i = 0; i < 5; i++) {
     ctx.fillStyle = isBlue ? '#1a4a7a' : '#7a1a1a';
-    ctx.fillRect(x - w/2 + i * 22, y - 20, 15, 22);
+    ctx.fillRect(x - w/2 + i * 24, y - 20, 16, 22);
   }
   
-  // Side towers
   ctx.fillStyle = isBlue ? '#143a5a' : '#5a1414';
-  ctx.fillRect(x - w/2 - 28, y + 40, 28, h - 40);
-  ctx.fillRect(x + w/2, y + 40, 28, h - 40);
+  ctx.fillRect(x - w/2 - 30, y + 40, 30, h - 40);
+  ctx.fillRect(x + w/2, y + 40, 30, h - 40);
   
   for (let i = 0; i < 2; i++) {
     ctx.fillStyle = isBlue ? '#1a4a7a' : '#7a1a1a';
-    ctx.fillRect(x - w/2 - 28 + i * 14, y + 25, 11, 18);
-    ctx.fillRect(x + w/2 + i * 14, y + 25, 11, 18);
+    ctx.fillRect(x - w/2 - 30 + i * 16, y + 25, 12, 18);
+    ctx.fillRect(x + w/2 + i * 16, y + 25, 12, 18);
   }
   
-  // Gate
   ctx.fillStyle = '#000';
+  for (let i = 0; i < 3; i++) {
+    ctx.fillRect(x - 15, y + 40 + i * 40, 10, 20);
+    ctx.fillRect(x + 5, y + 40 + i * 40, 10, 20);
+  }
+  
+  const winGlow = ctx.createRadialGradient(x, y + 50, 0, x, y + 50, 30);
+  winGlow.addColorStop(0, 'rgba(255,200,50,0.5)');
+  winGlow.addColorStop(1, 'rgba(255,200,50,0)');
+  ctx.fillStyle = winGlow;
+  ctx.fillRect(x - 25, y + 30, 50, 50);
+  
+  // Door
+  ctx.fillStyle = '#1a0a0a';
   ctx.beginPath();
   ctx.moveTo(x - 22, y + h);
-  ctx.lineTo(x - 22, y + h - 45);
-  ctx.quadraticCurveTo(x, y + h - 65, x + 22, y + h - 45);
+  ctx.lineTo(x - 22, y + h - 50);
+  ctx.quadraticCurveTo(x, y + h - 75, x + 22, y + h - 50);
   ctx.lineTo(x + 22, y + h);
   ctx.closePath();
   ctx.fill();
+  ctx.strokeStyle = '#ffd700';
+  ctx.lineWidth = 2;
+  ctx.stroke();
   
-  // Windows
-  ctx.fillStyle = '#000';
-  for (let i = 0; i < 2; i++) {
-    ctx.fillRect(x - 15, y + 30 + i * 45, 10, 20);
-    ctx.fillRect(x + 5, y + 30 + i * 45, 10, 20);
-  }
-  
-  // Window light
-  if (isNight()) {
-    const winGlow = ctx.createRadialGradient(x, y + 40, 0, x, y + 40, 30);
-    winGlow.addColorStop(0, 'rgba(255,200,50,0.6)');
-    winGlow.addColorStop(1, 'rgba(255,200,50,0)');
-    ctx.fillStyle = winGlow;
-    ctx.fillRect(x - 25, y + 20, 50, 50);
-  }
-  
-  // Flag pole
-  ctx.strokeStyle = '#666';
+  ctx.strokeStyle = '#555';
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.moveTo(x, y - 20);
-  ctx.lineTo(x, y - 90);
+  ctx.lineTo(x, y - 80);
   ctx.stroke();
   
-  // Flag
   const flagWave = Math.sin(gameTime * 3) * 6;
   ctx.fillStyle = isBlue ? '#4da3ff' : '#ff4d4d';
   ctx.beginPath();
-  ctx.moveTo(x, y - 90);
-  ctx.quadraticCurveTo(x + 25 + flagWave, y - 85, x + 50, y - 80);
-  ctx.lineTo(x + 50, y - 60);
-  ctx.quadraticCurveTo(x + 25 + flagWave, y - 65, x, y - 60);
+  ctx.moveTo(x, y - 80);
+  ctx.quadraticCurveTo(x + 25 + flagWave, y - 75, x + 50, y - 70);
+  ctx.lineTo(x + 50, y - 55);
+  ctx.quadraticCurveTo(x + 25 + flagWave, y - 60, x, y - 55);
   ctx.closePath();
   ctx.fill();
   ctx.fillStyle = '#fff';
-  ctx.font = 'bold 16px sans-serif';
+  ctx.font = 'bold 14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(isBlue ? 'A' : 'B', x + 22, y - 68);
+  ctx.fillText(isBlue ? 'A' : 'B', x + 22, y - 63);
   
-  // Level
   if (c.level > 1) {
     ctx.fillStyle = '#ffd700';
     ctx.font = 'bold 12px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('⭐'.repeat(Math.min(c.level, 5)), x, y - 105);
+    ctx.fillText('⭐'.repeat(Math.min(c.level, 5)), x, y - 100);
   }
   
-  // HP bar above
-  const barW = 110;
+  const barW = 100;
   const hpPct = Math.max(0, c.hp / c.maxHp);
-  ctx.fillStyle = 'rgba(0,0,0,0.8)';
-  ctx.fillRect(x - barW/2, y - 122, barW, 10);
+  ctx.fillStyle = 'rgba(0,0,0,0.7)';
+  ctx.fillRect(x - barW/2, y - 115, barW, 8);
   ctx.fillStyle = isBlue ? '#4da3ff' : '#ff4d4d';
-  ctx.fillRect(x - barW/2, y - 122, barW * hpPct, 10);
-  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+  ctx.fillRect(x - barW/2, y - 115, barW * hpPct, 8);
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
   ctx.lineWidth = 1;
-  ctx.strokeRect(x - barW/2, y - 122, barW, 10);
-}
-
-function drawWall(w) {
-  const hpPct = w.hp / w.maxHp;
-  const isBlue = w.team === 'blue';
-  
-  // base stone blocks
-  ctx.fillStyle = isBlue ? '#3a5a7a' : '#7a3a3a';
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 2; j++) {
-      const bx = w.x - 20 + j * 22;
-      const by = w.y - 20 + i * 14;
-      ctx.fillRect(bx, by, 20, 12);
-      ctx.strokeStyle = 'rgba(0,0,0,0.4)';
-      ctx.strokeRect(bx, by, 20, 12);
-    }
-  }
-  
-  // HP indicator
-  if (hpPct < 1) {
-    ctx.fillStyle = 'rgba(0,0,0,0.7)';
-    ctx.fillRect(w.x - 22, w.y - 35, 44, 5);
-    ctx.fillStyle = isBlue ? '#4da3ff' : '#ff4d4d';
-    ctx.fillRect(w.x - 22, w.y - 35, 44 * hpPct, 5);
-  }
-}
-
-function drawMine(m) {
-  const blinkPhase = (Math.sin(m.blink * 4) + 1) / 2;
-  const color = m.team === 'blue' ? '#4da3ff' : '#ff4d4d';
-  
-  // danger circle
-  ctx.fillStyle = `rgba(255,50,50,${0.1 + blinkPhase * 0.15})`;
-  ctx.beginPath();
-  ctx.arc(m.x, m.y, m.radius, 0, Math.PI*2);
-  ctx.fill();
-  
-  // mine body
-  const grad = ctx.createRadialGradient(m.x - 3, m.y - 3, 1, m.x, m.y, 12);
-  grad.addColorStop(0, '#555');
-  grad.addColorStop(1, '#111');
-  ctx.fillStyle = grad;
-  ctx.beginPath();
-  ctx.arc(m.x, m.y, 10, 0, Math.PI*2);
-  ctx.fill();
-  
-  // spikes
-  ctx.strokeStyle = '#222';
-  ctx.lineWidth = 2;
-  for (let i = 0; i < 8; i++) {
-    const a = (i / 8) * Math.PI * 2;
-    ctx.beginPath();
-    ctx.moveTo(m.x + Math.cos(a) * 8, m.y + Math.sin(a) * 8);
-    ctx.lineTo(m.x + Math.cos(a) * 13, m.y + Math.sin(a) * 13);
-    ctx.stroke();
-  }
-  
-  // blinking light
-  if (blinkPhase > 0.5) {
-    ctx.fillStyle = color;
-    ctx.shadowColor = color;
-    ctx.shadowBlur = 15;
-    ctx.beginPath();
-    ctx.arc(m.x, m.y - 2, 2.5, 0, Math.PI*2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-  }
-  
-  // team ring
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1;
-  ctx.globalAlpha = 0.5;
-  ctx.beginPath();
-  ctx.arc(m.x, m.y, 14, 0, Math.PI*2);
-  ctx.stroke();
-  ctx.globalAlpha = 1;
-}
-
-function drawTrap(t) {
-  const pulse = (Math.sin(gameTime * 3) + 1) / 2;
-  const color = t.team === 'blue' ? '#4da3ff' : '#ff4d4d';
-  
-  ctx.strokeStyle = color;
-  ctx.globalAlpha = 0.4 + pulse * 0.3;
-  ctx.lineWidth = 2;
-  ctx.setLineDash([5, 5]);
-  ctx.beginPath();
-  ctx.arc(t.x, t.y, t.radius, 0, Math.PI*2);
-  ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.globalAlpha = 1;
-  
-  // trap visual
-  ctx.strokeStyle = 'rgba(200,200,200,0.7)';
-  ctx.lineWidth = 1.5;
-  for (let i = 0; i < 6; i++) {
-    const a1 = (i / 6) * Math.PI * 2;
-    const a2 = ((i + 2) / 6) * Math.PI * 2;
-    ctx.beginPath();
-    ctx.moveTo(t.x + Math.cos(a1) * 15, t.y + Math.sin(a1) * 15);
-    ctx.lineTo(t.x + Math.cos(a2) * 15, t.y + Math.sin(a2) * 15);
-    ctx.stroke();
-  }
+  ctx.strokeRect(x - barW/2, y - 115, barW, 8);
 }
 
 function drawUnit(u) {
@@ -1938,39 +1617,56 @@ function drawUnit(u) {
   const s = u.size;
   const isBlue = u.team === 'blue';
   const bodyColor = isBlue ? '#1a5a9a' : '#9a1a1a';
+  const skinColor = '#e8c090';
   const flashing = u.flash > 0;
-  const buffed = u.buffTimer > 0;
   
   ctx.save();
   ctx.translate(x, y);
   
   // shadow
-  ctx.fillStyle = 'rgba(0,0,0,0.4)';
-  ctx.beginPath();
-  ctx.ellipse(0, s/2 + 2, s*0.7, s*0.25, 0, 0, Math.PI*2);
-  ctx.fill();
-  
-  // buff aura
-  if (buffed) {
-    const auraGrad = ctx.createRadialGradient(0, 0, 5, 0, 0, s*1.5);
-    auraGrad.addColorStop(0, 'rgba(255,220,100,0.4)');
-    auraGrad.addColorStop(1, 'rgba(255,220,100,0)');
-    ctx.fillStyle = auraGrad;
+  if (!u.flying) {
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
     ctx.beginPath();
-    ctx.arc(0, 0, s*1.5, 0, Math.PI*2);
+    ctx.ellipse(0, s/2 + 2, s*0.7, s*0.25, 0, 0, Math.PI*2);
+    ctx.fill();
+  } else {
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.beginPath();
+    ctx.ellipse(0, GROUND_Y - y, s*0.6, s*0.2, 0, 0, Math.PI*2);
     ctx.fill();
   }
   
-  const bob = Math.sin(u.walkPhase) * 2;
+  const bob = u.flying ? Math.sin(gameTime * 4 + u.walkPhase) * 5 : Math.sin(u.walkPhase) * 2;
   ctx.translate(0, bob);
   
   if (flashing) ctx.globalAlpha = 0.7;
   
-  const legSwing = Math.sin(u.walkPhase) * 4;
+  const legSwing = u.flying ? 0 : Math.sin(u.walkPhase) * 4;
   ctx.fillStyle = '#2a2a2a';
-  ctx.fillRect(-s*0.3 + legSwing, s*0.2, s*0.2, s*0.5);
-  ctx.fillRect(s*0.1 - legSwing, s*0.2, s*0.2, s*0.5);
+  if (!u.flying) {
+    ctx.fillRect(-s*0.3 + legSwing, s*0.2, s*0.2, s*0.5);
+    ctx.fillRect(s*0.1 - legSwing, s*0.2, s*0.2, s*0.5);
+  }
   
+  // Air unit wings
+  if (u.flying) {
+    ctx.fillStyle = '#3a5a8a';
+    const wingFlap = Math.sin(gameTime * 15) * 8;
+    ctx.beginPath();
+    ctx.moveTo(-s*0.4, -s*0.2);
+    ctx.lineTo(-s*1.2, -s*0.4 + wingFlap);
+    ctx.lineTo(-s*0.4, s*0.1);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(s*0.4, -s*0.2);
+    ctx.lineTo(s*1.2, -s*0.4 + wingFlap);
+    ctx.lineTo(s*0.4, s*0.1);
+    ctx.closePath();
+    ctx.fill();
+  }
+  
+  // Body
   const bodyGrad = ctx.createLinearGradient(-s/2, -s/2, s/2, s/2);
   bodyGrad.addColorStop(0, bodyColor);
   bodyGrad.addColorStop(1, isBlue ? '#0a2a4a' : '#4a0a0a');
@@ -1979,11 +1675,13 @@ function drawUnit(u) {
   ctx.roundRect(-s*0.4, -s*0.5, s*0.8, s*0.9, 3);
   ctx.fill();
   
-  ctx.fillStyle = flashing ? '#fff' : '#e8c090';
+  // Head
+  ctx.fillStyle = flashing ? '#fff' : skinColor;
   ctx.beginPath();
   ctx.arc(0, -s*0.7, s*0.32, 0, Math.PI*2);
   ctx.fill();
   
+  // Helmet
   ctx.fillStyle = isBlue ? '#4da3ff' : '#ff7d7d';
   ctx.beginPath();
   ctx.arc(0, -s*0.75, s*0.32, Math.PI, 0);
@@ -2016,10 +1714,49 @@ function drawUnit(u) {
     ctx.beginPath();
     ctx.arc(facing * s*0.9, -s*0.15, s*0.15, 0, Math.PI*2);
     ctx.fill();
+  } else if (u.type === 'tank') {
+    // Shield
+    ctx.fillStyle = '#aaa';
+    ctx.beginPath();
+    ctx.roundRect(facing * s*0.35, -s*0.6, facing * s*0.35, s*0.9, 4);
+    ctx.fill();
+    ctx.strokeStyle = '#666';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  } else if (u.type === 'mage') {
+    // Staff
+    ctx.strokeStyle = '#8B5A2B';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(facing * s*0.5, s*0.4);
+    ctx.lineTo(facing * s*0.5, -s*0.9);
+    ctx.stroke();
+    // Orb
+    const orbGlow = ctx.createRadialGradient(facing * s*0.5, -s*0.9, 2, facing * s*0.5, -s*0.9, 15);
+    orbGlow.addColorStop(0, 'rgba(180,100,255,1)');
+    orbGlow.addColorStop(1, 'rgba(180,100,255,0)');
+    ctx.fillStyle = orbGlow;
+    ctx.beginPath();
+    ctx.arc(facing * s*0.5, -s*0.9, 15, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = '#d8a0ff';
+    ctx.beginPath();
+    ctx.arc(facing * s*0.5, -s*0.9, 5, 0, Math.PI*2);
+    ctx.fill();
+  } else if (u.type === 'air') {
+    // Propeller
+    ctx.strokeStyle = '#888';
+    ctx.lineWidth = 3;
+    const propRot = gameTime * 20;
+    ctx.beginPath();
+    ctx.moveTo(-Math.cos(propRot)*s*0.8, -s*0.7 - Math.sin(propRot)*s*0.2);
+    ctx.lineTo(Math.cos(propRot)*s*0.8, -s*0.7 + Math.sin(propRot)*s*0.2);
+    ctx.stroke();
   }
   
   ctx.restore();
   
+  // HP bar
   if (u.hp < u.maxHp) {
     const bw = s * 1.2;
     ctx.fillStyle = 'rgba(0,0,0,0.6)';
@@ -2043,8 +1780,7 @@ function drawProjectile(p) {
     ctx.strokeStyle = '#c8a060';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(-12, 0); ctx.lineTo(12, 0);
-    ctx.stroke();
+    ctx.moveTo(-12, 0); ctx.lineTo(12, 0); ctx.stroke();
     ctx.fillStyle = '#eee';
     ctx.beginPath();
     ctx.moveTo(12, 0); ctx.lineTo(8, -3); ctx.lineTo(8, 3);
@@ -2053,73 +1789,36 @@ function drawProjectile(p) {
     ctx.beginPath();
     ctx.moveTo(-12, 0); ctx.lineTo(-16, -4); ctx.lineTo(-10, 0); ctx.lineTo(-16, 4);
     ctx.closePath(); ctx.fill();
-  } else {
+  } else if (p.type === 'cannonball') {
     ctx.fillStyle = 'rgba(255,140,50,0.4)';
     ctx.beginPath(); ctx.arc(-10, 0, 8, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = 'rgba(255,80,20,0.3)';
-    ctx.beginPath(); ctx.arc(-20, 0, 6, 0, Math.PI*2); ctx.fill();
     const grad = ctx.createRadialGradient(-2, -2, 1, 0, 0, 8);
-    grad.addColorStop(0, '#666');
-    grad.addColorStop(1, '#111');
+    grad.addColorStop(0, '#666'); grad.addColorStop(1, '#111');
     ctx.fillStyle = grad;
     ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = 'rgba(255,100,0,0.5)';
     ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI*2); ctx.fill();
+  } else if (p.type === 'magic') {
+    const mg = ctx.createRadialGradient(0, 0, 2, 0, 0, 12);
+    mg.addColorStop(0, 'rgba(230,180,255,1)');
+    mg.addColorStop(0.5, 'rgba(180,100,255,0.7)');
+    mg.addColorStop(1, 'rgba(180,100,255,0)');
+    ctx.fillStyle = mg;
+    ctx.beginPath(); ctx.arc(0, 0, 12, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI*2); ctx.fill();
+  } else if (p.type === 'bomb') {
+    ctx.fillStyle = '#333';
+    ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#ff4d3a';
+    ctx.beginPath(); ctx.arc(3, -4, 3, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#ffd700';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, -7);
+    ctx.lineTo(3, -12);
+    ctx.stroke();
   }
-  
-  ctx.restore();
-}
-
-function drawPlane(pl) {
-  ctx.save();
-  ctx.translate(pl.x, pl.y);
-  
-  // body
-  ctx.fillStyle = '#4a5a7a';
-  ctx.beginPath();
-  ctx.ellipse(0, 0, 30, 8, 0, 0, Math.PI*2);
-  ctx.fill();
-  
-  // wings
-  ctx.fillStyle = '#3a4a6a';
-  ctx.beginPath();
-  ctx.moveTo(-5, -2);
-  ctx.lineTo(-15, -20);
-  ctx.lineTo(-5, -20);
-  ctx.lineTo(10, -2);
-  ctx.closePath();
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(-5, 2);
-  ctx.lineTo(-15, 20);
-  ctx.lineTo(-5, 20);
-  ctx.lineTo(10, 2);
-  ctx.closePath();
-  ctx.fill();
-  
-  // tail
-  ctx.fillStyle = '#3a4a6a';
-  ctx.beginPath();
-  ctx.moveTo(-25, -1);
-  ctx.lineTo(-30, -10);
-  ctx.lineTo(-22, -2);
-  ctx.closePath();
-  ctx.fill();
-  
-  // cockpit
-  ctx.fillStyle = '#7dc4ff';
-  ctx.beginPath();
-  ctx.arc(12, -2, 4, 0, Math.PI*2);
-  ctx.fill();
-  
-  // propeller
-  ctx.strokeStyle = 'rgba(200,200,200,0.6)';
-  ctx.lineWidth = 2;
-  const propPhase = gameTime * 30;
-  ctx.beginPath();
-  ctx.moveTo(28, -8 + Math.sin(propPhase)*3);
-  ctx.lineTo(28, 8 + Math.sin(propPhase)*3);
-  ctx.stroke();
   
   ctx.restore();
 }
@@ -2148,9 +1847,7 @@ function drawPlayer() {
     auraGrad.addColorStop(0.6, 'rgba(255,80,20,0.15)');
     auraGrad.addColorStop(1, 'rgba(255,80,20,0)');
     ctx.fillStyle = auraGrad;
-    ctx.beginPath();
-    ctx.arc(0, -s*0.3, s*1.8, 0, Math.PI*2);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(0, -s*0.3, s*1.8, 0, Math.PI*2); ctx.fill();
   }
   
   const legSwing = Math.sin(player.walkPhase) * 5;
@@ -2177,18 +1874,12 @@ function drawPlayer() {
   ctx.fill();
   
   ctx.fillStyle = swordActive ? '#ffd700' : '#7dc4ff';
-  ctx.beginPath();
-  ctx.arc(0, -s*0.15, s*0.12, 0, Math.PI*2);
-  ctx.fill();
+  ctx.beginPath(); ctx.arc(0, -s*0.15, s*0.12, 0, Math.PI*2); ctx.fill();
   ctx.fillStyle = swordActive ? '#ff4d00' : '#1a3a6a';
-  ctx.beginPath();
-  ctx.arc(0, -s*0.15, s*0.07, 0, Math.PI*2);
-  ctx.fill();
+  ctx.beginPath(); ctx.arc(0, -s*0.15, s*0.07, 0, Math.PI*2); ctx.fill();
   
   ctx.fillStyle = '#e8c090';
-  ctx.beginPath();
-  ctx.arc(0, -s*0.78, s*0.34, 0, Math.PI*2);
-  ctx.fill();
+  ctx.beginPath(); ctx.arc(0, -s*0.78, s*0.34, 0, Math.PI*2); ctx.fill();
   
   const helmetGrad = ctx.createLinearGradient(-s*0.4, -s*1.1, s*0.4, -s*0.4);
   helmetGrad.addColorStop(0, swordActive ? '#ff7d3a' : '#7dc4ff');
@@ -2209,9 +1900,7 @@ function drawPlayer() {
   ctx.fillStyle = swordActive ? '#ff4d00' : '#4da3ff';
   ctx.shadowColor = ctx.fillStyle;
   ctx.shadowBlur = 10;
-  ctx.beginPath();
-  ctx.arc(facing * s*0.12, -s*0.8, 2.5, 0, Math.PI*2);
-  ctx.fill();
+  ctx.beginPath(); ctx.arc(facing * s*0.12, -s*0.8, 2.5, 0, Math.PI*2); ctx.fill();
   ctx.shadowBlur = 0;
   
   // Sword
@@ -2239,10 +1928,7 @@ function drawPlayer() {
     bladeGrad.addColorStop(1, '#aaa');
   }
   ctx.fillStyle = bladeGrad;
-  if (swordActive) {
-    ctx.shadowColor = '#ff7d3a';
-    ctx.shadowBlur = 20;
-  }
+  if (swordActive) { ctx.shadowColor = '#ff7d3a'; ctx.shadowBlur = 20; }
   ctx.beginPath();
   ctx.moveTo(8, -swordWidth/2);
   ctx.lineTo(swordLen - 10, -swordWidth/2 + 2);
@@ -2270,10 +1956,23 @@ function drawPlayer() {
   ctx.fillRect(5, -8, 6, 16);
   ctx.fillStyle = '#5a3a1a';
   ctx.fillRect(-6, -3, 12, 6);
-  
   ctx.restore();
+  
   ctx.globalAlpha = 1;
   ctx.restore();
+  
+  // Player HP bar (above head)
+  const hpPct = player.hp / player.maxHp;
+  if (hpPct < 1) {
+    const bw = 60;
+    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+    ctx.fillRect(x - bw/2, y - s*2.2, bw, 6);
+    ctx.fillStyle = '#4dff88';
+    ctx.fillRect(x - bw/2, y - s*2.2, bw * hpPct, 6);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x - bw/2, y - s*2.2, bw, 6);
+  }
 }
 
 function drawParticles() {
@@ -2291,6 +1990,20 @@ function drawParticles() {
   ctx.shadowBlur = 0;
 }
 
+function drawExplosions() {
+  for (const e of explosions) {
+    const alpha = e.life / e.maxLife;
+    const grad = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.radius);
+    grad.addColorStop(0, `rgba(255,255,200,${alpha})`);
+    grad.addColorStop(0.4, `rgba(255,180,50,${alpha*0.8})`);
+    grad.addColorStop(1, `rgba(255,80,20,0)`);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(e.x, e.y, e.radius, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
 function drawFloatingTexts() {
   ctx.textAlign = 'center';
   for (const t of floatingTexts) {
@@ -2299,38 +2012,10 @@ function drawFloatingTexts() {
     ctx.fillStyle = t.color;
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 3;
-    ctx.font = 'bold 18px sans-serif';
+    ctx.font = 'bold 20px sans-serif';
     ctx.strokeText(t.text, t.x, t.y);
     ctx.fillText(t.text, t.x, t.y);
   }
-  ctx.globalAlpha = 1;
-}
-
-function drawPlacementPreview() {
-  if (!placementMode) return;
-  const x = mouse.x, y = GROUND_Y - 8;
-  
-  // Check if valid
-  const valid = x > blueCastle.x + 100 && x < redCastle.x - 100;
-  
-  ctx.globalAlpha = 0.6;
-  ctx.strokeStyle = valid ? '#4dff4d' : '#ff4d4d';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([8, 4]);
-  
-  if (placementMode.type === 'wall') {
-    ctx.strokeRect(x - 20, GROUND_Y - 45, 40, 35);
-  } else if (placementMode.type === 'mine') {
-    ctx.beginPath();
-    ctx.arc(x, y, 40, 0, Math.PI*2);
-    ctx.stroke();
-  } else if (placementMode.type === 'trap') {
-    ctx.beginPath();
-    ctx.arc(x, y, 50, 0, Math.PI*2);
-    ctx.stroke();
-  }
-  
-  ctx.setLineDash([]);
   ctx.globalAlpha = 1;
 }
 
@@ -2341,39 +2026,43 @@ function render() {
   drawMountains();
   drawGround();
   drawTrees();
+  drawMines();
+  drawWalls();
   
-  drawCastle(blueCastle, true);
-  drawCastle(redCastle, false);
+  drawCastle(blueCastle);
+  drawCastle(redCastle);
   
-  // Traps (below units)
-  for (const t of traps) drawTrap(t);
-  
-  // Walls (behind units)
-  for (const w of walls) drawWall(w);
-  
-  // Mines (below units but visible)
-  for (const m of mines) drawMine(m);
-  
-  // Units sorted by y
   const sortedUnits = [...units].sort((a, b) => a.y - b.y);
   for (const u of sortedUnits) drawUnit(u);
-  
-  // Planes above
-  for (const pl of planes) drawPlane(pl);
   
   drawPlayer();
   
   for (const p of projectiles) drawProjectile(p);
   
+  drawExplosions();
   drawParticles();
   drawFloatingTexts();
-  drawPlacementPreview();
   
-  // Night overlay
-  const nightAlpha = Math.max(0, Math.min(0.55, (dayPhase - 0.5) * 2.2));
-  if (nightAlpha > 0) {
-    ctx.fillStyle = `rgba(10,15,40,${nightAlpha * 0.5})`;
-    ctx.fillRect(0, 0, W, H);
+  // Build mode preview
+  if (buildMode) {
+    const bx = mouse.x;
+    const by = buildMode === 'wall' ? GROUND_Y : GROUND_Y - 10;
+    ctx.globalAlpha = 0.5;
+    if (buildMode === 'wall') {
+      ctx.fillStyle = '#3a5a8a';
+      ctx.fillRect(bx - 20, by - 60, 40, 60);
+    } else {
+      ctx.fillStyle = '#ff4d3a';
+      ctx.beginPath(); ctx.arc(bx, by, 15, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = '#ffd700';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.arc(bx, by - (buildMode === 'wall' ? 30 : 0), 25, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.setLineDash([]);
   }
   
   // Vignette
@@ -2383,20 +2072,18 @@ function render() {
   ctx.fillStyle = vignette;
   ctx.fillRect(0, 0, W, H);
   
-  // Sword mode indicator
   if (swordActive && gameRunning) {
-    const t = gameTime * 3;
     ctx.save();
-    ctx.globalAlpha = 0.6 + Math.sin(t) * 0.3;
+    ctx.globalAlpha = 0.5 + Math.sin(gameTime * 3) * 0.3;
     ctx.strokeStyle = '#ff7d3a';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(3, 3, W-6, H-6);
+    ctx.lineWidth = 3;
+    ctx.strokeRect(5, 5, W-10, H-10);
     ctx.restore();
   }
 }
 
 // ============================================================
-// Main Loop
+// Main loop
 // ============================================================
 function loop(timestamp) {
   const dt = Math.min(0.05, (timestamp - lastTime) / 1000) || 0.016;
@@ -2406,6 +2093,7 @@ function loop(timestamp) {
     update(dt);
   } else {
     gameTime += dt;
+    dayNightCycle = (gameTime / 120) % 1;
     for (const c of clouds) { c.x += c.speed * dt; if (c.x - c.w > W) c.x = -c.w; }
   }
   
@@ -2414,64 +2102,55 @@ function loop(timestamp) {
 }
 
 // ============================================================
-// Input
+// Input (Mouse + Touch)
 // ============================================================
-function getPointerPos(e) {
-  if (e.touches && e.touches[0]) {
-    return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-  }
-  return { x: e.clientX, y: e.clientY };
-}
-
 document.addEventListener('mousemove', e => {
   mouse.x = e.clientX;
   mouse.y = e.clientY;
-  crosshair.style.left = e.clientX + 'px';
-  crosshair.style.top = e.clientY + 'px';
+  if (!isMobile) {
+    crosshair.style.left = e.clientX + 'px';
+    crosshair.style.top = e.clientY + 'px';
+  }
 });
 
-let lastTap = 0;
 document.addEventListener('mousedown', e => {
   if (!gameRunning) return;
   initAudio();
   if (e.button === 0) {
-    if (placementMode) {
-      placeDefense(e.clientX, GROUND_Y - 8);
+    if (buildMode) {
+      tryBuild();
     } else if (swordActive) {
       playerAttack();
     }
   }
 });
 
-document.addEventListener('touchstart', e => {
+// Touch support
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
   if (!gameRunning) return;
   initAudio();
-  const pos = getPointerPos(e);
-  mouse.x = pos.x;
-  mouse.y = pos.y;
+  const touch = e.touches[0];
+  mouse.x = touch.clientX;
+  mouse.y = touch.clientY;
+  touchActive = true;
   
-  // Double-tap to cancel placement
-  const now = Date.now();
-  if (now - lastTap < 300 && placementMode) {
-    cancelPlacement();
-    lastTap = 0;
-    return;
+  if (buildMode) {
+    tryBuild();
   }
-  lastTap = now;
-  
-  if (placementMode) {
-    placeDefense(pos.x, GROUND_Y - 8);
-  } else if (swordActive) {
-    playerAttack();
-  }
-}, { passive: true });
+}, { passive: false });
 
-document.addEventListener('touchmove', e => {
-  if (!gameRunning) return;
-  const pos = getPointerPos(e);
-  mouse.x = pos.x;
-  mouse.y = pos.y;
-}, { passive: true });
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  mouse.x = touch.clientX;
+  mouse.y = touch.clientY;
+}, { passive: false });
+
+canvas.addEventListener('touchend', e => {
+  e.preventDefault();
+  touchActive = false;
+}, { passive: false });
 
 document.addEventListener('keydown', e => {
   keys[e.key.toLowerCase()] = true;
@@ -2485,11 +2164,146 @@ document.addEventListener('keydown', e => {
   if (e.key === '1') trySpawn('soldier');
   if (e.key === '2') trySpawn('archer');
   if (e.key === '3') trySpawn('cannon');
-  if (e.key === 'Escape') cancelPlacement();
+  if (e.key === '4') trySpawn('tank');
+  if (e.key === '5') trySpawn('mage');
+  if (e.key === '6') trySpawn('air');
 });
 
 document.addEventListener('keyup', e => {
   keys[e.key.toLowerCase()] = false;
+});
+
+// ============================================================
+// Actions
+// ============================================================
+function trySpawn(type) {
+  if (!gameRunning) return;
+  const cost = UNIT_STATS[type].cost;
+  if (gold < cost) {
+    playSound('square', 150, 0.2, 0.1);
+    return;
+  }
+  gold -= cost;
+  spawnUnit('blue', type);
+  playSound('sine', 600, 0.15, 0.1);
+}
+
+function tryBuild() {
+  if (!buildMode || !gameRunning) return;
+  const cost = buildMode === 'wall' ? 60 : 40;
+  if (gold < cost) {
+    playSound('square', 150, 0.2, 0.1);
+    return;
+  }
+  gold -= cost;
+  if (buildMode === 'wall') {
+    walls.push({
+      x: mouse.x, y: GROUND_Y,
+      w: 40, h: 60,
+      hp: 300, maxHp: 300,
+      team: 'blue'
+    });
+    playSound('sine', 400, 0.2, 0.1);
+  } else {
+    mines.push({
+      x: mouse.x, y: GROUND_Y - 10,
+      team: 'blue',
+      life: 30,
+      exploded: false
+    });
+    playSound('sine', 500, 0.2, 0.1);
+  }
+  buildMode = null;
+  document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('pressed'));
+}
+
+function toggleSword() {
+  swordActive = !swordActive;
+  document.getElementById('swordBtn').classList.toggle('active', swordActive);
+  playSound('sawtooth', swordActive ? 300 : 200, 0.3, 0.15);
+  if (swordActive) {
+    for (let i = 0; i < 30; i++) {
+      const a = Math.random() * Math.PI * 2;
+      particles.push({
+        x: player.x, y: player.y - 20,
+        vx: Math.cos(a) * (100 + Math.random()*200),
+        vy: Math.sin(a) * (100 + Math.random()*200),
+        life: 0.8, maxLife: 0.8,
+        color: Math.random() > 0.5 ? '#ff7d3a' : '#ffd700',
+        size: 3 + Math.random()*4
+      });
+    }
+  }
+}
+
+function healArmy() {
+  if (gold < 100) { playSound('square', 150, 0.2, 0.1); return; }
+  gold -= 100;
+  for (const u of units) {
+    if (u.team === 'blue') {
+      u.hp = Math.min(u.maxHp, u.hp + 80);
+      spawnParticles(u.x, u.y - u.size, 8, '#4dff88', 3);
+    }
+  }
+  player.hp = Math.min(player.maxHp, player.hp + 200);
+  playSound('sine', 800, 0.4, 0.15);
+  spawnFloatingText(player.x, player.y - 80, '+HEAL', '#4dff88');
+}
+
+function upgradeCastle() {
+  if (gold < 200) { playSound('square', 150, 0.2, 0.1); return; }
+  gold -= 200;
+  blueCastle.level++;
+  blueCastle.maxHp += 400;
+  blueCastle.hp = Math.min(blueCastle.maxHp, blueCastle.hp + 400);
+  spawnFloatingText(blueCastle.x, blueCastle.y - 50, '⬆️ LEVEL ' + blueCastle.level, '#ffd700');
+  playSound('sine', 800, 0.4, 0.15);
+}
+
+// ============================================================
+// UI Bindings
+// ============================================================
+document.querySelectorAll('.unit-btn[data-unit]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    initAudio();
+    trySpawn(btn.dataset.unit);
+  });
+});
+
+document.querySelectorAll('.unit-btn[data-action]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    initAudio();
+    const action = btn.dataset.action;
+    if (action === 'heal') healArmy();
+    else if (action === 'upgrade') upgradeCastle();
+    else if (action === 'wall' || action === 'mine') {
+      buildMode = action;
+      document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('pressed'));
+      btn.classList.add('pressed');
+      spawnFloatingText(W/2, H/2, '👆 تاپ بکە بۆ دانان', '#ffd700');
+    }
+  });
+});
+
+document.getElementById('swordBtn').addEventListener('click', () => {
+  initAudio();
+  toggleSword();
+});
+
+document.getElementById('attackBtn').addEventListener('click', () => {
+  initAudio();
+  if (swordActive) playerAttack();
+});
+
+// Tabs
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    const target = document.getElementById('tab-' + tab.dataset.tab);
+    if (target) target.classList.add('active');
+  });
 });
 
 // ============================================================
@@ -2501,9 +2315,10 @@ function startGame() {
   crosshair.style.display = isMobile ? 'none' : 'block';
   gameRunning = true;
   gameTime = 0;
-  gameDuration = 0;
-  dayPhase = 0.2;
-  gold = 800;
+  gameStartTime = performance.now();
+  gold = 500;
+  totalKills = 0;
+  totalGoldEarned = 0;
   units = [];
   projectiles = [];
   particles = [];
@@ -2511,46 +2326,39 @@ function startGame() {
   bloodStains = [];
   walls = [];
   mines = [];
-  traps = [];
-  planes = [];
-  
-  blueCastle = { x: Math.max(70, W*0.08), y: GROUND_Y - 180, hp: 1500, maxHp: 1500, level: 1 };
-  redCastle  = { x: Math.min(W - 70, W*0.92), y: GROUND_Y - 180, hp: 1500, maxHp: 1500, level: 1 };
-  
-  player.x = W/2;
-  player.y = GROUND_Y - 40;
-  player.hp = player.maxHp;
-  
+  explosions = [];
+  buildMode = null;
+  blueCastle = { x: W*0.08, y: GROUND_Y - 180, hp: 1500, maxHp: 1500, level: 1, color: '#4da3ff' };
+  redCastle  = { x: W*0.92, y: GROUND_Y - 180, hp: 1500, maxHp: 1500, level: 1, color: '#ff4d4d' };
+  player = { x: W/2, y: GROUND_Y - 40, vx: 0, vy: 0, facing: 1, attackCooldown: 0, attackAnim: 0, hurtFlash: 0, walkPhase: 0, hp: 500, maxHp: 500, invuln: 0 };
   redSpawnTimer = 3;
   aiQueueIdx = 0;
-  stats = { kills: 0, unitsSpawned: 0, goldEarned: 0, damageDealt: 0 };
-  
-  renderButtons();
   
   playSound('sine', 400, 0.2, 0.2);
   setTimeout(() => playSound('sine', 600, 0.2, 0.2), 150);
   setTimeout(() => playSound('sine', 800, 0.3, 0.2), 300);
-  showToast('⚔️ شەر دەستیپێکرد!', 2500);
 }
 
 function endGame(win) {
   gameRunning = false;
   const over = document.getElementById('gameOver');
   const text = document.getElementById('resultText');
+  const stats = document.getElementById('finalStats');
   text.textContent = win ? '🎉 سەرکەوتوو بوویت!' : '💀 دۆڕایت...';
   text.className = win ? 'win' : 'lose';
   
-  const finalStats = document.getElementById('finalStats');
-  finalStats.innerHTML = `
-    ⚔️ کوژراو: <b>${stats.kills}</b><br>
-    🎖️ یەکەی دروستکراو: <b>${stats.unitsSpawned}</b><br>
-    💰 زێڕی کۆکراوە: <b>${Math.floor(stats.goldEarned)}</b><br>
-    ⏱️ کاتی شەر: <b>${Math.floor(gameDuration)}s</b>
+  const elapsed = Math.floor((performance.now() - gameStartTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  stats.innerHTML = `
+    ⏱️ کات: ${mins}:${secs.toString().padStart(2,'0')}<br>
+    ⚔️ کوژراوەکان: ${totalKills}<br>
+    💰 زێڕ کۆکراوە: ${Math.floor(totalGoldEarned)}<br>
+    🏰 ئاستی قەڵا: ${blueCastle.level}
   `;
   
   over.style.display = 'flex';
   crosshair.style.display = 'none';
-  cancelPlacement();
   
   if (win) {
     playSound('sine', 600, 0.3, 0.2);
@@ -2563,7 +2371,7 @@ function endGame(win) {
   }
 }
 
-// Polyfill roundRect
+// Polyfill
 if (!CanvasRenderingContext2D.prototype.roundRect) {
   CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
     if (w < 2*r) r = w/2;
@@ -2579,9 +2387,6 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
   };
 }
 
-// Init
-resizeCanvas();
-renderButtons();
 requestAnimationFrame(loop);
 </script>
 
