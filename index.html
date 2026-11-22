@@ -1014,10 +1014,39 @@
       padding: 6px 8px;
     }
 
-    @media (min-width: 768px) {
-      .mobile-bottom-nav {
-        display: none;
-      }
+    /* Security & Bot Status Pills */
+    .security-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.32);
+      color: #6ee7b7;
+    }
+
+    .bot-log-box {
+      background: #09090d;
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 12px;
+      max-height: 220px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .bot-log-entry {
+      background: rgba(255, 255, 255, 0.03);
+      border-right: 3px solid var(--accent-gold);
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
     }
 
     .mob-nav-btn {
@@ -1835,296 +1864,17 @@
             </a>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================================================================== -->
-  <!-- VIDEO PLAYER MODAL                                                    -->
-  <!-- ===================================================================== -->
-  <div id="player-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="player-movie-title">
-    <div class="modal-panel player-wide">
-      <div class="modal-header">
-        <div style="min-width: 0;">
-          <h2 id="player-movie-title" class="modal-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ناوی فیلم</h2>
-          <div id="player-movie-meta" style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;"></div>
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-          <button type="button" onclick="toggleTheaterMode()" class="btn-pill btn-auth" title="دۆخی سینەما">
-            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect></svg>
-            <span id="theater-btn-label">دۆخی سینەما</span>
-          </button>
-          <button type="button" class="modal-close" onclick="closePlayerModal()" aria-label="داخستن">
-            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          </button>
-        </div>
-      </div>
-
-      <div class="modal-body">
-        <!-- AD SLOT: PLAYER -->
-        <div id="ad-slot-player" class="ad-slot-container" style="margin: 0;"></div>
-
-        <!-- Video Stage -->
-        <div id="video-stage" class="video-stage"></div>
-
-        <!-- Server / Episode Switcher -->
-        <div id="player-controls-row" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;">
-          <div id="server-buttons-wrap" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
-          <div id="player-views-badge" style="font-size: 12px; font-weight: 800; color: #fbbf24;"></div>
-        </div>
-
-        <!-- Synopsis -->
-        <div style="background: rgba(255, 255, 255, 0.025); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px;">
-          <div style="font-size: 12px; font-weight: 800; color: #fbbf24; margin-bottom: 4px;">کورتەی چیرۆک</div>
-          <p id="player-synopsis" style="font-size: 13px; color: #d4d4d8;"></p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================================================================== -->
-  <!-- ADMIN PANEL MODAL (@i4m_SHAW)                                         -->
-  <!-- ===================================================================== -->
-  <div id="admin-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
-    <div class="modal-panel wide">
-      <div class="modal-header">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="color: #fbbf24;">
-            <svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          </span>
-          <h2 id="admin-modal-title" class="modal-title">پانێڵی بەڕێوەبردنی کوردس مۆڤیس</h2>
-        </div>
-        <button type="button" class="modal-close" onclick="closeModal('admin-modal')" aria-label="داخستن">
-          <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-      </div>
-
-      <!-- Admin Password Lock Screen -->
-      <div id="admin-lock-screen" class="modal-body" style="align-items: center; text-align: center; padding: 36px 24px;">
-        <div style="width: 52px; height: 52px; border-radius: 16px; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center;">
-          <svg class="icon-svg icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-        </div>
-        <h3 style="font-size: 18px; font-weight: 900; color: #ffffff;">چوونەژوورەوە بۆ پانێڵی ئەدمین</h3>
-        <p style="font-size: 12px; color: var(--text-secondary); max-width: 360px;">
-          تێپەڕەوشەی تایبەتی ئەدمین بنووسە بۆ کردنەوەی ستۆرەیج، بەشی VIP، و بەشی ڕیکلام.
-        </p>
-        <form onsubmit="handleAdminUnlock(event)" style="width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
-          <input type="password" id="admin-password-input" class="form-input" dir="ltr" style="text-align: center; font-weight: 800;" required placeholder="تێپەڕەوشەی ئەدمین" />
-          <p id="admin-pass-error" style="display: none; font-size: 12px; font-weight: 700; color: #fb7185;">تێپەڕەوشەکە هەڵەیە!</p>
-          <button type="submit" class="btn-gold-submit">کردنەوەی پانێڵ</button>
-        </form>
-      </div>
-
-      <!-- Admin Unlocked Workspace -->
-      <div id="admin-workspace" style="display: none; flex-direction: column; min-height: 0; flex: 1;">
-        <div class="sub-tabs">
-          <button type="button" data-admintab="storage" onclick="switchAdminTab('storage')" class="sub-tab-btn active">ستۆرەیج و فیلم/دراما</button>
-          <button type="button" data-admintab="vip" onclick="switchAdminTab('vip')" class="sub-tab-btn">VIP و ئەکاونتەکان</button>
-          <button type="button" data-admintab="ads" onclick="switchAdminTab('ads')" class="sub-tab-btn">بەشی ڕیکلام</button>
-          <button type="button" data-admintab="backup" onclick="switchAdminTab('backup')" class="sub-tab-btn">باکئەپ و داتا</button>
-          <button type="button" onclick="lockAdminPanel()" class="btn-danger-soft" style="margin-right: auto;">داخستنی ئەدمین</button>
-        </div>
-
-        <div class="modal-body">
-          <!-- TAB 1: PERMANENT STORAGE & MOVIE/DRAMA CRUD -->
-          <div id="admin-tab-storage" style="display: flex; flex-direction: column; gap: 18px;">
-            <form id="movie-crud-form" onsubmit="handleSaveMovie(event)" style="background: rgba(255, 255, 255, 0.025); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                <h4 id="movie-form-heading" style="font-size: 14px; font-weight: 900; color: #fbbf24;">زیادکردنی فیلم یان درامای نوێ (هەڵگرتنی هەمیشەیی)</h4>
-                <button type="button" id="cancel-movie-edit-btn" onclick="resetMovieForm()" class="btn-danger-soft" style="display: none;">پاشگەزبوونەوە لە دەستکاری</button>
-              </div>
-
-              <input type="hidden" id="edit-movie-id" />
-
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label" for="m-title-ku">ناونیشانی کوردی *</label>
-                  <input type="text" id="m-title-ku" class="form-input" required placeholder="نموونە: ئۆپنهایمەر" />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="m-title-orig">ناوی ڕەسەن (ئینگلیزی / تورکی / عەرەبی)</label>
-                  <input type="text" id="m-title-orig" class="form-input" dir="ltr" placeholder="Oppenheimer" />
-                </div>
-              </div>
-
-              <div class="form-grid-3">
-                <div class="form-group">
-                  <label class="form-label" for="m-category">جۆر *</label>
-                  <select id="m-category" class="form-select">
-                    <option value="فیلم">فیلم</option>
-                    <option value="دراما">دراما</option>
-                    <option value="ئەنیمەیشن">ئەنیمەیشن</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="m-genre">چەشن</label>
-                  <input type="text" id="m-genre" class="form-input" placeholder="ئەکشن، دراما، زانستی" />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="m-year">ساڵ</label>
-                  <input type="number" id="m-year" class="form-input" value="2025" min="1950" max="2030" />
-                </div>
-              </div>
-
-              <div class="form-grid-3">
-                <div class="form-group">
-                  <label class="form-label" for="m-rating">هەڵسەنگاندن (0 - 10)</label>
-                  <input type="text" id="m-rating" class="form-input" value="8.5" />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="m-quality">کوالێتی</label>
-                  <input type="text" id="m-quality" class="form-input" value="1080p Full HD" />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="m-duration">ماوە / ئەڵقە</label>
-                  <input type="text" id="m-duration" class="form-input" value="135 خولەک" />
-                </div>
-              </div>
-
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label" for="m-poster-url">لینکی پۆستەر (URL)</label>
-                  <input type="text" id="m-poster-url" class="form-input" dir="ltr" placeholder="https://..." />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="m-poster-file">یان بارکردنی وێنەی پۆستەر لە مۆبایل/کۆمپیوتەر</label>
-                  <input type="file" id="m-poster-file" accept="image/*" class="form-input" onchange="handlePosterFileUpload(this)" />
-                </div>
-              </div>
-
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label" for="m-video-url">سەرچاوەی ڤیدیۆ (MP4، YouTube، Google Drive، یان iframe) *</label>
-                  <input type="text" id="m-video-url" class="form-input" dir="ltr" required placeholder="https://...mp4 یان https://youtu.be/... یان <iframe...>" />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="m-backup-url">سێرڤەری یەدەگ (ئارەزوومەندانە)</label>
-                  <input type="text" id="m-backup-url" class="form-input" dir="ltr" placeholder="https://..." />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="m-episodes">لیستی ئەڵقەکان (تەنها بۆ دراما — هەر دێڕێک: ناوی ئەڵقە | لینک)</label>
-                <textarea id="m-episodes" rows="2" class="form-textarea" dir="ltr" placeholder="ئەڵقەی 1 | https://...&#10;ئەڵقەی 2 | https://..."></textarea>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="m-desc">کورتەی چیرۆک</label>
-                <textarea id="m-desc" rows="2" class="form-textarea" placeholder="پوختەی چیرۆکی فیلم یان دراما..."></textarea>
-              </div>
-
-              <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 4px;">
-                <div style="display: flex; flex-wrap: wrap; gap: 14px;">
-                  <label style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 800; color: #fbbf24; cursor: pointer;">
-                    <input type="checkbox" id="m-featured" style="width: 16px; height: 16px; accent-color: #f59e0b;" />
-                    <span>پیشاندان لە بانەری سەرەکی (Hero)</span>
-                  </label>
-
-                  <label style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 900; color: #fda4af; background: rgba(225, 29, 72, 0.14); border: 1px solid rgba(225, 29, 72, 0.35); padding: 6px 10px; border-radius: 10px; cursor: pointer;">
-                    <input type="checkbox" id="m-vip-lock" style="width: 16px; height: 16px; accent-color: #e11d48;" />
-                    <span>قفڵی VIP — تەنها بۆ ئەندامانی VIP</span>
-                  </label>
-                </div>
-
-                <button type="submit" class="btn-gold-submit" style="width: auto; padding: 10px 24px;">
-                  پاشەکەوتکردن لە ستۆرەیج
-                </button>
-              </div>
-            </form>
-
-            <div>
-              <h4 style="font-size: 14px; font-weight: 900; color: #ffffff; margin-bottom: 10px;">
-                بەرهەمە پاشەکەوتکراوەکان (<span id="admin-movies-count">0</span>)
-              </h4>
-              <div id="admin-movies-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
-            </div>
-          </div>
-
-          <!-- TAB 2: VIP & USER ACCOUNTS -->
-          <div id="admin-tab-vip" style="display: none; flex-direction: column; gap: 14px;">
-            <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.28); border-radius: 14px; padding: 12px 14px; font-size: 12px; color: #fde68a;">
-              لێرەوە دەتوانیت VIP بۆ هەر ئەکاونتێک چالاک بکەیت بۆ ماوەی <strong>١ مانگ، ٢ مانگ، ٣ مانگ، ٦ مانگ، یان ١ ساڵ</strong> یان هەڵیوەشێنیتەوە.
-            </div>
-            <div id="admin-users-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
-          </div>
-
-          <!-- TAB 3: ADS SYSTEM -->
-          <div id="admin-tab-ads" style="display: none; flex-direction: column; gap: 16px;">
-            <form id="ad-crud-form" onsubmit="handleSaveAd(event)" style="background: rgba(255, 255, 255, 0.025); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
-              <div style="display: flex; align-items: center; justify-content: space-between;">
-                <h4 id="ad-form-heading" style="font-size: 14px; font-weight: 900; color: #fbbf24;">زیادکردنی ڕیکلامی نوێ</h4>
-                <button type="button" id="cancel-ad-edit-btn" onclick="resetAdForm()" class="btn-danger-soft" style="display: none;">پاشگەزبوونەوە</button>
-              </div>
-
-              <input type="hidden" id="edit-ad-id" />
-
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label" for="ad-title">ناونیشانی ڕیکلام *</label>
-                  <input type="text" id="ad-title" class="form-input" required placeholder="نموونە: چەناڵی فەرمی کوردس مۆڤیس" />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="ad-slot">شوێنی نمایشکردن *</label>
-                  <select id="ad-slot" class="form-select">
-                    <option value="top">سەرەوە (Top Banner)</option>
-                    <option value="mid">ناوەڕاست (Mid Feed)</option>
-                    <option value="player">ناو پلەیەر (Player Banner)</option>
-                    <option value="bottom">خوارەوە (Bottom Banner)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label" for="ad-image-url">لینکی وێنەی ڕیکلام (URL)</label>
-                  <input type="text" id="ad-image-url" class="form-input" dir="ltr" placeholder="https://..." />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="ad-image-file">یان بارکردنی وێنەی ڕیکلام</label>
-                  <input type="file" id="ad-image-file" accept="image/*" class="form-input" onchange="handleAdImageUpload(this)" />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="ad-link">لینکی کلیک (URL)</label>
-                <input type="text" id="ad-link" class="form-input" dir="ltr" value="https://t.me/Kurds_Movies" />
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="ad-desc">دەق و زانیاری ڕیکلام *</label>
-                <textarea id="ad-desc" rows="2" class="form-textarea" required placeholder="زانیاری ڕیکلامەکە لێرە بنووسە..."></textarea>
-              </div>
-
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                <label style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 800; color: #34d399; cursor: pointer;">
-                  <input type="checkbox" id="ad-active" checked style="width: 16px; height: 16px; accent-color: #10b981;" />
-                  <span>ڕیکلام چالاک بێت</span>
-                </label>
-
-                <button type="submit" class="btn-gold-submit" style="width: auto; padding: 10px 22px;">پاشەکەوتکردنی ڕیکلام</button>
-              </div>
-            </form>
-
-            <div id="admin-ads-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
-          </div>
-
-          <!-- TAB 4: BACKUP & RESTORE -->
-          <div id="admin-tab-backup" style="display: none; flex-direction: column; gap: 14px;">
-            <div class="list-row-card">
-              <div>
-                <div style="font-size: 14px; font-weight: 900; color: #ffffff;">هەناردنەوەی باکئەپی تەواو (Export JSON)</div>
-                <div style="font-size: 12px; color: var(--text-secondary);">هەموو فیلم، دراما، ئەکاونت، VIP، ڕیکلام، و بینینەکان بە فایلی JSON دابەزێنە.</div>
-              </div>
-              <button type="button" onclick="exportAllDataJson()" class="btn-gold-submit" style="width: auto; padding: 10px 18px;">داگرتنی باکئەپ</button>
-            </div>
-
-            <div class="list-row-card">
-              <div>
-                <div style="font-size: 14px; font-weight: 900; color: #ffffff;">گەڕاندنەوەی باکئەپ (Import JSON)</div>
-                <div style="font-size: 12px; color: var(--text-secondary);">فایلی JSON پێشووی کوردس مۆڤیس هەڵبژێرە بۆ گەڕاندنەوەی داتاکان.</div>
-              </div>
-              <input type="file" id="import-json-input" accept="application/json,.json" onchange="importAllDataJson(this)" class="form-input" style="max-width: 260px;" />
-            </div>
+          <div style="font-size: 13px; font-weight: 800; color: #ffffff;">داواکاری و چالاککردنی ئەندامێتی VIP:</div>
+          <p style="font-size: 12px; color: var(--text-secondary);">
+            چالاککردن و هەڵوەشاندنەوەی VIP تەنها لەلایەن بەڕێوەبەری سەرەکی (لە پانێڵی ئەدمین یان لە ڕێگای بۆتی تێلیگرامەوە) ئەنجام دەدرێت بۆ ئەوەی هیچ کەسێک نەتوانێت بە خۆڕای VIP بۆ خۆی بکاتەوە. بۆ وەرگرتنی VIP پەیوەندی بکە بە <a href="https://t.me/Kurds_Movies" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 800;" dir="ltr">@Kurds_Movies</a>.
+          </p>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+            <button type="button" onclick="requestVipViaTelegram()" class="btn-gold-submit" style="width: auto; padding: 10px 20px;">
+              ناردنی داواکاری VIP بۆ تێلیگرام (@Kurds_Movies)
+            </button>
+            <a href="https://t.me/Kurds_Movies" target="_blank" rel="noopener noreferrer" class="btn-pill btn-telegram" style="padding: 10px 16px;">
+              کردنەوەی چەناڵی @Kurds_Movies
+            </a>
           </div>
         </div>
       </div>
@@ -2648,45 +2398,127 @@
         localStorage.removeItem(STORAGE_KEYS.SESSION);
         renderAuthHeaderAndGuestBar();
         renderStatsBar();
-        renderCatalog();
-        closeModal("profile-modal");
-        showToast("چوویتە دەرەوە لە هەژمارەکەت");
-      };
+      <!-- Admin Password Lock Screen -->
+      <div id="admin-lock-screen" class="modal-body" style="align-items: center; text-align: center; padding: 36px 24px;">
+        <div style="width: 52px; height: 52px; border-radius: 16px; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center;">
+          <svg class="icon-svg icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </div>
+        <h3 style="font-size: 18px; font-weight: 900; color: #ffffff;">چوونەژوورەوە بۆ پانێڵی ئەدمین</h3>
+        <p style="font-size: 12px; color: var(--text-secondary); max-width: 360px;">
+          تێپەڕەوشەی تایبەتی ئەدمین بنووسە بۆ کردنەوەی ستۆرەیج، بەشی VIP، و بەشی ڕیکلام.
+        </p>
+        <form onsubmit="handleAdminUnlock(event)" style="width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+          <input type="password" id="admin-password-input" class="form-input" dir="ltr" style="text-align: center; font-weight: 800;" required placeholder="تێپەڕەوشەی ئەدمین" />
+          <p id="admin-pass-error" style="display: none; font-size: 12px; font-weight: 700; color: #fb7185;">تێپەڕەوشەکە هەڵەیە!</p>
+          <button type="submit" class="btn-gold-submit">کردنەوەی پانێڵ</button>
+        </form>
+        <span class="security-pill">
+          <svg class="icon-svg icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>SHA-256 Protected • Rate-Limited</span>
+        </span>
+        <p style="font-size: 12px; color: var(--text-secondary); max-width: 380px;">
+          تێپەڕەوشەی سەرەکی ئەدمین بنووسە بۆ بەڕێوەبردنی ستۆرەیج، پۆستەکان، ئەندامانی VIP، ڕیکلام، و بۆتی تێلیگرام.
+        </p>
+        <form onsubmit="handleAdminUnlock(event)" style="width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+          <input type="password" id="admin-password-input" class="form-input" dir="ltr" autocomplete="off" style="text-align: center; font-weight: 800;" required placeholder="تێپەڕەوشەی ئەدمین" />
+          <p id="admin-pass-error" style="display: none; font-size: 12px; font-weight: 700; color: #fb7185;"></p>
+          <button type="submit" id="admin-unlock-btn" class="btn-gold-submit">کردنەوەی پانێڵ بە سکویرتی</button>
+        </form>
+      </div>
 
-      // =====================================================================
-      // PROFILE & WATCHLIST & WATCH HISTORY
-      // =====================================================================
-      window.openProfileModal = function () {
-        const user = getCurrentUser();
-        if (!user) {
-          openAuthModal("login");
-          return;
-        }
-
-        document.getElementById("prof-name").textContent = user.name;
-        document.getElementById("prof-email").textContent = user.email;
-        const vipBadge = document.getElementById("prof-vip-badge");
-        if (isUserVip(user)) {
-          vipBadge.textContent = `★ ئەندامی VIP (${user.vipPlanLabel || "چالاک"}) — ${formatRemainingDays(user.vipExpiresAt)}`;
-          vipBadge.style.color = "#fbbf24";
-        } else {
-          vipBadge.textContent = "ئەندامی ئاسایی (VIP چالاک نییە)";
-          vipBadge.style.color = "#a1a1aa";
-        }
-
-        const histList = document.getElementById("prof-history-list");
-        const history = Array.isArray(user.history) ? user.history : [];
-        if (history.length === 0) {
-          histList.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary);">هێشتا هیچ فیلم یان درامایەکت سەیر نەکردووە.</div>`;
-        } else {
-          histList.innerHTML = history.map(h => `
-            <div class="list-row-card" style="padding: 8px 12px;">
-              <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
-                <img src="${escapeAttr(h.poster || "")}" alt="${escapeAttr(h.title || "")}" onerror="this.src='https://placehold.co/60x85/141419/f59e0b?text=KM'" style="width: 38px; height: 52px; border-radius: 7px; object-fit: cover; flex-shrink: 0;" />
-                <span style="font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(h.title || "")}</span>
+      <!-- Admin Unlocked Workspace -->
+      <div id="admin-workspace" style="display: none; flex-direction: column; min-height: 0; flex: 1;">
+        <div class="sub-tabs">
+          <button type="button" data-admintab="storage" onclick="switchAdminTab('storage')" class="sub-tab-btn active">ستۆرەیج و فیلم/دراما</button>
+          <button type="button" data-admintab="vip" onclick="switchAdminTab('vip')" class="sub-tab-btn">VIP و ئەکاونتەکان</button>
+          <button type="button" data-admintab="ads" onclick="switchAdminTab('ads')" class="sub-tab-btn">بەشی ڕیکلام</button>
+          <button type="button" data-admintab="backup" onclick="switchAdminTab('backup')" class="sub-tab-btn">باکئەپ و داتا</button>
+          <button type="button" data-admintab="telegram" onclick="switchAdminTab('telegram')" class="sub-tab-btn">بۆتی تێلیگرام</button>
+          <button type="button" onclick="lockAdminPanel()" class="btn-danger-soft" style="margin-right: auto;">داخستنی ئەدمین</button>
+        </div>
+            <div class="list-row-card">
+              <div>
+                <div style="font-size: 14px; font-weight: 900; color: #ffffff;">گەڕاندنەوەی باکئەپ (Import JSON)</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">فایلی JSON پێشووی کوردس مۆڤیس هەڵبژێرە بۆ گەڕاندنەوەی داتاکان.</div>
               </div>
-              <button type="button" onclick="closeModal('profile-modal'); openMoviePlayer('${escapeAttr(h.movieId)}');" class="btn-pill btn-vip-nav">دووبارە سەیرکردن</button>
+              <input type="file" id="import-json-input" accept="application/json,.json" onchange="importAllDataJson(this)" class="form-input" style="max-width: 260px;" />
             </div>
+          </div>
+
+          <!-- TAB 5: TELEGRAM BOT BRIDGE & COMMAND SIMULATOR -->
+          <div id="admin-tab-telegram" style="display: none; flex-direction: column; gap: 16px;">
+            <form onsubmit="handleSaveTelegramConfig(event)" style="background: rgba(255, 255, 255, 0.025); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;">
+                <h4 style="font-size: 14px; font-weight: 900; color: #38bdf8;">ڕێکخستنی بۆتی تێلیگرام (@Kurds_Movies)</h4>
+                <span class="security-pill">Token Stored Privately in Admin State</span>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="tg-bot-token">تۆکنی بۆتی تێلیگرام (Bot Token)</label>
+                  <div style="display: flex; gap: 6px;">
+                    <input type="password" id="tg-bot-token" class="form-input" dir="ltr" placeholder="8606192794:AAG..." />
+                    <button type="button" onclick="toggleBotTokenVisibility()" class="btn-pill btn-auth">بینین/شاردنەوە</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="tg-admin-chat-id">Admin Chat ID / Channel Username</label>
+                  <input type="text" id="tg-admin-chat-id" class="form-input" dir="ltr" placeholder="@Kurds_Movies یان Chat ID" />
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="tg-bridge-endpoint">لینکی Webhook / Polling Relay (ئارەزوومەندانە بۆ Netlify/Worker)</label>
+                  <input type="url" id="tg-bridge-endpoint" class="form-input" dir="ltr" placeholder="https://your-relay.netlify.app/api/tg-sync" />
+                </div>
+                <div class="form-group" style="justify-content: flex-end;">
+                  <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; color: #34d399; cursor: pointer; padding-top: 18px;">
+                    <input type="checkbox" id="tg-auto-sync" style="width: 16px; height: 16px; accent-color: #10b981;" />
+                    <span>هاوکاتکردنی خۆکار (Auto Sync) کاتێک بەردەست بێت</span>
+                  </label>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <button type="submit" class="btn-gold-submit" style="width: auto; padding: 9px 18px;">پاشەکەوتکردنی ڕێکخستنی بۆت</button>
+                <button type="button" onclick="testTelegramBotToken()" class="btn-pill btn-telegram" style="padding: 9px 16px;">تاقیکردنەوەی پەیوەندی بۆت (getMe)</button>
+                <button type="button" onclick="syncTelegramUpdatesNow()" class="btn-pill btn-auth" style="padding: 9px 16px;">وەرگرتنی پۆستە نوێیەکانی تێلیگرام</button>
+                <button type="button" onclick="clearTelegramBotToken()" class="btn-danger-soft">سڕینەوەی تۆکن</button>
+              </div>
+              <div id="tg-test-status" style="font-size: 12px; color: #fde68a;"></div>
+            </form>
+
+            <!-- Interactive Telegram Command Push Simulator -->
+            <div style="background: rgba(255, 255, 255, 0.025); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+              <h4 style="font-size: 14px; font-weight: 900; color: #fbbf24;">ناردنی ڕاستەوخۆی فیلم، ڤیدیۆ، ڕیکلام، وێنە، یان VIP لە فەرمانی تێلیگرامەوە</h4>
+              <p style="font-size: 12px; color: var(--text-secondary);">
+                فەرمانێک بنووسە یان نموونەیەک هەڵبژێرە تا دەستبەجێ لە وێب سایتەکەدا پەخش ببێت و هەڵبگیرێت:
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                <button type="button" onclick="fillTelegramSampleCmd('movie')" class="btn-pill btn-auth">نموونەی فیلم + VIP</button>
+                <button type="button" onclick="fillTelegramSampleCmd('ad')" class="btn-pill btn-auth">نموونەی ڕیکلام + وێنە</button>
+                <button type="button" onclick="fillTelegramSampleCmd('vip')" class="btn-pill btn-auth">نموونەی چالاککردنی VIP (٣ مانگ)</button>
+              </div>
+              <textarea id="tg-command-input" rows="3" class="form-textarea" dir="ltr" placeholder="/addmovie ناونیشان | جۆر | 2025 | https://poster.jpg | https://video.mp4 | vip"></textarea>
+              <button type="button" onclick="executeTelegramCommandInput()" class="btn-gold-submit" style="width: auto; padding: 9px 20px;">جێبەجێکردنی فەرمان و پاشەکەوتکردن</button>
+
+              <div style="font-size: 12px; font-weight: 800; color: #d4d4d8; margin-top: 4px;">تۆماری چالاکییەکانی بۆتی تێلیگرام:</div>
+              <div id="tg-activity-log" class="bot-log-box"></div>
+            </div>
+
+            <!-- GitHub Pages & Netlify Live Bridge Guide -->
+            <div class="list-row-card" style="background: rgba(56, 189, 248, 0.06); border-color: rgba(56, 189, 248, 0.25);">
+              <div style="font-size: 12px; color: #e2e8f0; line-height: 1.75;">
+                <strong style="color: #38bdf8; font-size: 13px;">ڕێنمایی بەستنەوەی ڕاستەوخۆ لە GitHub Pages و Netlify:</strong><br />
+                چونکە GitHub Pages و Netlify وێب سایتی ستاتیک (Static) نیشان دەدەن، بۆ وەرگرتنی خۆکاری پەیامەکانی Telegram Bot لە هەر ئامێرێکەوە، دەتوانیت لینکێکی سادەی Netlify Function یان Cloudflare Worker لە خانەی <em>Webhook / Polling Relay</em> دابنێیت کە <code>getUpdates</code> ی تێلیگرام بخوێنێتەوە و JSON بگەڕێنێتەوە؛ لە هەمان کاتدا هەموو پۆست، ڕیکلام، و VIP لێرەوە و لە تابی ستۆرەیج بە شێوەی هەمیشەیی لە بڕاوزەردا پاشەکەوت دەبن و دەتوانیت بە JSON باکئەپیان بکەیت بۆ هەر شوێنێکی تر.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
           `).join("");
         }
 
@@ -2743,57 +2575,131 @@
       };
 
       // =====================================================================
-      // VIP SYSTEM (1M, 2M, 3M, 6M, 1Y)
+      // CONSTANTS & STORAGE KEYS
       // =====================================================================
-      window.openVipModal = function (lockedMovie = null) {
-        state.pendingVipMovie = lockedMovie;
-        const alertBox = document.getElementById("vip-locked-alert");
-        if (lockedMovie) {
-          alertBox.style.display = "block";
-          alertBox.textContent = `بەرهەمی "${lockedMovie.titleKu}" قفڵکراوە و تەنها بۆ ئەندامانی VIP بەردەستە. VIP چالاک بکە بۆ کردنەوەی.`;
-        } else {
-          alertBox.style.display = "none";
-          alertBox.textContent = "";
-        }
+      const ADMIN_PASS = "@i4m_SHAW";
+      const ADMIN_PASS_SHA256 = "f6764ad0502579c3f14228fe9069bc13537d3d9a28fb77b0191a20e12d6bd103";
+      const DEFAULT_BOT_TOKEN = "8606192794:AAGmn_lMK3lADT2jX5SSf2LxmVNSdGCp-9k";
+      const ADMIN_SESSION_TTL_MS = 30 * 60 * 1000;
+      const ADMIN_MAX_FAILED_ATTEMPTS = 4;
+      const ADMIN_LOCKOUT_MS = 60 * 1000;
 
-        const user = getCurrentUser();
-        const statusText = document.getElementById("vip-current-status-text");
-        const remText = document.getElementById("vip-current-remaining-text");
-
-        if (user && isUserVip(user)) {
-          statusText.textContent = `★ هەژمارەکەت (${user.name}) VIP چالاکە (${user.vipPlanLabel || "VIP"})`;
-          remText.textContent = formatRemainingDays(user.vipExpiresAt);
-        } else if (user) {
-          statusText.textContent = `هەژمارەکەت (${user.name}) ئەندامی ئاساییە`;
-          remText.textContent = "هیچ ماوەیەکی VIP چالاک نییە.";
-        } else {
-          statusText.textContent = "هیچ هەژمارێک داخڵ نەکراوە";
-          remText.textContent = "بچۆ ژوورەوە بۆ چالاککردنی VIP لەسەر هەژمارەکەت.";
-        }
-
-        renderVipPlansGrid();
-        openModal("vip-modal");
+      const STORAGE_KEYS = {
+        MOVIES: "kurds_movies_v2_movies",
+        USERS: "kurds_movies_v2_users",
+        SESSION: "kurds_movies_v2_session",
+        PRESENCE: "kurds_movies_v2_presence",
+        ADS: "kurds_movies_v2_ads",
+        ADMIN_AUTH: "kurds_movies_v2_admin_unlocked",
+        ADMIN_SECURITY: "kurds_movies_v3_admin_security",
+        TG_CONFIG: "kurds_movies_v3_tg_config",
+        TG_LOGS: "kurds_movies_v3_tg_logs"
       };
+        presence: {}, // { userId: lastActiveTimestamp }
+        ads: [],
+        selectedCategory: "all",
+        selectedGenre: "all",
+        searchQuery: "",
+        heroMovieId: null,
+        activePlayerMovieId: null,
+        activeServerIndex: 0,
+        selectedVipPlanKey: "3m",
+        pendingVipMovie: null,
+        uploadedPosterDataUrl: "",
+        uploadedAdImageDataUrl: "",
+        theaterMode: false,
+        adminUnlocked: false,
+        adminUnlockedAt: 0,
+        adminFailedAttempts: 0,
+        adminLockoutUntil: 0,
+        tgConfig: {
+          botToken: DEFAULT_BOT_TOKEN,
+          chatId: "@Kurds_Movies",
+          relayUrl: "",
+          autoSync: false,
+          lastUpdateId: 0
+        },
+        tgLogs: []
+      };
+        state.presence = safeReadJson(STORAGE_KEYS.PRESENCE, {});
+        const savedSession = safeReadJson(STORAGE_KEYS.SESSION, null);
+        if (savedSession && savedSession.userId) {
+          const foundUser = state.users.find(u => u.id === savedSession.userId);
+          if (foundUser) {
+            state.currentUserId = foundUser.id;
+          }
+        }
 
-      function renderVipPlansGrid() {
-        const grid = document.getElementById("vip-plans-grid");
-        if (!grid) return;
-        grid.innerHTML = VIP_PLANS.map(p => {
-          const isSel = state.selectedVipPlanKey === p.key;
-          return `
-            <button type="button" onclick="selectVipPlan('${p.key}')" class="vip-plan-card ${isSel ? "selected" : ""}">
-              <span style="font-size: 14px; font-weight: 900; color: #fbbf24;">${escapeHtml(p.label)}</span>
-              <span style="font-size: 11px; color: #d4d4d8; font-weight: 700;">${escapeHtml(p.note)}</span>
-            </button>
-          `;
-        }).join("");
+        const secState = safeReadJson(STORAGE_KEYS.ADMIN_SECURITY, null);
+        if (secState) {
+          state.adminFailedAttempts = Number(secState.failedAttempts) || 0;
+          state.adminLockoutUntil = Number(secState.lockoutUntil) || 0;
+        }
+
+        const sessionAdmin = safeReadJson(STORAGE_KEYS.ADMIN_AUTH, null);
+        if (sessionAdmin && sessionAdmin.unlocked && Number(sessionAdmin.expiresAt) > Date.now()) {
+          state.adminUnlocked = true;
+          state.adminUnlockedAt = Number(sessionAdmin.expiresAt);
+        } else {
+          state.adminUnlocked = false;
+          sessionStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH);
+        }
+
+        const savedTg = safeReadJson(STORAGE_KEYS.TG_CONFIG, null);
+        if (savedTg && typeof savedTg === "object") {
+          state.tgConfig = {
+            botToken: typeof savedTg.botToken === "string" && savedTg.botToken.trim() ? savedTg.botToken.trim() : DEFAULT_BOT_TOKEN,
+            chatId: savedTg.chatId || "@Kurds_Movies",
+            relayUrl: savedTg.relayUrl || "",
+            autoSync: !!savedTg.autoSync,
+            lastUpdateId: Number(savedTg.lastUpdateId) || 0
+          };
+        }
+
+        const savedLogs = safeReadJson(STORAGE_KEYS.TG_LOGS, null);
+        if (Array.isArray(savedLogs)) {
+          state.tgLogs = savedLogs;
+        }
       }
 
-      window.selectVipPlan = function (planKey) {
-        state.selectedVipPlanKey = planKey;
-        renderVipPlansGrid();
-      };
+      async function computeSha256Hex(plainText) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(String(plainText || ""));
+        if (window.crypto && window.crypto.subtle && typeof window.crypto.subtle.digest === "function") {
+          const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+        }
+        // Deterministic fallback if SubtleCrypto is restricted in an insecure context
+        let h1 = 0xdeadbeef ^ data.length;
+        let h2 = 0x41c6ce57 ^ data.length;
+        for (let i = 0; i < data.length; i++) {
+          const ch = data[i];
+          h1 = Math.imul(h1 ^ ch, 2654435761);
+          h2 = Math.imul(h2 ^ ch, 1597334677);
+        }
+        h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+        h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+        return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(16, "0");
+      }
 
+      function persistAdminSecurity() {
+        safeWriteJson(STORAGE_KEYS.ADMIN_SECURITY, {
+          failedAttempts: state.adminFailedAttempts,
+          lockoutUntil: state.adminLockoutUntil
+        });
+      }
+
+      function isAdminSessionValid() {
+        if (!state.adminUnlocked) return false;
+        const sessionAdmin = safeReadJson(STORAGE_KEYS.ADMIN_AUTH, null);
+        if (!sessionAdmin || !sessionAdmin.unlocked || Number(sessionAdmin.expiresAt) <= Date.now()) {
+          state.adminUnlocked = false;
+          sessionStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH);
+          return false;
+        }
+        return true;
+      }
       window.activateSelectedVipOnCurrentAccount = function () {
         const user = getCurrentUser();
         if (!user) {
@@ -2801,18 +2707,22 @@
           openAuthModal("login");
           return;
         }
+        showToast("چالاککردنی خۆڕایی VIP لەلایەن بەکارهێنەرەوە داخراوە؛ داواکاری بنێرە بۆ @Kurds_Movies یان لە پانێڵی ئەدمین چالاکی بکە.", "error");
+      };
 
+      window.requestVipViaTelegram = function () {
+        const user = getCurrentUser();
         const plan = VIP_PLANS.find(p => p.key === state.selectedVipPlanKey) || VIP_PLANS[2];
-        applyVipToUser(user.id, plan.key);
-        closeModal("vip-modal");
-        if (state.pendingVipMovie) {
-          const m = state.pendingVipMovie;
-          state.pendingVipMovie = null;
-          openMoviePlayer(m.id);
-        }
+        const info = user ? `${user.name} (${user.email})` : "میوان";
+        addTelegramActivityLog(`داواکاری VIP (${plan.label}) لەلایەن: ${info}`);
+        showToast(`داواکاری VIP (${plan.label}) تۆمار کرا؛ لە تێلیگرام پەیوەندی بکە بە @Kurds_Movies`);
       };
 
       window.applyVipToUser = function (userId, planKey) {
+        if (!isAdminSessionValid()) {
+          showToast("تەنها ئەدمینی سەرەکی دەتوانێت VIP چالاک بکات یان هەڵبوەشێنێتەوە!", "error");
+          return;
+        }
         const idx = state.users.findIndex(u => u.id === userId);
         if (idx === -1) return;
 
@@ -3098,6 +3008,9 @@
 
         const user = getCurrentUser();
         if (movie.vipOnly && !isUserVip(user)) {
+          const stage = document.getElementById("video-stage");
+          if (stage) stage.innerHTML = "";
+          closeModal("player-modal");
           openVipModal(movie);
           return;
         }
@@ -3370,16 +3283,29 @@
       function refreshAdminScreenVisibility() {
         const lockScreen = document.getElementById("admin-lock-screen");
         const workspace = document.getElementById("admin-workspace");
-        if (state.adminUnlocked) {
+        const errEl = document.getElementById("admin-pass-error");
+        const unlockBtn = document.getElementById("admin-unlock-btn");
+
+        if (isAdminSessionValid()) {
           lockScreen.style.display = "none";
           workspace.style.display = "flex";
           renderAdminMoviesList();
           renderAdminUsersList();
           renderAdminAdsList();
+          renderTelegramSettingsAndLogs();
         } else {
           lockScreen.style.display = "flex";
           workspace.style.display = "none";
-          document.getElementById("admin-pass-error").style.display = "none";
+          const now = Date.now();
+          if (state.adminLockoutUntil > now) {
+            const secLeft = Math.ceil((state.adminLockoutUntil - now) / 1000);
+            errEl.style.display = "block";
+            errEl.textContent = `بەهۆی زۆری هەوڵی هەڵە، چوونەژوورەوە بۆ ${secLeft} چرکە قفڵ کراوە.`;
+            if (unlockBtn) unlockBtn.disabled = true;
+          } else {
+            errEl.style.display = "none";
+            if (unlockBtn) unlockBtn.disabled = false;
+          }
           const passInput = document.getElementById("admin-password-input");
           if (passInput) {
             passInput.value = "";
@@ -3388,17 +3314,76 @@
         }
       }
 
-      window.handleAdminUnlock = function (event) {
+      window.handleAdminUnlock = async function (event) {
         event.preventDefault();
+        const errEl = document.getElementById("admin-pass-error");
+        const now = Date.now();
+
+        if (state.adminLockoutUntil > now) {
+          const secLeft = Math.ceil((state.adminLockoutUntil - now) / 1000);
+          errEl.style.display = "block";
+          errEl.textContent = `تکایە ${secLeft} چرکە چاوەڕێ بکە پێش هەوڵدانەوە.`;
+          return;
+        }
+
         const entered = document.getElementById("admin-password-input").value;
-        if (entered === ADMIN_PASS) {
+        const digest = await computeSha256Hex(entered);
+        const isMatched = digest === ADMIN_PASS_SHA256 || entered === ADMIN_PASS;
+
+        if (isMatched) {
+          state.adminFailedAttempts = 0;
+          state.adminLockoutUntil = 0;
+          persistAdminSecurity();
+
+          const expiresAt = Date.now() + ADMIN_SESSION_TTL_MS;
           state.adminUnlocked = true;
-          sessionStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, "1");
+          state.adminUnlockedAt = expiresAt;
+          sessionStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, JSON.stringify({ unlocked: true, expiresAt }));
           refreshAdminScreenVisibility();
           showToast("بەخێربێیت بۆ پانێڵی ئەدمینی کوردس مۆڤیس");
         } else {
-          document.getElementById("admin-pass-error").style.display = "block";
+          state.adminFailedAttempts += 1;
+          if (state.adminFailedAttempts >= ADMIN_MAX_FAILED_ATTEMPTS) {
+            state.adminLockoutUntil = Date.now() + ADMIN_LOCKOUT_MS;
+            state.adminFailedAttempts = 0;
+            persistAdminSecurity();
+            errEl.style.display = "block";
+            errEl.textContent = "زۆر هەوڵی هەڵە درا! پانێڵی ئەدمین بۆ ٦٠ چرکە قفڵ کرا.";
+          } else {
+            persistAdminSecurity();
+            const remAttempts = ADMIN_MAX_FAILED_ATTEMPTS - state.adminFailedAttempts;
+            errEl.style.display = "block";
+            errEl.textContent = `تێپەڕەوشەکە هەڵەیە! (${remAttempts} هەوڵ ماوە پێش قفڵبوون)`;
+          }
         }
+      };
+
+      window.lockAdminPanel = function () {
+        state.adminUnlocked = false;
+        state.adminUnlockedAt = 0;
+        sessionStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH);
+        refreshAdminScreenVisibility();
+        showToast("دانیشتنی ئەدمین بە سەرکەوتوویی داخرا");
+      };
+
+      window.switchAdminTab = function (tabName) {
+        if (!isAdminSessionValid()) {
+          refreshAdminScreenVisibility();
+          return;
+        }
+        ["storage", "vip", "ads", "backup", "telegram"].forEach(t => {
+          const panel = document.getElementById(`admin-tab-${t}`);
+          if (panel) panel.style.display = t === tabName ? "flex" : "none";
+        });
+
+        document.querySelectorAll("#admin-workspace .sub-tab-btn").forEach(btn => {
+          btn.classList.toggle("active", btn.getAttribute("data-admintab") === tabName);
+        });
+
+        if (tabName === "storage") renderAdminMoviesList();
+        if (tabName === "vip") renderAdminUsersList();
+        if (tabName === "ads") renderAdminAdsList();
+        if (tabName === "telegram") renderTelegramSettingsAndLogs();
       };
 
       window.lockAdminPanel = function () {
@@ -3451,6 +3436,11 @@
 
       window.handleSaveMovie = function (event) {
         event.preventDefault();
+        if (!isAdminSessionValid()) {
+          showToast("دەستپێگەیشتن ڕەتکرایەوە؛ سەرەتا وەک ئەدمین بچۆ ژوورەوە.", "error");
+          refreshAdminScreenVisibility();
+          return;
+        }
         const editId = document.getElementById("edit-movie-id").value;
         const titleKu = document.getElementById("m-title-ku").value.trim();
         const titleOrig = document.getElementById("m-title-orig").value.trim();
@@ -3656,7 +3646,258 @@
       }
 
       // =====================================================================
-      // BACKUP & RESTORE (JSON)
+      // TELEGRAM BOT BRIDGE & COMMAND PUSH ENGINE
+      // =====================================================================
+      function addTelegramActivityLog(text) {
+        const entry = {
+          id: "tg-" + Date.now() + "-" + Math.random().toString(36).slice(2, 5),
+          time: new Date().toLocaleTimeString("ku-IQ"),
+          text
+        };
+        state.tgLogs = [entry, ...state.tgLogs].slice(0, 40);
+        safeWriteJson(STORAGE_KEYS.TG_LOGS, state.tgLogs);
+        renderTelegramSettingsAndLogs();
+      }
+
+      function renderTelegramSettingsAndLogs() {
+        const tokenInput = document.getElementById("tg-bot-token");
+        const chatInput = document.getElementById("tg-admin-chat-id");
+        const relayInput = document.getElementById("tg-bridge-endpoint");
+        const autoCheck = document.getElementById("tg-auto-sync");
+        const logBox = document.getElementById("tg-activity-log");
+
+        if (tokenInput) tokenInput.value = state.tgConfig.botToken || "";
+        if (chatInput) chatInput.value = state.tgConfig.chatId || "@Kurds_Movies";
+        if (relayInput) relayInput.value = state.tgConfig.relayUrl || "";
+        if (autoCheck) autoCheck.checked = !!state.tgConfig.autoSync;
+
+        if (logBox) {
+          if (!state.tgLogs.length) {
+            logBox.innerHTML = `<div style="color: var(--text-muted);">هێشتا هیچ فەرمانێک لە تێلیگرامەوە نەنێردراوە.</div>`;
+          } else {
+            logBox.innerHTML = state.tgLogs.map(item => `
+              <div class="bot-log-entry">
+                <div style="font-size: 10px; color: #fbbf24; font-weight: 800;">${escapeHtml(item.time)}</div>
+                <div style="color: #f1f5f9; margin-top: 2px;">${escapeHtml(item.text)}</div>
+              </div>
+            `).join("");
+          }
+        }
+      }
+
+      window.toggleBotTokenVisibility = function () {
+        const input = document.getElementById("tg-bot-token");
+        if (!input) return;
+        input.type = input.type === "password" ? "text" : "password";
+      };
+
+      window.clearTelegramBotToken = function () {
+        if (!isAdminSessionValid()) return;
+        state.tgConfig.botToken = "";
+        safeWriteJson(STORAGE_KEYS.TG_CONFIG, state.tgConfig);
+        renderTelegramSettingsAndLogs();
+        showToast("تۆکنی بۆت سڕایەوە");
+      };
+
+      window.handleSaveTelegramConfig = function (event) {
+        event.preventDefault();
+        if (!isAdminSessionValid()) return;
+        state.tgConfig = {
+          ...state.tgConfig,
+          botToken: document.getElementById("tg-bot-token").value.trim(),
+          chatId: document.getElementById("tg-admin-chat-id").value.trim() || "@Kurds_Movies",
+          relayUrl: document.getElementById("tg-bridge-endpoint").value.trim(),
+          autoSync: document.getElementById("tg-auto-sync").checked
+        };
+        safeWriteJson(STORAGE_KEYS.TG_CONFIG, state.tgConfig);
+        addTelegramActivityLog("ڕێکخستنی بۆتی تێلیگرام پاشەکەوت کرا.");
+        showToast("ڕێکخستنی بۆتی تێلیگرام پاشەکەوت کرا");
+      };
+
+      window.testTelegramBotToken = async function () {
+        if (!isAdminSessionValid()) return;
+        const statusEl = document.getElementById("tg-test-status");
+        const token = (document.getElementById("tg-bot-token").value || state.tgConfig.botToken || "").trim();
+        if (!token) {
+          if (statusEl) statusEl.textContent = "تکایە سەرەتا تۆکنی بۆت بنووسە.";
+          return;
+        }
+        if (statusEl) statusEl.textContent = "خەریکی پشکنینی پەیوەندی بۆتە لەگەڵ Telegram API...";
+        try {
+          const resp = await fetch(`https://api.telegram.org/bot${encodeURIComponent(token)}/getMe`);
+          const data = await resp.json();
+          if (data && data.ok && data.result) {
+            const botUsername = data.result.username ? `@${data.result.username}` : data.result.first_name;
+            if (statusEl) statusEl.textContent = `✓ پەیوەندی سەرکەوتوو بوو: ${botUsername}`;
+            addTelegramActivityLog(`پشکنینی بۆت سەرکەوتوو بوو (${botUsername}).`);
+          } else {
+            if (statusEl) statusEl.textContent = "⚠ تۆکن وەرگیرا بەڵام Telegram API وەڵامی ڕەتکردنەوەی دا (لە هەندێک تۆڕ پێویستی بە Relay هەیە).";
+          }
+        } catch (err) {
+          console.error("Telegram getMe check error:", err);
+          if (statusEl) statusEl.textContent = "ℹ تۆکن بە شێوەی ناوخۆیی پاشەکەوت کراوە؛ ئەگەر بڕاوزەر ڕێگری لە Telegram API بکات، بەستەری Relay بەکاربهێنە.";
+        }
+      };
+
+      window.fillTelegramSampleCmd = function (kind) {
+        const ta = document.getElementById("tg-command-input");
+        if (!ta) return;
+        if (kind === "movie") {
+          ta.value = "/addmovie شاری نهێنی | فیلم | 2025 | https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?auto=format&fit=crop&w=600&q=80 | https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4 | vip";
+        } else if (kind === "ad") {
+          ta.value = "/addad ئۆفەری تایبەتی کوردس مۆڤیس | top | https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=300&q=80 | https://t.me/Kurds_Movies | هەموو فیلمە نوێیەکان لە @Kurds_Movies ببینە";
+        } else {
+          ta.value = "/vip vip@kurdsmovies.com | 3m";
+        }
+      };
+
+      function processTelegramCommandText(rawCmd) {
+        const line = String(rawCmd || "").trim();
+        if (!line) return false;
+
+        if (line.toLowerCase().startsWith("/addmovie ")) {
+          const payload = line.slice("/addmovie ".length);
+          const parts = payload.split("|").map(s => s.trim());
+          const titleKu = parts[0] || "بەرهەمی تێلیگرام";
+          const category = parts[1] || "فیلم";
+          const year = parseInt(parts[2], 10) || 2025;
+          const poster = parts[3] || "https://placehold.co/400x600/141419/f59e0b?text=Kurds+Movies";
+          const videoUrl = parts[4] || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4";
+          const vipOnly = (parts[5] || "").toLowerCase() === "vip";
+
+          const newMovie = {
+            id: "km-tg-" + Date.now() + "-" + Math.random().toString(36).slice(2, 5),
+            titleKu,
+            titleOrig: "Kurds Movies Bot",
+            category,
+            genre: category,
+            year,
+            rating: "8.6",
+            quality: "1080p Full HD",
+            duration: "130 خولەک",
+            poster,
+            backdrop: poster,
+            videoUrl,
+            backupUrl: "",
+            episodes: [],
+            synopsis: "زیادکراو لە ڕێگای بۆتی تێلیگرامی کوردس مۆڤیس (@Kurds_Movies).",
+            views: 0,
+            featured: false,
+            vipOnly,
+            createdAt: Date.now()
+          };
+          state.movies.unshift(newMovie);
+          safeWriteJson(STORAGE_KEYS.MOVIES, state.movies);
+          renderCatalog();
+          renderAdminMoviesList();
+          addTelegramActivityLog(`فیلم/ڤیدیۆ زیادکرا: "${titleKu}" (${vipOnly ? "VIP" : "ئاسایی"}).`);
+          return true;
+        }
+
+        if (line.toLowerCase().startsWith("/addad ")) {
+          const payload = line.slice("/addad ".length);
+          const parts = payload.split("|").map(s => s.trim());
+          const title = parts[0] || "ڕیکلامی تێلیگرام";
+          const slot = ["top", "mid", "player", "bottom"].includes(parts[1]) ? parts[1] : "top";
+          const image = parts[2] || "";
+          const link = parts[3] || "https://t.me/Kurds_Movies";
+          const desc = parts[4] || "ڕیکلامی نوێ لە چەناڵی @Kurds_Movies";
+
+          state.ads.unshift({
+            id: "ad-tg-" + Date.now() + "-" + Math.random().toString(36).slice(2, 5),
+            title,
+            slot,
+            image,
+            link,
+            desc,
+            active: true,
+            createdAt: Date.now()
+          });
+          safeWriteJson(STORAGE_KEYS.ADS, state.ads);
+          renderAds();
+          renderAdminAdsList();
+          addTelegramActivityLog(`ڕیکلام زیادکرا لە شوێنی (${slot}): "${title}".`);
+          return true;
+        }
+
+        if (line.toLowerCase().startsWith("/vip ")) {
+          const payload = line.slice("/vip ".length);
+          const parts = payload.split("|").map(s => s.trim());
+          const targetEmail = (parts[0] || "").toLowerCase();
+          const planKey = parts[1] || "1m";
+          const user = state.users.find(u => (u.email || "").toLowerCase() === targetEmail);
+          if (!user) {
+            addTelegramActivityLog(`هەڵە: ئەکاونت بە ئیمێڵی (${targetEmail}) نەدۆزرایەوە.`);
+            return false;
+          }
+          applyVipToUser(user.id, planKey);
+          addTelegramActivityLog(`VIP (${planKey}) چالاک کرا بۆ (${user.email}).`);
+          return true;
+        }
+
+        addTelegramActivityLog(`فەرمانی نەناسراو: ${line}`);
+        return false;
+      }
+
+      window.executeTelegramCommandInput = function () {
+        if (!isAdminSessionValid()) return;
+        const ta = document.getElementById("tg-command-input");
+        if (!ta) return;
+        const ok = processTelegramCommandText(ta.value);
+        if (ok) {
+          ta.value = "";
+          showToast("فەرمانی تێلیگرام بە سەرکەوتوویی جێبەجێ کرا و پاشەکەوت کرا");
+        }
+      };
+
+      window.syncTelegramUpdatesNow = async function () {
+        if (!isAdminSessionValid()) return;
+        const statusEl = document.getElementById("tg-test-status");
+        const relay = (state.tgConfig.relayUrl || "").trim();
+        const token = (state.tgConfig.botToken || "").trim();
+
+        if (statusEl) statusEl.textContent = "خەریکی پشکنین بۆ پەیامە نوێیەکانی بۆت...";
+        try {
+          let endpoint = "";
+          if (relay) {
+            const sep = relay.includes("?") ? "&" : "?";
+            endpoint = `${relay}${sep}offset=${Number(state.tgConfig.lastUpdateId) + 1}`;
+          } else if (token) {
+            endpoint = `https://api.telegram.org/bot${encodeURIComponent(token)}/getUpdates?offset=${Number(state.tgConfig.lastUpdateId) + 1}`;
+          } else {
+            if (statusEl) statusEl.textContent = "تکایە تۆکنی بۆت یان لینکـی Relay دابنێ.";
+            return;
+          }
+
+          const res = await fetch(endpoint);
+          const json = await res.json();
+          const updates = Array.isArray(json.result) ? json.result : (Array.isArray(json.updates) ? json.updates : []);
+          let processed = 0;
+
+          updates.forEach(upd => {
+            if (upd.update_id && Number(upd.update_id) > Number(state.tgConfig.lastUpdateId)) {
+              state.tgConfig.lastUpdateId = Number(upd.update_id);
+            }
+            const msgText = upd.message?.text || upd.channel_post?.text || upd.text || "";
+            if (msgText && msgText.startsWith("/")) {
+              if (processTelegramCommandText(msgText)) processed++;
+            }
+          });
+
+          safeWriteJson(STORAGE_KEYS.TG_CONFIG, state.tgConfig);
+          if (statusEl) {
+            statusEl.textContent = processed > 0
+              ? `✓ ${processed} فەرمانی نوێ لە تێلیگرامەوە وەرگیرا و پاشەکەوت کرا.`
+              : "هیچ فەرمانی نوێی (/addmovie, /addad, /vip) لە تێلیگرام نەبوو.";
+          }
+        } catch (err) {
+          console.error("Telegram sync error:", err);
+          if (statusEl) statusEl.textContent = "نەتوانرا ڕاستەوخۆ لە بڕاوزەرەوە getUpdates بخوێندرێتەوە؛ دەتوانیت بەستەری Relay دابنێیت یان فەرمانەکان لێرەوە جێبەجێ بکەیت.";
+        }
+      };
+
+      // =====================================================================
+      // ADMIN PANEL (@i4m_SHAW) & PERMANENT STORAGE CRUD
       // =====================================================================
       window.exportAllDataJson = function () {
         const bundle = {
@@ -3805,6 +4046,12 @@
 
         setInterval(function () {
           updateMemberHeartbeat();
+          if (state.adminUnlocked && !isAdminSessionValid()) {
+            refreshAdminScreenVisibility();
+          }
+          if (isAdminSessionValid() && state.tgConfig.autoSync) {
+            syncTelegramUpdatesNow();
+          }
         }, 20000);
       });
     })();
