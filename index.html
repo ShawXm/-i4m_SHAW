@@ -1,36 +1,48 @@
-<!doctype html>
-<html lang="ckb" dir="rtl" class="dark">
-  <head>
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <link rel="icon" type="image/png" href="/favicon.png">
-    <link rel="apple-touch-icon" href="/favicon.png">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#0D1114"><!-- Preload the two fonts almost every character on the page uses, so
-         visitors start downloading them immediately instead of waiting for
-         the CSS to be parsed first. -->
-    <link rel="preload" href="/fonts/AvenirLT-65Medium.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/Rabar_038.woff2" as="font" type="font/woff2" crossorigin>
+    <title>تاقیکردنەوەی پەیوەندی</title>
     <style>
-      html, body {
-        background-color: #0D1114 !important;
-        color: #ffffff;
-      }
+        body { font-family: sans-serif; background-color: #0D1114; color: white; padding: 20px; }
+        .movie-card { border: 1px solid #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; background-color: #1a1f24; }
+        h1 { color: #fff; }
+        .error { color: red; }
     </style>
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="سینەماسپەیس">
-    <title>سینەماسپەیس - فیلم و زنجیرە تەماشابکە</title>
-    <meta name="description" content="باشترین فیلم و زنجیرەکان لە سینەماسپەیس تەماشابکە. ناوەڕۆکی تایبەت، هەڵسەنگاندنی سەرەکی، و کۆکراوەی فرانچایز.">
-    <meta property="og:title" content="سینەماسپەیس - فیلم و زنجیرە تەماشابکە">
-    <meta property="og:description" content="مەنزڵگەی سینەماییت بۆ فیلم و زنجیرە و زیاتر.">
-    <script type="module" crossorigin src="assets/script_0_13644.js"></script>
-    <link rel="stylesheet" crossorigin href="assets/style_0_13048.css">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="assets/script_1_11001.jsvc" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;97388339629041debbfd8e94a0844499&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
-    <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5e6271b883490da',t:'MTc5NTMzMTgyOQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5e6271b883490da',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-  </body>
+</head>
+<body>
+    <h1>لیستی فیلمەکان لە سێرڤەرەوە</h1>
+    <div id="movie-list">چاوەڕوان بە...</div>
+
+    <script>
+        // ئەمە کۆدێکی JavaScriptـە کە داتا لە سێرڤەرەکەت دەخوازێت
+        async function fetchMovies() {
+            try {
+                // ئەمە ناونیشانی سێرڤەرەکەتە (کە لە هەنگاوی یەکەم دروستمان کرد)
+                const response = await fetch('http://localhost:3000/api/movies');
+                const movies = await response.json(); // داتاکە دەگۆڕێت بۆ JSON
+
+                const listDiv = document.getElementById('movie-list');
+                listDiv.innerHTML = ''; // پاککردنەوەی دەقی "چاوەڕوان بە"
+
+                // بۆ هەر فیلمێک، کارتێک دروست دەکەین و پیشانی دەدەین
+                movies.forEach(movie => {
+                    const card = document.createElement('div');
+                    card.className = 'movie-card';
+                    card.innerHTML = `
+                        <h3>${movie.title} (${movie.year})</strong></h3>
+                        <p>جۆر: ${movie.genre}</p>
+                    `;
+                    listDiv.appendChild(card);
+                });
+            } catch (error) {
+                document.getElementById('movie-list').innerHTML = 
+                    `<p class="error">هەڵە: نەتوانرا داتا بهێنرێت. دڵنیابە سێرڤەرەکە کاردەکات. (${error.message})</p>`;
+            }
+        }
+
+        // کاتێک لاپەڕەکە دەکرێتەوە، ئەم فەنکشنە جێبەجێ دەبێت
+        fetchMovies();
+    </script>
+</body>
 </html>
