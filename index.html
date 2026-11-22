@@ -1,48 +1,3813 @@
 <!DOCTYPE html>
 <html lang="ckb" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>تاقیکردنەوەی پەیوەندی</title>
-    <style>
-        body { font-family: sans-serif; background-color: #0D1114; color: white; padding: 20px; }
-        .movie-card { border: 1px solid #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; background-color: #1a1f24; }
-        h1 { color: #fff; }
-        .error { color: red; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>کوردس مۆڤیس | Kurds Movies — فیلم و درامای ژێرنووسکراوی کوردی</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f13;
+      --bg-card: rgba(20, 20, 27, 0.86);
+      --bg-card-hover: rgba(28, 28, 38, 0.96);
+      --text-primary: #f8fafc;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent-gold: #f59e0b;
+      --accent-gold-bright: #fbbf24;
+      --accent-rose: #e11d48;
+      --accent-emerald: #10b981;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-gold: rgba(245, 158, 11, 0.35);
+      --shadow-luxury: 0 20px 50px -12px rgba(0, 0, 0, 0.75);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body.theater-active {
+      background-color: #030304;
+    }
+
+    body.theater-active .theater-dim {
+      opacity: 0.14;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #09090b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f59e0b;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* SVG Icon Sizing Guard */
+    .icon-svg {
+      display: inline-block;
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
+
+    .icon-xs { width: 14px; height: 14px; }
+    .icon-sm { width: 16px; height: 16px; }
+    .icon-md { width: 20px; height: 20px; }
+    .icon-lg { width: 24px; height: 24px; }
+    .icon-xl { width: 32px; height: 32px; }
+
+    /* Top Ribbon */
+    .top-luxury-bar {
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, #e11d48 0%, #f59e0b 50%, #10b981 100%);
+    }
+
+    /* Header & Navigation */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(9, 9, 11, 0.86);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .container-main {
+      width: 100%;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .container-main {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 68px;
+      padding: 8px 0;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 55%, #e11d48 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #09090b;
+      font-weight: 900;
+      font-size: 18px;
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.28);
+      flex-shrink: 0;
+    }
+
+    .brand-titles {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-name {
+      font-size: 16px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    @media (min-width: 640px) {
+      .brand-name {
+        font-size: 19px;
+      }
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--accent-gold);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .desktop-search {
+      display: none;
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    @media (min-width: 1024px) {
+      .desktop-search {
+        display: block;
+      }
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 13px;
+      padding: 10px 38px 10px 14px;
+      font-size: 13px;
+      color: #ffffff;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-gold);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-icon-pos {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-telegram {
+      background: rgba(34, 158, 217, 0.14);
+      border: 1px solid rgba(34, 158, 217, 0.35);
+      color: #38bdf8;
+    }
+
+    .btn-telegram:hover {
+      background: #229ED9;
+      color: #ffffff;
+    }
+
+    .btn-vip-nav {
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.38);
+      color: var(--accent-gold-bright);
+      font-weight: 800;
+    }
+
+    .btn-vip-nav:hover {
+      background: rgba(245, 158, 11, 0.25);
+    }
+
+    .btn-auth {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: #ffffff;
+    }
+
+    .btn-auth:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .btn-user-chip {
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #6ee7b7;
+    }
+
+    .btn-admin {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #09090b;
+      font-weight: 900;
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.25);
+    }
+
+    .btn-admin:hover {
+      filter: brightness(1.08);
+    }
+
+    .mobile-search-wrap {
+      padding-bottom: 10px;
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-search-wrap {
+        display: none;
+      }
+    }
+
+    /* Member-Only Analytics Strip */
+    .stats-bar {
+      background: #0d0d11;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    @media (min-width: 640px) {
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+    }
+
+    .stat-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border-subtle);
+      border-radius: 13px;
+      padding: 9px 14px;
+    }
+
+    .stat-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .stat-icon-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .stat-num {
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .stat-tag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--accent-gold);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 10px var(--accent-emerald);
+      animation: pulseAnim 1.8s infinite;
+    }
+
+    @keyframes pulseAnim {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    /* Guest Notice Bar */
+    .guest-bar {
+      background: rgba(245, 158, 11, 0.08);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.22);
+      padding: 9px 0;
+    }
+
+    .guest-bar-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      color: #fde68a;
+    }
+
+    /* Ad Slots */
+    .ad-slot-container {
+      margin: 14px 0;
+    }
+
+    .ad-slot-container:empty {
+      display: none;
+      margin: 0;
+    }
+
+    .ad-banner-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: linear-gradient(120deg, rgba(245, 158, 11, 0.1) 0%, rgba(20, 20, 27, 0.92) 55%, rgba(225, 29, 72, 0.1) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    @media (min-width: 640px) {
+      .ad-banner-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .ad-banner-card:hover {
+      border-color: var(--accent-gold);
+      transform: translateY(-1px);
+    }
+
+    .ad-content-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .ad-thumb {
+      width: 64px;
+      height: 46px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+    }
+
+    .ad-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--accent-gold-bright);
+      margin-left: 6px;
+    }
+
+    .ad-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .ad-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .ad-cta-btn {
+      align-self: flex-end;
+      padding: 8px 14px;
+      border-radius: 11px;
+      background: var(--accent-gold);
+      color: #09090b;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 640px) {
+      .ad-cta-btn {
+        align-self: center;
+      }
+    }
+
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      width: 100%;
+      min-height: 390px;
+      max-height: 540px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      margin-top: 14px;
+      background: #111116;
+      box-shadow: var(--shadow-luxury);
+    }
+
+    @media (min-width: 768px) {
+      .hero-section {
+        min-height: 450px;
+      }
+    }
+
+    .hero-backdrop {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.45;
+    }
+
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(9, 9, 11, 0.35) 0%, rgba(9, 9, 11, 0.82) 55%, rgba(9, 9, 11, 0.97) 100%),
+                  linear-gradient(0deg, rgba(9, 9, 11, 0.98) 0%, rgba(9, 9, 11, 0.25) 60%, rgba(9, 9, 11, 0.45) 100%);
+    }
+
+    .hero-body {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 390px;
+      gap: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .hero-body {
+        padding: 40px 44px;
+        min-height: 450px;
+      }
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .badge-gold {
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(245, 158, 11, 0.45);
+      color: var(--accent-gold-bright);
+    }
+
+    .badge-rose {
+      background: rgba(225, 29, 72, 0.22);
+      border-color: rgba(225, 29, 72, 0.45);
+      color: #fda4af;
+    }
+
+    .hero-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.25;
+    }
+
+    @media (min-width: 768px) {
+      .hero-title {
+        font-size: 38px;
+      }
+    }
+
+    .hero-desc {
+      font-size: 13px;
+      color: #d4d4d8;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .hero-desc {
+        font-size: 14px;
+      }
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
+    .btn-primary-play {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f59e0b 0%, #e11d48 100%);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+      box-shadow: 0 10px 25px rgba(225, 29, 72, 0.28);
+      transition: transform 0.18s ease, filter 0.18s ease;
+    }
+
+    .btn-primary-play:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.07);
+    }
+
+    .btn-secondary-glass {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 16px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      transition: background 0.18s ease;
+    }
+
+    .btn-secondary-glass:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    /* Filters & Controls */
+    .filter-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 26px;
+      margin-bottom: 18px;
+    }
+
+    @media (min-width: 768px) {
+      .filter-bar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .cat-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .cat-tab {
+      padding: 8px 15px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cat-tab:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    .cat-tab.active {
+      background: var(--accent-gold);
+      border-color: var(--accent-gold);
+      color: #09090b;
+      font-weight: 900;
+    }
+
+    .right-filters {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .select-control {
+      background: #14141a;
+      border: 1px solid var(--border-subtle);
+      border-radius: 11px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #e4e4e7;
+      outline: none;
+    }
+
+    .select-control:focus {
+      border-color: var(--accent-gold);
+    }
+
+    /* Movies Grid */
+    .movies-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    @media (min-width: 640px) {
+      .movies-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .movies-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+      }
+    }
+
+    .movie-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-4px);
+      background: var(--bg-card-hover);
+      border-color: rgba(245, 158, 11, 0.42);
+      box-shadow: 0 18px 34px -10px rgba(0, 0, 0, 0.8);
+    }
+
+    .movie-card.vip-card {
+      border-color: rgba(245, 158, 11, 0.45);
+      box-shadow: 0 0 24px -6px rgba(245, 158, 11, 0.22);
+    }
+
+    .poster-box {
+      position: relative;
+      aspect-ratio: 2 / 3;
+      width: 100%;
+      overflow: hidden;
+      background: #141419;
+    }
+
+    .poster-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .movie-card:hover .poster-img {
+      transform: scale(1.06);
+    }
+
+    .poster-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(9, 9, 11, 0.5) 0%, transparent 38%, rgba(9, 9, 11, 0.94) 100%);
+    }
+
+    .poster-top-row {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      left: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      z-index: 2;
+    }
+
+    .mini-badge {
+      padding: 3px 7px;
+      border-radius: 7px;
+      font-size: 10px;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .mini-rating {
+      background: rgba(9, 9, 11, 0.8);
+      color: var(--accent-gold-bright);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .mini-vip {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #09090b;
+      font-weight: 900;
+    }
+
+    .mini-cat {
+      background: rgba(225, 29, 72, 0.9);
+      color: #ffffff;
+    }
+
+    .fav-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: rgba(9, 9, 11, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d4d4d8;
+    }
+
+    .fav-btn.active {
+      color: #fb7185;
+    }
+
+    .poster-play-hover {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      transition: opacity 0.22s ease;
+      z-index: 2;
+    }
+
+    .movie-card:hover .poster-play-hover {
+      opacity: 1;
+    }
+
+    .play-circle {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      background: var(--accent-gold);
+      color: #09090b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+    }
+
+    .play-circle.locked {
+      background: var(--accent-rose);
+      color: #ffffff;
+    }
+
+    .poster-bottom-row {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      left: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      color: #e4e4e7;
+      z-index: 2;
+    }
+
+    .poster-meta-pill {
+      background: rgba(9, 9, 11, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 7px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-footer-info {
+      padding: 11px 12px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .movie-card:hover .card-title {
+      color: var(--accent-gold-bright);
+    }
+
+    .card-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-sub.vip-text {
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    /* Footer */
+    .site-footer {
+      margin-top: 48px;
+      background: #0b0b0e;
+      border-top: 1px solid var(--border-subtle);
+      padding-bottom: 84px;
+    }
+
+    @media (min-width: 768px) {
+      .site-footer {
+        padding-bottom: 24px;
+      }
+    }
+
+    .footer-inner {
+      padding: 28px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .footer-inner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    /* Mobile Bottom Nav */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      z-index: 45;
+      background: rgba(12, 12, 16, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border-subtle);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 6px 8px;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-bottom-nav {
+        display: none;
+      }
+    }
+
+    .mob-nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 6px 4px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .mob-nav-btn.active {
+      color: var(--accent-gold-bright);
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-panel {
+      width: 100%;
+      max-width: 520px;
+      background: #121218;
+      border: 1px solid var(--border-subtle);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow-luxury);
+      margin: auto;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-panel.wide {
+      max-width: 860px;
+    }
+
+    .modal-panel.player-wide {
+      max-width: 1020px;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.02);
+      flex-shrink: 0;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #e4e4e7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .modal-close:hover {
+      background: var(--accent-rose);
+      color: #ffffff;
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Form Elements */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #d4d4d8;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: rgba(9, 9, 11, 0.75);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 10px 13px;
+      font-size: 13px;
+      color: #ffffff;
+      outline: none;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--accent-gold);
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .btn-gold-submit {
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #09090b;
+      font-size: 13px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-gold-submit:hover {
+      filter: brightness(1.07);
+    }
+
+    .btn-danger-soft {
+      padding: 7px 11px;
+      border-radius: 10px;
+      background: rgba(225, 29, 72, 0.14);
+      border: 1px solid rgba(225, 29, 72, 0.35);
+      color: #fda4af;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .btn-danger-soft:hover {
+      background: var(--accent-rose);
+      color: #ffffff;
+    }
+
+    /* Tabs inside Modals */
+    .sub-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(0, 0, 0, 0.25);
+      flex-shrink: 0;
+    }
+
+    .sub-tab-btn {
+      padding: 7px 13px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sub-tab-btn.active {
+      background: rgba(245, 158, 11, 0.16);
+      color: var(--accent-gold-bright);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    /* Video Stage */
+    .video-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000000;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .video-stage video,
+    .video-stage iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    /* VIP Plan Cards */
+    .vip-plans-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .vip-plans-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    .vip-plan-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 14px;
+      padding: 12px 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .vip-plan-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-gold-bright);
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .vip-plan-card.selected {
+      border-color: var(--accent-gold-bright);
+      background: rgba(245, 158, 11, 0.16);
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+    }
+
+    /* List Rows in Admin / Profile */
+    .list-row-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    @media (min-width: 768px) {
+      .list-row-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    /* Toast Notification */
+    .toast-stack {
+      position: fixed;
+      bottom: 78px;
+      left: 16px;
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 340px;
+      pointer-events: none;
+    }
+
+    @media (min-width: 768px) {
+      .toast-stack {
+        bottom: 24px;
+        left: 24px;
+      }
+    }
+
+    .toast-item {
+      background: #18181f;
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #ffffff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65);
+      pointer-events: auto;
+    }
+
+    .toast-item.error {
+      border-color: rgba(225, 29, 72, 0.6);
+      color: #fecdd3;
+    }
+
+    .empty-box {
+      text-align: center;
+      padding: 48px 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--border-subtle);
+      border-radius: 20px;
+      margin-top: 12px;
+    }
+  </style>
 </head>
 <body>
-    <h1>لیستی فیلمەکان لە سێرڤەرەوە</h1>
-    <div id="movie-list">چاوەڕوان بە...</div>
+  <div class="top-luxury-bar"></div>
 
-    <script>
-        // ئەمە کۆدێکی JavaScriptـە کە داتا لە سێرڤەرەکەت دەخوازێت
-        async function fetchMovies() {
-            try {
-                // ئەمە ناونیشانی سێرڤەرەکەتە (کە لە هەنگاوی یەکەم دروستمان کرد)
-                const response = await fetch('http://localhost:3000/api/movies');
-                const movies = await response.json(); // داتاکە دەگۆڕێت بۆ JSON
+  <!-- Toast Container -->
+  <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
 
-                const listDiv = document.getElementById('movie-list');
-                listDiv.innerHTML = ''; // پاککردنەوەی دەقی "چاوەڕوان بە"
+  <!-- Header -->
+  <header class="site-header theater-dim">
+    <div class="container-main">
+      <div class="header-inner">
+        <!-- Brand -->
+        <a href="#top" onclick="resetHomeView(); return false;" class="brand-box">
+          <div class="brand-logo" aria-hidden="true">KM</div>
+          <div class="brand-titles">
+            <span class="brand-name">کوردس مۆڤیس</span>
+            <span class="brand-sub">Kurds Movies • سینەمای کوردی</span>
+          </div>
+        </a>
 
-                // بۆ هەر فیلمێک، کارتێک دروست دەکەین و پیشانی دەدەین
-                movies.forEach(movie => {
-                    const card = document.createElement('div');
-                    card.className = 'movie-card';
-                    card.innerHTML = `
-                        <h3>${movie.title} (${movie.year})</strong></h3>
-                        <p>جۆر: ${movie.genre}</p>
-                    `;
-                    listDiv.appendChild(card);
-                });
-            } catch (error) {
-                document.getElementById('movie-list').innerHTML = 
-                    `<p class="error">هەڵە: نەتوانرا داتا بهێنرێت. دڵنیابە سێرڤەرەکە کاردەکات. (${error.message})</p>`;
-            }
+        <!-- Desktop Search -->
+        <div class="desktop-search">
+          <span class="search-icon-pos">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input
+            type="search"
+            id="search-desktop"
+            class="search-input"
+            placeholder="گەڕان بۆ ناوی فیلم، دراما، یان چەشن..."
+            oninput="handleSearchInput(this.value)"
+          />
+        </div>
+
+        <!-- Header Actions -->
+        <div class="header-actions">
+          <a
+            href="https://t.me/Kurds_Movies"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-pill btn-telegram"
+            title="چەناڵی تێلیگرامی کوردس مۆڤیس"
+          >
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+            </svg>
+            <span dir="ltr">@Kurds_Movies</span>
+          </a>
+
+          <button type="button" onclick="openVipModal()" class="btn-pill btn-vip-nav">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M5 18h14v2H5v-2zm1-3l-2-9 5.5 4L12 4l2.5 6L20 6l-2 9H6z"/>
+            </svg>
+            <span>VIP</span>
+          </button>
+
+          <button type="button" id="auth-header-btn" onclick="handleHeaderAuthClick()" class="btn-pill btn-auth">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span id="auth-header-label">چوونەژوورەوە</span>
+          </button>
+
+          <button type="button" onclick="openAdminModal()" class="btn-pill btn-admin">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>ئەدمین</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Search -->
+      <div class="mobile-search-wrap">
+        <div style="position: relative;">
+          <span class="search-icon-pos">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input
+            type="search"
+            id="search-mobile"
+            class="search-input"
+            placeholder="گەڕان لە کوردس مۆڤیس..."
+            oninput="handleSearchInput(this.value)"
+          />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Registered-Accounts-Only Real-Time Stats Bar -->
+  <section class="stats-bar theater-dim" aria-label="ئاماری ئەندامان">
+    <div class="container-main">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-left">
+            <div class="stat-icon-circle" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">
+              <svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <div>
+              <div id="stat-total-members" class="stat-num" style="color: #fbbf24;">0</div>
+              <div class="stat-label">کۆی ئەندامان / سەردانیکەرانی خاوەن ئەکاونت</div>
+            </div>
+          </div>
+          <span class="stat-tag">تەنها خاوەن ئەکاونت</span>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-left">
+            <div class="stat-icon-circle" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">
+              <span class="pulse-dot"></span>
+            </div>
+            <div>
+              <div id="stat-online-members" class="stat-num" style="color: #34d399;">0</div>
+              <div class="stat-label">ئەندامانی ئۆنڵاین (لەناو ئەکاونتدا)</div>
+            </div>
+          </div>
+          <span class="stat-tag" style="background: rgba(16, 185, 129, 0.14); color: #34d399;">ڕاستەوخۆ</span>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-left">
+            <div class="stat-icon-circle" style="background: rgba(225, 29, 72, 0.15); color: #fb7185;">
+              <svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </div>
+            <div>
+              <div id="stat-total-views" class="stat-num" style="color: #fb7185;">0</div>
+              <div class="stat-label">کۆی بینینی فیلم و دراماکان</div>
+            </div>
+          </div>
+          <span id="stat-movies-count" class="stat-tag" style="background: rgba(225, 29, 72, 0.14); color: #fda4af;">0 بەرهەم</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guest Prompt Banner -->
+  <div id="guest-notice-bar" class="guest-bar theater-dim">
+    <div class="container-main">
+      <div class="guest-bar-inner">
+        <span>ئێستا وەک میوان سەیری سایت دەکەیت. ئاماری سەردانیکەران و ئۆنڵاینەکان تەنها ئەندامانی خاوەن ئەکاونت هەژمار دەکات.</span>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" onclick="openAuthModal('register')" style="padding: 5px 12px; border-radius: 9px; background: #f59e0b; color: #09090b; font-weight: 900; font-size: 11px;">
+            دروستکردنی ئەکاونت
+          </button>
+          <button type="button" onclick="openAuthModal('login')" style="padding: 5px 12px; border-radius: 9px; background: rgba(255,255,255,0.12); color: #fff; font-weight: 700; font-size: 11px;">
+            چوونەژوورەوە
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="top" class="container-main">
+    <!-- AD SLOT: TOP BANNER -->
+    <div id="ad-slot-top" class="ad-slot-container theater-dim"></div>
+
+    <!-- Hero Banner -->
+    <section id="hero-banner" class="hero-section theater-dim">
+      <img id="hero-backdrop" src="" alt="پۆستەری سەرەکی" class="hero-backdrop" />
+      <div class="hero-gradient"></div>
+      <div class="hero-body">
+        <div class="hero-badges">
+          <span id="hero-vip-badge" class="badge-chip badge-gold" style="display: none;">
+            <svg class="icon-svg icon-xs" viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14v2H5v-2zm1-3l-2-9 5.5 4L12 4l2.5 6L20 6l-2 9H6z"/></svg>
+            <span>تایبەت بە VIP</span>
+          </span>
+          <span id="hero-category-badge" class="badge-chip badge-rose">فیلم</span>
+          <span id="hero-rating-badge" class="badge-chip badge-gold">★ 8.8</span>
+          <span id="hero-year-badge" class="badge-chip">2024</span>
+          <span id="hero-quality-badge" class="badge-chip">4K UHD</span>
+        </div>
+
+        <h1 id="hero-title" class="hero-title">کوردس مۆڤیس — خۆشحاڵین بە هاتنت</h1>
+        <p id="hero-desc" class="hero-desc">نوێترین فیلم و درامای ژێرنووسکراوی کوردی بە باشترین کوالێتی و خێراترین سێرڤەر لە کوردس مۆڤیس.</p>
+
+        <div class="hero-actions">
+          <button type="button" onclick="watchCurrentHero()" class="btn-primary-play">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>ئێستا سەیر بکە</span>
+          </button>
+          <button type="button" onclick="openVipModal()" class="btn-secondary-glass" style="border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14v2H5v-2zm1-3l-2-9 5.5 4L12 4l2.5 6L20 6l-2 9H6z"/></svg>
+            <span>پاکێجەکانی VIP</span>
+          </button>
+          <button type="button" id="hero-fav-btn" onclick="toggleHeroFavorite()" class="btn-secondary-glass">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <span>دڵخوازەکان</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category & Sorting Bar -->
+    <div class="filter-bar theater-dim">
+      <div class="cat-tabs no-scrollbar" id="category-tabs">
+        <button type="button" data-cat="all" onclick="selectCategory('all')" class="cat-tab active">هەموو بەرهەمەکان</button>
+        <button type="button" data-cat="فیلم" onclick="selectCategory('فیلم')" class="cat-tab">فیلم</button>
+        <button type="button" data-cat="دراما" onclick="selectCategory('دراما')" class="cat-tab">دراما</button>
+        <button type="button" data-cat="ئەنیمەیشن" onclick="selectCategory('ئەنیمەیشن')" class="cat-tab">ئەنیمەیشن</button>
+        <button type="button" data-cat="vip" onclick="selectCategory('vip')" class="cat-tab" style="color: #fbbf24; border-color: rgba(245, 158, 11, 0.35);">
+          <svg class="icon-svg icon-xs" viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14v2H5v-2zm1-3l-2-9 5.5 4L12 4l2.5 6L20 6l-2 9H6z"/></svg>
+          <span>تایبەت بە VIP</span>
+        </button>
+        <button type="button" data-cat="watchlist" onclick="selectCategory('watchlist')" class="cat-tab">لیستی دڵخواز</button>
+      </div>
+
+      <div class="right-filters">
+        <select id="genre-filter" class="select-control" onchange="handleGenreChange(this.value)">
+          <option value="all">هەموو چەشنەکان</option>
+          <option value="ئەکشن">ئەکشن</option>
+          <option value="دراما">دراما</option>
+          <option value="زانستی">زانستی خەیاڵی</option>
+          <option value="ترسناک">ترسناک</option>
+          <option value="کۆمیدی">کۆمیدی</option>
+          <option value="سەرکێشی">سەرکێشی</option>
+        </select>
+
+        <select id="sort-filter" class="select-control" onchange="renderCatalog()">
+          <option value="newest">نوێترینەکان</option>
+          <option value="views">زۆرترین بینەر</option>
+          <option value="rating">بەرزترین هەڵسەنگاندن</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Movies & Dramas Grid -->
+    <section id="movies-grid" class="movies-grid theater-dim" aria-label="لیستی فیلم و دراماکان"></section>
+
+    <!-- Empty State -->
+    <div id="empty-catalog" class="empty-box theater-dim" style="display: none;">
+      <p style="font-size: 16px; font-weight: 800; color: #ffffff;">هیچ فیلم یان درامایەک نەدۆزرایەوە</p>
+      <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">فلتەرەکان بگۆڕە یان لە پانێڵی ئەدمین بەرهەمی نوێ زیاد بکە.</p>
+      <button type="button" onclick="resetHomeView()" style="margin-top: 14px; padding: 9px 18px; border-radius: 11px; background: var(--accent-gold); color: #09090b; font-weight: 900; font-size: 12px;">
+        گەڕانەوە بۆ هەموو بەرهەمەکان
+      </button>
+    </div>
+
+    <!-- AD SLOT: MID FEED -->
+    <div id="ad-slot-mid" class="ad-slot-container theater-dim"></div>
+
+    <!-- AD SLOT: BOTTOM BANNER -->
+    <div id="ad-slot-bottom" class="ad-slot-container theater-dim"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer theater-dim">
+    <div class="top-luxury-bar"></div>
+    <div class="container-main">
+      <div class="footer-inner">
+        <div>
+          <div style="font-size: 16px; font-weight: 900; color: #ffffff;">کوردس مۆڤیس — Kurds Movies</div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
+            پلاتفۆرمی فیلم و درامای ژێرنووسکراوی کوردی • هەڵگرتنی هەمیشەیی بە لۆکاڵ ستۆرەیج
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
+          <a href="https://t.me/Kurds_Movies" target="_blank" rel="noopener noreferrer" class="btn-pill btn-telegram">
+            <span>چەناڵی تێلیگرام: @Kurds_Movies</span>
+          </a>
+          <span style="font-size: 12px; color: var(--text-muted);">© ٢٠٢٦ کوردس مۆڤیس</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile App Bottom Navigation -->
+  <nav class="mobile-bottom-nav theater-dim" aria-label="هێڵی خوارەوەی مۆبایل">
+    <button type="button" id="mob-tab-home" onclick="resetHomeView(); window.scrollTo({top: 0, behavior: 'smooth'});" class="mob-nav-btn active">
+      <svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>سەرەکی</span>
+    </button>
+    <button type="button" onclick="focusMobileSearchBar()" class="mob-nav-btn">
+      <svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <span>گەڕان</span>
+    </button>
+    <button type="button" onclick="openVipModal()" class="mob-nav-btn" style="color: #fbbf24;">
+      <svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14v2H5v-2zm1-3l-2-9 5.5 4L12 4l2.5 6L20 6l-2 9H6z"/></svg>
+      <span>VIP</span>
+    </button>
+    <button type="button" onclick="handleHeaderAuthClick()" class="mob-nav-btn">
+      <svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <span id="mob-account-label">هەژمارم</span>
+    </button>
+  </nav>
+
+  <!-- ===================================================================== -->
+  <!-- AUTHENTICATION MODAL (SIGN IN / SIGN UP / ACCOUNT RECOVERY)           -->
+  <!-- ===================================================================== -->
+  <div id="auth-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h2 id="auth-modal-title" class="modal-title">هەژماری ئەندامان — کوردس مۆڤیس</h2>
+        <button type="button" class="modal-close" onclick="closeModal('auth-modal')" aria-label="داخستن">
+          <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="sub-tabs">
+        <button type="button" id="auth-tab-login" onclick="switchAuthTab('login')" class="sub-tab-btn active">چوونەژوورەوە</button>
+        <button type="button" id="auth-tab-register" onclick="switchAuthTab('register')" class="sub-tab-btn">دروستکردنی ئەکاونت</button>
+        <button type="button" id="auth-tab-recover" onclick="switchAuthTab('recover')" class="sub-tab-btn">هێنانەوەی ئەکاونت</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Login Form -->
+        <form id="login-form" onsubmit="handleLogin(event)" style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 12px; padding: 10px 12px; font-size: 11px; color: #fde68a;">
+            <strong>ئەکاونتی تاقیکردنەوە:</strong>
+            <div style="margin-top: 4px; display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" onclick="quickFillLogin('vip@kurdsmovies.com', '123456')" style="padding: 4px 9px; border-radius: 7px; background: #f59e0b; color: #09090b; font-weight: 900;">VIP: vip@kurdsmovies.com</button>
+              <button type="button" onclick="quickFillLogin('member@kurdsmovies.com', '123456')" style="padding: 4px 9px; border-radius: 7px; background: rgba(255,255,255,0.12); color: #fff; font-weight: 700;">ئاسایی: member@kurdsmovies.com</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-email">ئیمێڵ (Email)</label>
+            <input type="email" id="login-email" class="form-input" dir="ltr" required placeholder="name@example.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">تێپەڕەوشە (Password)</label>
+            <input type="password" id="login-password" class="form-input" dir="ltr" required placeholder="••••••••" />
+          </div>
+
+          <button type="submit" class="btn-gold-submit">چوونەژوورەوە بۆ ئەکاونت</button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" onsubmit="handleRegister(event)" style="display: none; flex-direction: column; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label" for="reg-name">ناوی تەواو</label>
+            <input type="text" id="reg-name" class="form-input" required placeholder="نموونە: هێمن کوردی" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email">ئیمێڵ (Email)</label>
+            <input type="email" id="reg-email" class="form-input" dir="ltr" required placeholder="name@example.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-password">تێپەڕەوشە (لانیکەم ٦ پیت)</label>
+            <input type="password" id="reg-password" class="form-input" dir="ltr" minlength="6" required placeholder="••••••••" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-recovery-code">کۆدی هێنانەوەی ئەکاونت (بۆ کاتی لەبیرچوونی پاسۆرد)</label>
+            <input type="text" id="reg-recovery-code" class="form-input" required placeholder="نموونە: kurds2026 یان ناوی شارەکەت" />
+          </div>
+
+          <button type="submit" class="btn-gold-submit">تۆمارکردن و چوونەژوورەوە</button>
+        </form>
+
+        <!-- Account Recovery Form -->
+        <form id="recover-form" onsubmit="handleRecoverAccount(event)" style="display: none; flex-direction: column; gap: 12px;">
+          <p style="font-size: 12px; color: var(--text-secondary);">
+            ئیمێڵی تۆمارکراو و کۆدی هێنانەوەی ئەکاونتەکەت بنووسە بۆ گۆڕینی تێپەڕەوشە یان گەڕاندنەوەی دەستبەجێی ئەکاونتەکەت.
+          </p>
+
+          <div class="form-group">
+            <label class="form-label" for="rec-email">ئیمێڵی ئەکاونت</label>
+            <input type="email" id="rec-email" class="form-input" dir="ltr" required placeholder="name@example.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="rec-code">کۆدی هێنانەوە (ئەگەر کاتی دروستکردن دانرابێت)</label>
+            <input type="text" id="rec-code" class="form-input" placeholder="کۆدی هێنانەوە بنووسە" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="rec-new-pass">تێپەڕەوشەی نوێ</label>
+            <input type="password" id="rec-new-pass" class="form-input" dir="ltr" minlength="6" required placeholder="تێپەڕەوشەی نوێ" />
+          </div>
+
+          <div id="recover-result" style="display: none; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); color: #6ee7b7; border-radius: 11px; padding: 10px 12px; font-size: 12px; font-weight: 700;"></div>
+
+          <button type="submit" class="btn-gold-submit">هێنانەوەی ئەکاونت و نوێکردنەوەی پاسۆرد</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- USER PROFILE MODAL                                                    -->
+  <!-- ===================================================================== -->
+  <div id="profile-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+    <div class="modal-panel wide">
+      <div class="modal-header">
+        <h2 id="profile-modal-title" class="modal-title">پڕۆفایلی ئەندام — کوردس مۆڤیس</h2>
+        <button type="button" class="modal-close" onclick="closeModal('profile-modal')" aria-label="داخستن">
+          <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="list-row-card" style="background: rgba(245, 158, 11, 0.06); border-color: rgba(245, 158, 11, 0.3);">
+          <div>
+            <div id="prof-name" style="font-size: 17px; font-weight: 900; color: #ffffff;">ناو</div>
+            <div id="prof-email" dir="ltr" style="font-size: 12px; color: var(--text-secondary); text-align: right;">email</div>
+            <div id="prof-vip-badge" style="margin-top: 6px; font-size: 12px; font-weight: 800; color: #fbbf24;">دۆخی VIP</div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <button type="button" onclick="closeModal('profile-modal'); openVipModal();" class="btn-pill btn-vip-nav">پاکێجەکانی VIP</button>
+            <button type="button" onclick="closeModal('profile-modal'); openAuthModal('login');" class="btn-pill btn-auth">گۆڕینی ئەکاونت</button>
+            <button type="button" onclick="logoutCurrentUser()" class="btn-danger-soft">چوونەدەرەوە</button>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="font-size: 14px; font-weight: 800; color: #fbbf24; margin-bottom: 10px;">مێژووی سەیرکردن</h3>
+          <div id="prof-history-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- VIP MODAL (1M, 2M, 3M, 6M, 1Y & LOCKED CONTENT PROMPT)                -->
+  <!-- ===================================================================== -->
+  <div id="vip-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="vip-modal-title">
+    <div class="modal-panel wide">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #fbbf24;">
+            <svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14v2H5v-2zm1-3l-2-9 5.5 4L12 4l2.5 6L20 6l-2 9H6z"/></svg>
+          </span>
+          <h2 id="vip-modal-title" class="modal-title">ئەندامێتی VIP کوردس مۆڤیس</h2>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('vip-modal')" aria-label="داخستن">
+          <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div id="vip-locked-alert" style="display: none; background: rgba(225, 29, 72, 0.14); border: 1px solid rgba(225, 29, 72, 0.45); color: #fecdd3; border-radius: 13px; padding: 12px 14px; font-size: 13px; font-weight: 700;"></div>
+
+        <div id="vip-user-status-box" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;">
+          <div>
+            <div style="font-size: 11px; color: var(--text-secondary);">دۆخی هەژماری ئێستات:</div>
+            <div id="vip-current-status-text" style="font-size: 15px; font-weight: 900; color: #ffffff; margin-top: 2px;">ئەندامی ئاسایی</div>
+            <div id="vip-current-remaining-text" style="font-size: 12px; color: #fbbf24; margin-top: 2px;"></div>
+          </div>
+          <button type="button" onclick="closeModal('vip-modal'); openAuthModal('login');" class="btn-pill btn-auth">چوونەژوورەوە / گۆڕینی هەژمار</button>
+        </div>
+
+        <div>
+          <div style="font-size: 13px; font-weight: 800; color: #fbbf24; margin-bottom: 10px;">ماوەکانی بەردەستی VIP (١ مانگ تا ١ ساڵ):</div>
+          <div class="vip-plans-grid" id="vip-plans-grid"></div>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-size: 13px; font-weight: 800; color: #ffffff;">چالاککردنی ماوەی VIP لەسەر هەژمارەکەت:</div>
+          <p style="font-size: 12px; color: var(--text-secondary);">
+            دەتوانیت یەکێک لە ماوەکانی سەرەوە هەڵبژێریت و دەستبەجێ چالاکی بکەیت، یان لە پانێڵی ئەدمین (<span dir="ltr">@i4m_SHAW</span>) ماوەی VIP بۆ هەر ئەکاونتێک دیاری بکەیت، یان لە تێلیگرام پەیوەندی بکە بە <a href="https://t.me/Kurds_Movies" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 800;" dir="ltr">@Kurds_Movies</a>.
+          </p>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+            <button type="button" onclick="activateSelectedVipOnCurrentAccount()" class="btn-gold-submit" style="width: auto; padding: 10px 20px;">
+              چالاککردنی ماوەی هەڵبژێردراو بۆ هەژمارەکەم
+            </button>
+            <a href="https://t.me/Kurds_Movies" target="_blank" rel="noopener noreferrer" class="btn-pill btn-telegram" style="padding: 10px 16px;">
+              پەیوەندی لە تێلیگرام (@Kurds_Movies)
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- VIDEO PLAYER MODAL                                                    -->
+  <!-- ===================================================================== -->
+  <div id="player-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="player-movie-title">
+    <div class="modal-panel player-wide">
+      <div class="modal-header">
+        <div style="min-width: 0;">
+          <h2 id="player-movie-title" class="modal-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ناوی فیلم</h2>
+          <div id="player-movie-meta" style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;"></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+          <button type="button" onclick="toggleTheaterMode()" class="btn-pill btn-auth" title="دۆخی سینەما">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect></svg>
+            <span id="theater-btn-label">دۆخی سینەما</span>
+          </button>
+          <button type="button" class="modal-close" onclick="closePlayerModal()" aria-label="داخستن">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <!-- AD SLOT: PLAYER -->
+        <div id="ad-slot-player" class="ad-slot-container" style="margin: 0;"></div>
+
+        <!-- Video Stage -->
+        <div id="video-stage" class="video-stage"></div>
+
+        <!-- Server / Episode Switcher -->
+        <div id="player-controls-row" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;">
+          <div id="server-buttons-wrap" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+          <div id="player-views-badge" style="font-size: 12px; font-weight: 800; color: #fbbf24;"></div>
+        </div>
+
+        <!-- Synopsis -->
+        <div style="background: rgba(255, 255, 255, 0.025); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px;">
+          <div style="font-size: 12px; font-weight: 800; color: #fbbf24; margin-bottom: 4px;">کورتەی چیرۆک</div>
+          <p id="player-synopsis" style="font-size: 13px; color: #d4d4d8;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- ADMIN PANEL MODAL (@i4m_SHAW)                                         -->
+  <!-- ===================================================================== -->
+  <div id="admin-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
+    <div class="modal-panel wide">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #fbbf24;">
+            <svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </span>
+          <h2 id="admin-modal-title" class="modal-title">پانێڵی بەڕێوەبردنی کوردس مۆڤیس</h2>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal('admin-modal')" aria-label="داخستن">
+          <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- Admin Password Lock Screen -->
+      <div id="admin-lock-screen" class="modal-body" style="align-items: center; text-align: center; padding: 36px 24px;">
+        <div style="width: 52px; height: 52px; border-radius: 16px; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center;">
+          <svg class="icon-svg icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </div>
+        <h3 style="font-size: 18px; font-weight: 900; color: #ffffff;">چوونەژوورەوە بۆ پانێڵی ئەدمین</h3>
+        <p style="font-size: 12px; color: var(--text-secondary); max-width: 360px;">
+          تێپەڕەوشەی تایبەتی ئەدمین بنووسە بۆ کردنەوەی ستۆرەیج، بەشی VIP، و بەشی ڕیکلام.
+        </p>
+        <form onsubmit="handleAdminUnlock(event)" style="width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+          <input type="password" id="admin-password-input" class="form-input" dir="ltr" style="text-align: center; font-weight: 800;" required placeholder="تێپەڕەوشەی ئەدمین" />
+          <p id="admin-pass-error" style="display: none; font-size: 12px; font-weight: 700; color: #fb7185;">تێپەڕەوشەکە هەڵەیە!</p>
+          <button type="submit" class="btn-gold-submit">کردنەوەی پانێڵ</button>
+        </form>
+      </div>
+
+      <!-- Admin Unlocked Workspace -->
+      <div id="admin-workspace" style="display: none; flex-direction: column; min-height: 0; flex: 1;">
+        <div class="sub-tabs">
+          <button type="button" data-admintab="storage" onclick="switchAdminTab('storage')" class="sub-tab-btn active">ستۆرەیج و فیلم/دراما</button>
+          <button type="button" data-admintab="vip" onclick="switchAdminTab('vip')" class="sub-tab-btn">VIP و ئەکاونتەکان</button>
+          <button type="button" data-admintab="ads" onclick="switchAdminTab('ads')" class="sub-tab-btn">بەشی ڕیکلام</button>
+          <button type="button" data-admintab="backup" onclick="switchAdminTab('backup')" class="sub-tab-btn">باکئەپ و داتا</button>
+          <button type="button" onclick="lockAdminPanel()" class="btn-danger-soft" style="margin-right: auto;">داخستنی ئەدمین</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- TAB 1: PERMANENT STORAGE & MOVIE/DRAMA CRUD -->
+          <div id="admin-tab-storage" style="display: flex; flex-direction: column; gap: 18px;">
+            <form id="movie-crud-form" onsubmit="handleSaveMovie(event)" style="background: rgba(255, 255, 255, 0.025); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <h4 id="movie-form-heading" style="font-size: 14px; font-weight: 900; color: #fbbf24;">زیادکردنی فیلم یان درامای نوێ (هەڵگرتنی هەمیشەیی)</h4>
+                <button type="button" id="cancel-movie-edit-btn" onclick="resetMovieForm()" class="btn-danger-soft" style="display: none;">پاشگەزبوونەوە لە دەستکاری</button>
+              </div>
+
+              <input type="hidden" id="edit-movie-id" />
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="m-title-ku">ناونیشانی کوردی *</label>
+                  <input type="text" id="m-title-ku" class="form-input" required placeholder="نموونە: ئۆپنهایمەر" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="m-title-orig">ناوی ڕەسەن (ئینگلیزی / تورکی / عەرەبی)</label>
+                  <input type="text" id="m-title-orig" class="form-input" dir="ltr" placeholder="Oppenheimer" />
+                </div>
+              </div>
+
+              <div class="form-grid-3">
+                <div class="form-group">
+                  <label class="form-label" for="m-category">جۆر *</label>
+                  <select id="m-category" class="form-select">
+                    <option value="فیلم">فیلم</option>
+                    <option value="دراما">دراما</option>
+                    <option value="ئەنیمەیشن">ئەنیمەیشن</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="m-genre">چەشن</label>
+                  <input type="text" id="m-genre" class="form-input" placeholder="ئەکشن، دراما، زانستی" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="m-year">ساڵ</label>
+                  <input type="number" id="m-year" class="form-input" value="2025" min="1950" max="2030" />
+                </div>
+              </div>
+
+              <div class="form-grid-3">
+                <div class="form-group">
+                  <label class="form-label" for="m-rating">هەڵسەنگاندن (0 - 10)</label>
+                  <input type="text" id="m-rating" class="form-input" value="8.5" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="m-quality">کوالێتی</label>
+                  <input type="text" id="m-quality" class="form-input" value="1080p Full HD" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="m-duration">ماوە / ئەڵقە</label>
+                  <input type="text" id="m-duration" class="form-input" value="135 خولەک" />
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="m-poster-url">لینکی پۆستەر (URL)</label>
+                  <input type="text" id="m-poster-url" class="form-input" dir="ltr" placeholder="https://..." />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="m-poster-file">یان بارکردنی وێنەی پۆستەر لە مۆبایل/کۆمپیوتەر</label>
+                  <input type="file" id="m-poster-file" accept="image/*" class="form-input" onchange="handlePosterFileUpload(this)" />
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="m-video-url">سەرچاوەی ڤیدیۆ (MP4، YouTube، Google Drive، یان iframe) *</label>
+                  <input type="text" id="m-video-url" class="form-input" dir="ltr" required placeholder="https://...mp4 یان https://youtu.be/... یان <iframe...>" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="m-backup-url">سێرڤەری یەدەگ (ئارەزوومەندانە)</label>
+                  <input type="text" id="m-backup-url" class="form-input" dir="ltr" placeholder="https://..." />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="m-episodes">لیستی ئەڵقەکان (تەنها بۆ دراما — هەر دێڕێک: ناوی ئەڵقە | لینک)</label>
+                <textarea id="m-episodes" rows="2" class="form-textarea" dir="ltr" placeholder="ئەڵقەی 1 | https://...&#10;ئەڵقەی 2 | https://..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="m-desc">کورتەی چیرۆک</label>
+                <textarea id="m-desc" rows="2" class="form-textarea" placeholder="پوختەی چیرۆکی فیلم یان دراما..."></textarea>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 4px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 14px;">
+                  <label style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 800; color: #fbbf24; cursor: pointer;">
+                    <input type="checkbox" id="m-featured" style="width: 16px; height: 16px; accent-color: #f59e0b;" />
+                    <span>پیشاندان لە بانەری سەرەکی (Hero)</span>
+                  </label>
+
+                  <label style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 900; color: #fda4af; background: rgba(225, 29, 72, 0.14); border: 1px solid rgba(225, 29, 72, 0.35); padding: 6px 10px; border-radius: 10px; cursor: pointer;">
+                    <input type="checkbox" id="m-vip-lock" style="width: 16px; height: 16px; accent-color: #e11d48;" />
+                    <span>قفڵی VIP — تەنها بۆ ئەندامانی VIP</span>
+                  </label>
+                </div>
+
+                <button type="submit" class="btn-gold-submit" style="width: auto; padding: 10px 24px;">
+                  پاشەکەوتکردن لە ستۆرەیج
+                </button>
+              </div>
+            </form>
+
+            <div>
+              <h4 style="font-size: 14px; font-weight: 900; color: #ffffff; margin-bottom: 10px;">
+                بەرهەمە پاشەکەوتکراوەکان (<span id="admin-movies-count">0</span>)
+              </h4>
+              <div id="admin-movies-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+          </div>
+
+          <!-- TAB 2: VIP & USER ACCOUNTS -->
+          <div id="admin-tab-vip" style="display: none; flex-direction: column; gap: 14px;">
+            <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.28); border-radius: 14px; padding: 12px 14px; font-size: 12px; color: #fde68a;">
+              لێرەوە دەتوانیت VIP بۆ هەر ئەکاونتێک چالاک بکەیت بۆ ماوەی <strong>١ مانگ، ٢ مانگ، ٣ مانگ، ٦ مانگ، یان ١ ساڵ</strong> یان هەڵیوەشێنیتەوە.
+            </div>
+            <div id="admin-users-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+          </div>
+
+          <!-- TAB 3: ADS SYSTEM -->
+          <div id="admin-tab-ads" style="display: none; flex-direction: column; gap: 16px;">
+            <form id="ad-crud-form" onsubmit="handleSaveAd(event)" style="background: rgba(255, 255, 255, 0.025); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <h4 id="ad-form-heading" style="font-size: 14px; font-weight: 900; color: #fbbf24;">زیادکردنی ڕیکلامی نوێ</h4>
+                <button type="button" id="cancel-ad-edit-btn" onclick="resetAdForm()" class="btn-danger-soft" style="display: none;">پاشگەزبوونەوە</button>
+              </div>
+
+              <input type="hidden" id="edit-ad-id" />
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="ad-title">ناونیشانی ڕیکلام *</label>
+                  <input type="text" id="ad-title" class="form-input" required placeholder="نموونە: چەناڵی فەرمی کوردس مۆڤیس" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="ad-slot">شوێنی نمایشکردن *</label>
+                  <select id="ad-slot" class="form-select">
+                    <option value="top">سەرەوە (Top Banner)</option>
+                    <option value="mid">ناوەڕاست (Mid Feed)</option>
+                    <option value="player">ناو پلەیەر (Player Banner)</option>
+                    <option value="bottom">خوارەوە (Bottom Banner)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="ad-image-url">لینکی وێنەی ڕیکلام (URL)</label>
+                  <input type="text" id="ad-image-url" class="form-input" dir="ltr" placeholder="https://..." />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="ad-image-file">یان بارکردنی وێنەی ڕیکلام</label>
+                  <input type="file" id="ad-image-file" accept="image/*" class="form-input" onchange="handleAdImageUpload(this)" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="ad-link">لینکی کلیک (URL)</label>
+                <input type="text" id="ad-link" class="form-input" dir="ltr" value="https://t.me/Kurds_Movies" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="ad-desc">دەق و زانیاری ڕیکلام *</label>
+                <textarea id="ad-desc" rows="2" class="form-textarea" required placeholder="زانیاری ڕیکلامەکە لێرە بنووسە..."></textarea>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <label style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 800; color: #34d399; cursor: pointer;">
+                  <input type="checkbox" id="ad-active" checked style="width: 16px; height: 16px; accent-color: #10b981;" />
+                  <span>ڕیکلام چالاک بێت</span>
+                </label>
+
+                <button type="submit" class="btn-gold-submit" style="width: auto; padding: 10px 22px;">پاشەکەوتکردنی ڕیکلام</button>
+              </div>
+            </form>
+
+            <div id="admin-ads-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          </div>
+
+          <!-- TAB 4: BACKUP & RESTORE -->
+          <div id="admin-tab-backup" style="display: none; flex-direction: column; gap: 14px;">
+            <div class="list-row-card">
+              <div>
+                <div style="font-size: 14px; font-weight: 900; color: #ffffff;">هەناردنەوەی باکئەپی تەواو (Export JSON)</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">هەموو فیلم، دراما، ئەکاونت، VIP، ڕیکلام، و بینینەکان بە فایلی JSON دابەزێنە.</div>
+              </div>
+              <button type="button" onclick="exportAllDataJson()" class="btn-gold-submit" style="width: auto; padding: 10px 18px;">داگرتنی باکئەپ</button>
+            </div>
+
+            <div class="list-row-card">
+              <div>
+                <div style="font-size: 14px; font-weight: 900; color: #ffffff;">گەڕاندنەوەی باکئەپ (Import JSON)</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">فایلی JSON پێشووی کوردس مۆڤیس هەڵبژێرە بۆ گەڕاندنەوەی داتاکان.</div>
+              </div>
+              <input type="file" id="import-json-input" accept="application/json,.json" onchange="importAllDataJson(this)" class="form-input" style="max-width: 260px;" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      // =====================================================================
+      // CONSTANTS & STORAGE KEYS
+      // =====================================================================
+      const ADMIN_PASS = "@i4m_SHAW";
+      const STORAGE_KEYS = {
+        MOVIES: "kurds_movies_v2_movies",
+        USERS: "kurds_movies_v2_users",
+        SESSION: "kurds_movies_v2_session",
+        PRESENCE: "kurds_movies_v2_presence",
+        ADS: "kurds_movies_v2_ads",
+        ADMIN_AUTH: "kurds_movies_v2_admin_unlocked"
+      };
+
+      const VIP_PLANS = [
+        { key: "1m", label: "١ مانگ", days: 30, note: "30 ڕۆژ" },
+        { key: "2m", label: "٢ مانگ", days: 60, note: "60 ڕۆژ" },
+        { key: "3m", label: "٣ مانگ", days: 90, note: "90 ڕۆژ • پڕفرۆش" },
+        { key: "6m", label: "٦ مانگ", days: 180, note: "180 ڕۆژ" },
+        { key: "1y", label: "١ ساڵ", days: 365, note: "365 ڕۆژ • شاهانە" }
+      ];
+
+      const DEFAULT_MOVIES = [
+        {
+          id: "km-dune-2",
+          titleKu: "دون: بەشی دووەم",
+          titleOrig: "Dune: Part Two",
+          category: "فیلم",
+          genre: "زانستی، ئەکشن، سەرکێشی",
+          year: 2024,
+          rating: "8.8",
+          quality: "4K UHD",
+          duration: "166 خولەک",
+          poster: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80",
+          backdrop: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1600&q=80",
+          videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+          backupUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+          episodes: [],
+          synopsis: "پۆڵ ئەتریدیس یەکدەگرێت لەگەڵ چانی و فریمێنەکان لە کاتێکدا لە ڕێگای تۆڵەسەندنەوەدایە دژی ئەو پیلانگێڕانەی کە خێزانەکەیان لەناوبرد.",
+          views: 1940,
+          featured: true,
+          vipOnly: false,
+          createdAt: Date.now() - 400000
+        },
+        {
+          id: "km-dark-knight",
+          titleKu: "شۆڕەسواری تاریکی",
+          titleOrig: "The Dark Knight",
+          category: "فیلم",
+          genre: "ئەکشن، دراما",
+          year: 2008,
+          rating: "9.0",
+          quality: "1080p Full HD",
+          duration: "152 خولەک",
+          poster: "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?auto=format&fit=crop&w=600&q=80",
+          backdrop: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=1600&q=80",
+          videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+          backupUrl: "",
+          episodes: [],
+          synopsis: "باتمان و لێکۆڵەر جیم گۆردن ڕووبەڕووی جۆکەر دەبنەوە کە گۆشەمە دەخاتە ناو فەوزایەکی بێوێنەوە.",
+          views: 2480,
+          featured: false,
+          vipOnly: true,
+          createdAt: Date.now() - 300000
+        },
+        {
+          id: "km-breaking-drama",
+          titleKu: "پاشای گۆڕەپان",
+          titleOrig: "Crown of Shadows",
+          category: "دراما",
+          genre: "دراما، ترسناک",
+          year: 2025,
+          rating: "8.9",
+          quality: "1080p Full HD",
+          duration: "2 وەرز • ژێرنووسی کوردی",
+          poster: "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?auto=format&fit=crop&w=600&q=80",
+          backdrop: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1600&q=80",
+          videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+          backupUrl: "",
+          episodes: [
+            { title: "ئەڵقەی ١", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" },
+            { title: "ئەڵقەی ٢", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" }
+          ],
+          synopsis: "درامایەکی پڕ لە نهێنی و ململانێی دەسەڵات کە هەر بڕیارێک چارەنووسی کەسەکان دەگۆڕێت.",
+          views: 1620,
+          featured: false,
+          vipOnly: true,
+          createdAt: Date.now() - 200000
+        },
+        {
+          id: "km-spider-verse",
+          titleKu: "پیاوی جاڵجاڵۆکە: فرەگەردوون",
+          titleOrig: "Spider-Man: Across the Spider-Verse",
+          category: "ئەنیمەیشن",
+          genre: "ئەنیمەیشن، ئەکشن، کۆمیدی",
+          year: 2023,
+          rating: "8.7",
+          quality: "4K HDR",
+          duration: "140 خولەک",
+          poster: "https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=600&q=80",
+          backdrop: "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?auto=format&fit=crop&w=1600&q=80",
+          videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+          backupUrl: "",
+          episodes: [],
+          synopsis: "مایلز مۆرالیس گەشت دەکات بەناو فرەگەردووندا و ڕووبەڕووی ڕووداوی چاوەڕواننەکراو دەبێتەوە.",
+          views: 1390,
+          featured: false,
+          vipOnly: false,
+          createdAt: Date.now() - 100000
+        }
+      ];
+
+      const DEFAULT_USERS = [
+        {
+          id: "usr-vip-demo",
+          name: "ئەندامی VIP کوردس",
+          email: "vip@kurdsmovies.com",
+          password: simpleHash("123456"),
+          recoveryCode: "kurds2026",
+          vipExpiresAt: Date.now() + 90 * 24 * 60 * 60 * 1000,
+          vipPlanLabel: "٣ مانگ",
+          watchlist: ["km-dark-knight"],
+          history: []
+        },
+        {
+          id: "usr-member-demo",
+          name: "ئەندامی ئاسایی",
+          email: "member@kurdsmovies.com",
+          password: simpleHash("123456"),
+          recoveryCode: "hawler",
+          vipExpiresAt: 0,
+          vipPlanLabel: "",
+          watchlist: [],
+          history: []
+        }
+      ];
+
+      const DEFAULT_ADS = [
+        {
+          id: "ad-top-tg",
+          title: "چەناڵی فەرمی کوردس مۆڤیس لە تێلیگرام",
+          slot: "top",
+          image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=300&q=80",
+          desc: "نوێترین فیلم و درامای ژێرنووسکراوی کوردی و کۆدی VIP لە چەناڵی @Kurds_Movies ببینە!",
+          link: "https://t.me/Kurds_Movies",
+          active: true,
+          createdAt: Date.now() - 2000
+        },
+        {
+          id: "ad-mid-vip",
+          title: "ئەندامێتی VIP کوردس مۆڤیس (١ مانگ تا ١ ساڵ)",
+          slot: "mid",
+          image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=300&q=80",
+          desc: "هەموو بەرهەمە قفڵکراوەکان بکەرەوە و بە خێراترین سێرڤەر سەیر بکە.",
+          link: "https://t.me/Kurds_Movies",
+          active: true,
+          createdAt: Date.now() - 1000
+        }
+      ];
+
+      // =====================================================================
+      // APPLICATION STATE
+      // =====================================================================
+      let state = {
+        movies: [],
+        users: [],
+        currentUserId: null,
+        presence: {}, // { userId: lastActiveTimestamp }
+        ads: [],
+        selectedCategory: "all",
+        selectedGenre: "all",
+        searchQuery: "",
+        heroMovieId: null,
+        activePlayerMovieId: null,
+        activeServerIndex: 0,
+        selectedVipPlanKey: "3m",
+        pendingVipMovie: null,
+        uploadedPosterDataUrl: "",
+        uploadedAdImageDataUrl: "",
+        theaterMode: false,
+        adminUnlocked: sessionStorage.getItem(STORAGE_KEYS.ADMIN_AUTH) === "1"
+      };
+
+      // =====================================================================
+      // HELPERS & STORAGE
+      // =====================================================================
+      function simpleHash(str) {
+        let h = 2166136261;
+        const text = String(str || "");
+        for (let i = 0; i < text.length; i++) {
+          h ^= text.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        return (h >>> 0).toString(16);
+      }
+
+      function safeReadJson(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) return fallback;
+          const parsed = JSON.parse(raw);
+          return parsed !== null && parsed !== undefined ? parsed : fallback;
+        } catch (err) {
+          console.error("Storage read error:", key, err);
+          return fallback;
+        }
+      }
+
+      function safeWriteJson(key, value) {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+          return true;
+        } catch (err) {
+          console.error("Storage write error:", key, err);
+          showToast("کێشەیەک لە پاشەکەوتکردنی ستۆرەیج ڕوویدا (ڕەنگە قەبارەی وێنە زۆر بێت)", "error");
+          return false;
+        }
+      }
+
+      function showToast(message, type = "info") {
+        const stack = document.getElementById("toast-stack");
+        if (!stack) return;
+        const item = document.createElement("div");
+        item.className = "toast-item" + (type === "error" ? " error" : "");
+        item.textContent = message;
+        stack.appendChild(item);
+        setTimeout(() => {
+          item.remove();
+        }, 3200);
+      }
+
+      function initializeDataStore() {
+        const existingMovies = safeReadJson(STORAGE_KEYS.MOVIES, null);
+        if (!Array.isArray(existingMovies) || existingMovies.length === 0) {
+          state.movies = DEFAULT_MOVIES.slice();
+          safeWriteJson(STORAGE_KEYS.MOVIES, state.movies);
+        } else {
+          state.movies = existingMovies;
         }
 
-        // کاتێک لاپەڕەکە دەکرێتەوە، ئەم فەنکشنە جێبەجێ دەبێت
-        fetchMovies();
-    </script>
+        const existingUsers = safeReadJson(STORAGE_KEYS.USERS, null);
+        if (!Array.isArray(existingUsers) || existingUsers.length === 0) {
+          state.users = DEFAULT_USERS.slice();
+          safeWriteJson(STORAGE_KEYS.USERS, state.users);
+        } else {
+          state.users = existingUsers;
+        }
+
+        const existingAds = safeReadJson(STORAGE_KEYS.ADS, null);
+        if (!Array.isArray(existingAds) || existingAds.length === 0) {
+          state.ads = DEFAULT_ADS.slice();
+          safeWriteJson(STORAGE_KEYS.ADS, state.ads);
+        } else {
+          state.ads = existingAds;
+        }
+
+        state.presence = safeReadJson(STORAGE_KEYS.PRESENCE, {});
+        const savedSession = safeReadJson(STORAGE_KEYS.SESSION, null);
+        if (savedSession && savedSession.userId) {
+          const foundUser = state.users.find(u => u.id === savedSession.userId);
+          if (foundUser) {
+            state.currentUserId = foundUser.id;
+          }
+        }
+      }
+
+      // =====================================================================
+      // AUTHENTICATION & MEMBER-ONLY ONLINE PRESENCE
+      // =====================================================================
+      function getCurrentUser() {
+        if (!state.currentUserId) return null;
+        return state.users.find(u => u.id === state.currentUserId) || null;
+      }
+
+      function isUserVip(user) {
+        if (!user || !user.vipExpiresAt) return false;
+        return Number(user.vipExpiresAt) > Date.now();
+      }
+
+      function formatRemainingDays(expiresAt) {
+        const diff = Number(expiresAt) - Date.now();
+        if (!expiresAt || diff <= 0) return "";
+        const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+        const dateStr = new Date(Number(expiresAt)).toLocaleDateString("ku-IQ");
+        return `${days} ڕۆژ ماوە (تا ${dateStr})`;
+      }
+
+      function updateMemberHeartbeat() {
+        state.presence = safeReadJson(STORAGE_KEYS.PRESENCE, {});
+        const user = getCurrentUser();
+        if (user) {
+          state.presence[user.id] = Date.now();
+          safeWriteJson(STORAGE_KEYS.PRESENCE, state.presence);
+        }
+        renderStatsBar();
+      }
+
+      function removeUserFromPresence(userId) {
+        state.presence = safeReadJson(STORAGE_KEYS.PRESENCE, {});
+        if (userId && state.presence[userId]) {
+          delete state.presence[userId];
+          safeWriteJson(STORAGE_KEYS.PRESENCE, state.presence);
+        }
+      }
+
+      function renderStatsBar() {
+        // ONLY authenticated member accounts in state.users are counted
+        const totalMembersEl = document.getElementById("stat-total-members");
+        const onlineMembersEl = document.getElementById("stat-online-members");
+        const totalViewsEl = document.getElementById("stat-total-views");
+        const moviesCountEl = document.getElementById("stat-movies-count");
+
+        const registeredCount = state.users.length;
+        const now = Date.now();
+        const activeWindowMs = 65000;
+
+        const currentPresence = safeReadJson(STORAGE_KEYS.PRESENCE, {});
+        const validMemberIds = new Set(state.users.map(u => u.id));
+        let onlineCount = 0;
+
+        Object.entries(currentPresence).forEach(([uid, ts]) => {
+          if (validMemberIds.has(uid) && now - Number(ts) < activeWindowMs) {
+            onlineCount++;
+          }
+        });
+
+        const totalViews = state.movies.reduce((sum, m) => sum + (Number(m.views) || 0), 0);
+
+        if (totalMembersEl) totalMembersEl.textContent = registeredCount.toLocaleString();
+        if (onlineMembersEl) onlineMembersEl.textContent = onlineCount.toLocaleString();
+        if (totalViewsEl) totalViewsEl.textContent = totalViews.toLocaleString();
+        if (moviesCountEl) moviesCountEl.textContent = `${state.movies.length} بەرهەم`;
+      }
+
+      function renderAuthHeaderAndGuestBar() {
+        const user = getCurrentUser();
+        const authLabel = document.getElementById("auth-header-label");
+        const authBtn = document.getElementById("auth-header-btn");
+        const guestBar = document.getElementById("guest-notice-bar");
+        const mobAccountLabel = document.getElementById("mob-account-label");
+
+        if (user) {
+          const vipActive = isUserVip(user);
+          if (authLabel) {
+            authLabel.textContent = vipActive ? `★ ${user.name}` : user.name;
+          }
+          if (authBtn) {
+            authBtn.className = "btn-pill btn-user-chip";
+          }
+          if (guestBar) guestBar.style.display = "none";
+          if (mobAccountLabel) mobAccountLabel.textContent = vipActive ? "پڕۆفایل ★" : "پڕۆفایل";
+        } else {
+          if (authLabel) authLabel.textContent = "چوونەژوورەوە";
+          if (authBtn) authBtn.className = "btn-pill btn-auth";
+          if (guestBar) guestBar.style.display = "block";
+          if (mobAccountLabel) mobAccountLabel.textContent = "هەژمارم";
+        }
+      }
+
+      window.handleHeaderAuthClick = function () {
+        const user = getCurrentUser();
+        if (user) {
+          openProfileModal();
+        } else {
+          openAuthModal("login");
+        }
+      };
+
+      window.openAuthModal = function (tab = "login") {
+        switchAuthTab(tab);
+        openModal("auth-modal");
+      };
+
+      window.switchAuthTab = function (tab) {
+        const loginForm = document.getElementById("login-form");
+        const regForm = document.getElementById("register-form");
+        const recForm = document.getElementById("recover-form");
+        const tLogin = document.getElementById("auth-tab-login");
+        const tReg = document.getElementById("auth-tab-register");
+        const tRec = document.getElementById("auth-tab-recover");
+
+        loginForm.style.display = tab === "login" ? "flex" : "none";
+        regForm.style.display = tab === "register" ? "flex" : "none";
+        recForm.style.display = tab === "recover" ? "flex" : "none";
+
+        tLogin.classList.toggle("active", tab === "login");
+        tReg.classList.toggle("active", tab === "register");
+        tRec.classList.toggle("active", tab === "recover");
+      };
+
+      window.quickFillLogin = function (email, pass) {
+        document.getElementById("login-email").value = email;
+        document.getElementById("login-password").value = pass;
+      };
+
+      window.handleLogin = function (event) {
+        event.preventDefault();
+        const email = document.getElementById("login-email").value.trim().toLowerCase();
+        const pass = document.getElementById("login-password").value;
+        const passHash = simpleHash(pass);
+
+        const user = state.users.find(u => (u.email || "").toLowerCase() === email && u.password === passHash);
+        if (!user) {
+          showToast("ئیمێڵ یان تێپەڕەوشە هەڵەیە!", "error");
+          return;
+        }
+
+        state.currentUserId = user.id;
+        safeWriteJson(STORAGE_KEYS.SESSION, { userId: user.id });
+        updateMemberHeartbeat();
+        renderAuthHeaderAndGuestBar();
+        renderCatalog();
+        if (state.adminUnlocked) renderAdminUsersList();
+        closeModal("auth-modal");
+        showToast(`بەخێربێیت ${user.name}!`);
+      };
+
+      window.handleRegister = function (event) {
+        event.preventDefault();
+        const name = document.getElementById("reg-name").value.trim();
+        const email = document.getElementById("reg-email").value.trim().toLowerCase();
+        const pass = document.getElementById("reg-password").value;
+        const recoveryCode = document.getElementById("reg-recovery-code").value.trim();
+
+        if (!name || !email || pass.length < 6) {
+          showToast("تکایە هەموو خانەکان بە دروستی پڕ بکەرەوە", "error");
+          return;
+        }
+
+        const exists = state.users.some(u => (u.email || "").toLowerCase() === email);
+        if (exists) {
+          showToast("ئەم ئیمێڵە پێشتر تۆمار کراوە!", "error");
+          return;
+        }
+
+        const newUser = {
+          id: "usr-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6),
+          name,
+          email,
+          password: simpleHash(pass),
+          recoveryCode: recoveryCode.toLowerCase(),
+          vipExpiresAt: 0,
+          vipPlanLabel: "",
+          watchlist: [],
+          history: []
+        };
+
+        state.users.push(newUser);
+        safeWriteJson(STORAGE_KEYS.USERS, state.users);
+
+        state.currentUserId = newUser.id;
+        safeWriteJson(STORAGE_KEYS.SESSION, { userId: newUser.id });
+        updateMemberHeartbeat();
+        renderAuthHeaderAndGuestBar();
+        renderCatalog();
+        if (state.adminUnlocked) renderAdminUsersList();
+        closeModal("auth-modal");
+        showToast(`ئەکاونتەکەت بە سەرکەوتوویی دروست کرا، بەخێربێیت ${name}!`);
+      };
+
+      window.handleRecoverAccount = function (event) {
+        event.preventDefault();
+        const email = document.getElementById("rec-email").value.trim().toLowerCase();
+        const code = document.getElementById("rec-code").value.trim().toLowerCase();
+        const newPass = document.getElementById("rec-new-pass").value;
+        const resultBox = document.getElementById("recover-result");
+
+        const userIndex = state.users.findIndex(u => (u.email || "").toLowerCase() === email);
+        if (userIndex === -1) {
+          resultBox.style.display = "block";
+          resultBox.style.background = "rgba(225, 29, 72, 0.14)";
+          resultBox.style.borderColor = "rgba(225, 29, 72, 0.4)";
+          resultBox.style.color = "#fecdd3";
+          resultBox.textContent = "هیچ ئەکاونتێک بەم ئیمێڵە نەدۆزرایەوە.";
+          return;
+        }
+
+        const targetUser = state.users[userIndex];
+        if (targetUser.recoveryCode && code && targetUser.recoveryCode !== code) {
+          resultBox.style.display = "block";
+          resultBox.style.background = "rgba(225, 29, 72, 0.14)";
+          resultBox.style.borderColor = "rgba(225, 29, 72, 0.4)";
+          resultBox.style.color = "#fecdd3";
+          resultBox.textContent = "کۆدی هێنانەوەی ئەکاونت هەڵەیە.";
+          return;
+        }
+
+        targetUser.password = simpleHash(newPass);
+        state.users[userIndex] = targetUser;
+        safeWriteJson(STORAGE_KEYS.USERS, state.users);
+
+        state.currentUserId = targetUser.id;
+        safeWriteJson(STORAGE_KEYS.SESSION, { userId: targetUser.id });
+        updateMemberHeartbeat();
+        renderAuthHeaderAndGuestBar();
+        renderCatalog();
+
+        resultBox.style.display = "block";
+        resultBox.style.background = "rgba(16, 185, 129, 0.14)";
+        resultBox.style.borderColor = "rgba(16, 185, 129, 0.4)";
+        resultBox.style.color = "#6ee7b7";
+        resultBox.textContent = `✓ ئەکاونتی (${targetUser.name}) گەڕێندرایەوە و تێپەڕەوشە نوێ کرایەوە! ئێستا چوویتە ژوورەوە.`;
+        showToast("ئەکاونتەکەت بە سەرکەوتوویی هێنرایەوە!");
+      };
+
+      window.logoutCurrentUser = function () {
+        const user = getCurrentUser();
+        if (user) {
+          removeUserFromPresence(user.id);
+        }
+        state.currentUserId = null;
+        localStorage.removeItem(STORAGE_KEYS.SESSION);
+        renderAuthHeaderAndGuestBar();
+        renderStatsBar();
+        renderCatalog();
+        closeModal("profile-modal");
+        showToast("چوویتە دەرەوە لە هەژمارەکەت");
+      };
+
+      // =====================================================================
+      // PROFILE & WATCHLIST & WATCH HISTORY
+      // =====================================================================
+      window.openProfileModal = function () {
+        const user = getCurrentUser();
+        if (!user) {
+          openAuthModal("login");
+          return;
+        }
+
+        document.getElementById("prof-name").textContent = user.name;
+        document.getElementById("prof-email").textContent = user.email;
+        const vipBadge = document.getElementById("prof-vip-badge");
+        if (isUserVip(user)) {
+          vipBadge.textContent = `★ ئەندامی VIP (${user.vipPlanLabel || "چالاک"}) — ${formatRemainingDays(user.vipExpiresAt)}`;
+          vipBadge.style.color = "#fbbf24";
+        } else {
+          vipBadge.textContent = "ئەندامی ئاسایی (VIP چالاک نییە)";
+          vipBadge.style.color = "#a1a1aa";
+        }
+
+        const histList = document.getElementById("prof-history-list");
+        const history = Array.isArray(user.history) ? user.history : [];
+        if (history.length === 0) {
+          histList.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary);">هێشتا هیچ فیلم یان درامایەکت سەیر نەکردووە.</div>`;
+        } else {
+          histList.innerHTML = history.map(h => `
+            <div class="list-row-card" style="padding: 8px 12px;">
+              <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                <img src="${escapeAttr(h.poster || "")}" alt="${escapeAttr(h.title || "")}" onerror="this.src='https://placehold.co/60x85/141419/f59e0b?text=KM'" style="width: 38px; height: 52px; border-radius: 7px; object-fit: cover; flex-shrink: 0;" />
+                <span style="font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(h.title || "")}</span>
+              </div>
+              <button type="button" onclick="closeModal('profile-modal'); openMoviePlayer('${escapeAttr(h.movieId)}');" class="btn-pill btn-vip-nav">دووبارە سەیرکردن</button>
+            </div>
+          `).join("");
+        }
+
+        openModal("profile-modal");
+      };
+
+      function recordMovieHistory(movie) {
+        const user = getCurrentUser();
+        if (!user || !movie) return;
+        const idx = state.users.findIndex(u => u.id === user.id);
+        if (idx === -1) return;
+
+        const existing = Array.isArray(state.users[idx].history) ? state.users[idx].history : [];
+        const filtered = existing.filter(item => item.movieId !== movie.id);
+        state.users[idx].history = [
+          { movieId: movie.id, title: movie.titleKu, poster: movie.poster, watchedAt: Date.now() },
+          ...filtered
+        ].slice(0, 20);
+        safeWriteJson(STORAGE_KEYS.USERS, state.users);
+      }
+
+      window.toggleFavoriteMovie = function (movieId, event) {
+        if (event) event.stopPropagation();
+        const user = getCurrentUser();
+        if (!user) {
+          showToast("بۆ زیادکردن بۆ لیستی دڵخواز، سەرەتا بچۆ ژوورەوە", "error");
+          openAuthModal("login");
+          return;
+        }
+
+        const idx = state.users.findIndex(u => u.id === user.id);
+        if (idx === -1) return;
+
+        const list = Array.isArray(state.users[idx].watchlist) ? state.users[idx].watchlist : [];
+        const pos = list.indexOf(movieId);
+        if (pos > -1) {
+          list.splice(pos, 1);
+          showToast("لە لیستی دڵخواز لابرا");
+        } else {
+          list.push(movieId);
+          showToast("زیادکرا بۆ لیستی دڵخواز");
+        }
+
+        state.users[idx].watchlist = list;
+        safeWriteJson(STORAGE_KEYS.USERS, state.users);
+        renderCatalog();
+        updateHeroFavLabel();
+      };
+
+      window.toggleHeroFavorite = function () {
+        const heroMovie = getHeroMovie();
+        if (!heroMovie) return;
+        toggleFavoriteMovie(heroMovie.id, null);
+      };
+
+      // =====================================================================
+      // VIP SYSTEM (1M, 2M, 3M, 6M, 1Y)
+      // =====================================================================
+      window.openVipModal = function (lockedMovie = null) {
+        state.pendingVipMovie = lockedMovie;
+        const alertBox = document.getElementById("vip-locked-alert");
+        if (lockedMovie) {
+          alertBox.style.display = "block";
+          alertBox.textContent = `بەرهەمی "${lockedMovie.titleKu}" قفڵکراوە و تەنها بۆ ئەندامانی VIP بەردەستە. VIP چالاک بکە بۆ کردنەوەی.`;
+        } else {
+          alertBox.style.display = "none";
+          alertBox.textContent = "";
+        }
+
+        const user = getCurrentUser();
+        const statusText = document.getElementById("vip-current-status-text");
+        const remText = document.getElementById("vip-current-remaining-text");
+
+        if (user && isUserVip(user)) {
+          statusText.textContent = `★ هەژمارەکەت (${user.name}) VIP چالاکە (${user.vipPlanLabel || "VIP"})`;
+          remText.textContent = formatRemainingDays(user.vipExpiresAt);
+        } else if (user) {
+          statusText.textContent = `هەژمارەکەت (${user.name}) ئەندامی ئاساییە`;
+          remText.textContent = "هیچ ماوەیەکی VIP چالاک نییە.";
+        } else {
+          statusText.textContent = "هیچ هەژمارێک داخڵ نەکراوە";
+          remText.textContent = "بچۆ ژوورەوە بۆ چالاککردنی VIP لەسەر هەژمارەکەت.";
+        }
+
+        renderVipPlansGrid();
+        openModal("vip-modal");
+      };
+
+      function renderVipPlansGrid() {
+        const grid = document.getElementById("vip-plans-grid");
+        if (!grid) return;
+        grid.innerHTML = VIP_PLANS.map(p => {
+          const isSel = state.selectedVipPlanKey === p.key;
+          return `
+            <button type="button" onclick="selectVipPlan('${p.key}')" class="vip-plan-card ${isSel ? "selected" : ""}">
+              <span style="font-size: 14px; font-weight: 900; color: #fbbf24;">${escapeHtml(p.label)}</span>
+              <span style="font-size: 11px; color: #d4d4d8; font-weight: 700;">${escapeHtml(p.note)}</span>
+            </button>
+          `;
+        }).join("");
+      }
+
+      window.selectVipPlan = function (planKey) {
+        state.selectedVipPlanKey = planKey;
+        renderVipPlansGrid();
+      };
+
+      window.activateSelectedVipOnCurrentAccount = function () {
+        const user = getCurrentUser();
+        if (!user) {
+          closeModal("vip-modal");
+          openAuthModal("login");
+          return;
+        }
+
+        const plan = VIP_PLANS.find(p => p.key === state.selectedVipPlanKey) || VIP_PLANS[2];
+        applyVipToUser(user.id, plan.key);
+        closeModal("vip-modal");
+        if (state.pendingVipMovie) {
+          const m = state.pendingVipMovie;
+          state.pendingVipMovie = null;
+          openMoviePlayer(m.id);
+        }
+      };
+
+      window.applyVipToUser = function (userId, planKey) {
+        const idx = state.users.findIndex(u => u.id === userId);
+        if (idx === -1) return;
+
+        if (planKey === "revoke") {
+          state.users[idx].vipExpiresAt = 0;
+          state.users[idx].vipPlanLabel = "";
+          safeWriteJson(STORAGE_KEYS.USERS, state.users);
+          renderCatalog();
+          if (state.adminUnlocked) renderAdminUsersList();
+          if (getCurrentUser()?.id === userId) renderAuthHeaderAndGuestBar();
+          showToast("VIP بۆ ئەکاونتەکە هەڵوەشێنرایەوە");
+          return;
+        }
+
+        const plan = VIP_PLANS.find(p => p.key === planKey);
+        if (!plan) return;
+
+        const baseTime = Math.max(Date.now(), Number(state.users[idx].vipExpiresAt) || 0);
+        state.users[idx].vipExpiresAt = baseTime + plan.days * 24 * 60 * 60 * 1000;
+        state.users[idx].vipPlanLabel = plan.label;
+        safeWriteJson(STORAGE_KEYS.USERS, state.users);
+
+        renderCatalog();
+        if (state.adminUnlocked) renderAdminUsersList();
+        if (getCurrentUser()?.id === userId) renderAuthHeaderAndGuestBar();
+        showToast(`VIP بۆ ماوەی (${plan.label}) چالاک کرا!`);
+      };
+
+      // =====================================================================
+      // CATALOG, HERO & VIDEO PLAYER
+      // =====================================================================
+      function getHeroMovie() {
+        if (state.heroMovieId) {
+          const found = state.movies.find(m => m.id === state.heroMovieId);
+          if (found) return found;
+        }
+        const featured = state.movies.find(m => m.featured) || state.movies[0] || null;
+        state.heroMovieId = featured ? featured.id : null;
+        return featured;
+      }
+
+      function renderHero() {
+        const movie = getHeroMovie();
+        const titleEl = document.getElementById("hero-title");
+        const descEl = document.getElementById("hero-desc");
+        const backdropEl = document.getElementById("hero-backdrop");
+        const catEl = document.getElementById("hero-category-badge");
+        const ratEl = document.getElementById("hero-rating-badge");
+        const yearEl = document.getElementById("hero-year-badge");
+        const qualEl = document.getElementById("hero-quality-badge");
+        const vipBadge = document.getElementById("hero-vip-badge");
+
+        if (!movie) {
+          titleEl.textContent = "کوردس مۆڤیس — Kurds Movies";
+          descEl.textContent = "هیچ بەرهەمێک لە ستۆرەیجدا نییە. لە بەشی ئەدمین فیلم یان دراما زیاد بکە.";
+          backdropEl.src = "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1600&q=80";
+          return;
+        }
+
+        titleEl.textContent = movie.titleKu + (movie.titleOrig ? ` (${movie.titleOrig})` : "");
+        descEl.textContent = movie.synopsis || "بینینی ژێرنووسکراوی کوردی بە باشترین کوالێتی لە کوردس مۆڤیس.";
+        backdropEl.src = movie.backdrop || movie.poster || "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1600&q=80";
+        backdropEl.onerror = function () {
+          this.src = "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1600&q=80";
+        };
+
+        catEl.textContent = movie.category || "فیلم";
+        ratEl.textContent = `★ ${movie.rating || "8.0"}`;
+        yearEl.textContent = movie.year || "2025";
+        qualEl.textContent = movie.quality || "1080p";
+        vipBadge.style.display = movie.vipOnly ? "inline-flex" : "none";
+        updateHeroFavLabel();
+      }
+
+      function updateHeroFavLabel() {
+        const movie = getHeroMovie();
+        const btn = document.getElementById("hero-fav-btn");
+        if (!movie || !btn) return;
+        const user = getCurrentUser();
+        const isFav = !!(user && Array.isArray(user.watchlist) && user.watchlist.includes(movie.id));
+        btn.innerHTML = `
+          <svg class="icon-svg icon-sm" viewBox="0 0 24 24" fill="${isFav ? "#fb7185" : "none"}" stroke="${isFav ? "#fb7185" : "currentColor"}" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span>${isFav ? "لە دڵخوازەکاندایە" : "دڵخوازەکان"}</span>
+        `;
+      }
+
+      window.watchCurrentHero = function () {
+        const movie = getHeroMovie();
+        if (movie) openMoviePlayer(movie.id);
+      };
+
+      window.selectCategory = function (cat) {
+        state.selectedCategory = cat;
+        document.querySelectorAll("#category-tabs .cat-tab").forEach(btn => {
+          btn.classList.toggle("active", btn.getAttribute("data-cat") === cat);
+        });
+        renderCatalog();
+      };
+
+      window.handleGenreChange = function (genre) {
+        state.selectedGenre = genre;
+        renderCatalog();
+      };
+
+      window.handleSearchInput = function (val) {
+        state.searchQuery = val || "";
+        const dInput = document.getElementById("search-desktop");
+        const mInput = document.getElementById("search-mobile");
+        if (dInput && dInput.value !== state.searchQuery) dInput.value = state.searchQuery;
+        if (mInput && mInput.value !== state.searchQuery) mInput.value = state.searchQuery;
+        renderCatalog();
+      };
+
+      window.focusMobileSearchBar = function () {
+        const mInput = document.getElementById("search-mobile");
+        if (mInput) {
+          mInput.scrollIntoView({ behavior: "smooth", block: "center" });
+          setTimeout(() => mInput.focus(), 220);
+        }
+      };
+
+      window.resetHomeView = function () {
+        state.selectedCategory = "all";
+        state.selectedGenre = "all";
+        state.searchQuery = "";
+        const dInput = document.getElementById("search-desktop");
+        const mInput = document.getElementById("search-mobile");
+        const gSelect = document.getElementById("genre-filter");
+        if (dInput) dInput.value = "";
+        if (mInput) mInput.value = "";
+        if (gSelect) gSelect.value = "all";
+        document.querySelectorAll("#category-tabs .cat-tab").forEach(btn => {
+          btn.classList.toggle("active", btn.getAttribute("data-cat") === "all");
+        });
+        renderCatalog();
+      };
+
+      function renderCatalog() {
+        renderHero();
+        renderStatsBar();
+
+        const grid = document.getElementById("movies-grid");
+        const emptyBox = document.getElementById("empty-catalog");
+        const sortBy = document.getElementById("sort-filter").value;
+        const user = getCurrentUser();
+        const userHasVip = isUserVip(user);
+        const watchlist = (user && Array.isArray(user.watchlist)) ? user.watchlist : [];
+
+        const q = state.searchQuery.trim().toLowerCase();
+
+        let filtered = state.movies.filter(m => {
+          let matchCat = true;
+          if (state.selectedCategory === "watchlist") {
+            matchCat = watchlist.includes(m.id);
+          } else if (state.selectedCategory === "vip") {
+            matchCat = !!m.vipOnly;
+          } else if (state.selectedCategory !== "all") {
+            matchCat = m.category === state.selectedCategory;
+          }
+
+          const matchGenre = state.selectedGenre === "all" || (m.genre && m.genre.includes(state.selectedGenre));
+
+          const matchSearch = !q ||
+            (m.titleKu && m.titleKu.toLowerCase().includes(q)) ||
+            (m.titleOrig && m.titleOrig.toLowerCase().includes(q)) ||
+            (m.genre && m.genre.toLowerCase().includes(q)) ||
+            String(m.year || "").includes(q);
+
+          return matchCat && matchGenre && matchSearch;
+        });
+
+        filtered.sort((a, b) => {
+          if (sortBy === "views") return (Number(b.views) || 0) - (Number(a.views) || 0);
+          if (sortBy === "rating") return (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0);
+          return (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0);
+        });
+
+        if (filtered.length === 0) {
+          grid.innerHTML = "";
+          emptyBox.style.display = "block";
+          return;
+        }
+
+        emptyBox.style.display = "none";
+        grid.innerHTML = filtered.map(movie => {
+          const isFav = watchlist.includes(movie.id);
+          const lockedForCurrentUser = !!movie.vipOnly && !userHasVip;
+
+          return `
+            <article onclick="openMoviePlayer('${escapeAttr(movie.id)}')" class="movie-card ${movie.vipOnly ? "vip-card" : ""}">
+              <div class="poster-box">
+                <img
+                  src="${escapeAttr(movie.poster || "")}"
+                  alt="${escapeAttr(movie.titleKu)}"
+                  loading="lazy"
+                  onerror="this.src='https://placehold.co/400x600/141419/f59e0b?text=Kurds+Movies'"
+                  class="poster-img"
+                />
+                <div class="poster-overlay"></div>
+
+                <div class="poster-top-row">
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <span class="mini-badge mini-rating">★ ${escapeHtml(movie.rating || "8.0")}</span>
+                    ${movie.vipOnly ? `
+                      <span class="mini-badge mini-vip">
+                        <svg class="icon-svg icon-xs" viewBox="0 0 24 24" fill="currentColor"><path d="M5 18h14v2H5v-2zm1-3l-2-9 5.5 4L12 4l2.5 6L20 6l-2 9H6z"/></svg>
+                        <span>VIP</span>
+                      </span>
+                    ` : ""}
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <span class="mini-badge mini-cat">${escapeHtml(movie.category || "فیلم")}</span>
+                    <button type="button" onclick="toggleFavoriteMovie('${escapeAttr(movie.id)}', event)" class="fav-btn ${isFav ? "active" : ""}" title="دڵخواز">
+                      <svg class="icon-svg icon-xs" viewBox="0 0 24 24" fill="${isFav ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="poster-play-hover">
+                  <div class="play-circle ${lockedForCurrentUser ? "locked" : ""}">
+                    ${lockedForCurrentUser
+                      ? `<svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`
+                      : `<svg class="icon-svg icon-md" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>`
+                    }
+                  </div>
+                </div>
+
+                <div class="poster-bottom-row">
+                  <span class="poster-meta-pill">${(Number(movie.views) || 0).toLocaleString()} بینەر</span>
+                  <span class="poster-meta-pill">${escapeHtml(movie.year || "2025")}</span>
+                </div>
+              </div>
+
+              <div class="card-footer-info">
+                <h3 class="card-title">${escapeHtml(movie.titleKu)}</h3>
+                <p class="card-sub ${movie.vipOnly ? "vip-text" : ""}">
+                  ${movie.vipOnly ? "قفڵی VIP • ژێرنووسی کوردی" : `${escapeHtml(movie.quality || "1080p")} • ژێرنووسی کوردی`}
+                </p>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      function buildVideoEmbedHtml(sourceStr) {
+        const raw = String(sourceStr || "").trim();
+        if (!raw) {
+          return `<div style="color:#a1a1aa; display:flex; align-items:center; justify-content:center; height:100%; font-size:13px;">هیچ لینکێکی ڤیدیۆ تۆمار نەکراوە</div>`;
+        }
+
+        // If user pasted an iframe embed tag
+        if (raw.toLowerCase().includes("<iframe")) {
+          const srcMatch = raw.match(/src=["']([^"']+)["']/i);
+          if (srcMatch && srcMatch[1]) {
+            return `<iframe src="${escapeAttr(srcMatch[1])}" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+          }
+        }
+
+        // YouTube URLs
+        const ytMatch = raw.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+        if (ytMatch && ytMatch[1]) {
+          return `<iframe src="https://www.youtube.com/embed/${escapeAttr(ytMatch[1])}?rel=0" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+        }
+
+        // Google Drive URLs
+        const driveMatch = raw.match(/drive\.google\.com\/file\/d\/([A-Za-z0-9_-]+)/);
+        if (driveMatch && driveMatch[1]) {
+          return `<iframe src="https://drive.google.com/file/d/${escapeAttr(driveMatch[1])}/preview" allowfullscreen allow="autoplay"></iframe>`;
+        }
+
+        // Direct MP4 / stream / embed URL
+        if (/\.(mp4|webm|ogg|m3u8)(\?.*)?$/i.test(raw) || raw.includes("commondatastorage.googleapis.com")) {
+          return `<video src="${escapeAttr(raw)}" controls autoplay playsinline preload="metadata"></video>`;
+        }
+
+        return `<iframe src="${escapeAttr(raw)}" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+      }
+
+      window.openMoviePlayer = function (movieId) {
+        const idx = state.movies.findIndex(m => m.id === movieId);
+        if (idx === -1) return;
+        const movie = state.movies[idx];
+
+        const user = getCurrentUser();
+        if (movie.vipOnly && !isUserVip(user)) {
+          openVipModal(movie);
+          return;
+        }
+
+        // Increment persistent view count
+        state.movies[idx].views = (Number(state.movies[idx].views) || 0) + 1;
+        safeWriteJson(STORAGE_KEYS.MOVIES, state.movies);
+        recordMovieHistory(state.movies[idx]);
+
+        state.activePlayerMovieId = movie.id;
+        state.activeServerIndex = 0;
+
+        document.getElementById("player-movie-title").textContent =
+          state.movies[idx].titleKu + (state.movies[idx].titleOrig ? ` (${state.movies[idx].titleOrig})` : "");
+        document.getElementById("player-movie-meta").textContent =
+          `${state.movies[idx].category} • ${state.movies[idx].year} • ${state.movies[idx].quality} • ${state.movies[idx].duration || ""}`;
+        document.getElementById("player-synopsis").textContent =
+          state.movies[idx].synopsis || "کورتەی چیرۆک تۆمار نەکراوە.";
+        document.getElementById("player-views-badge").textContent =
+          `کۆی بینین: ${(Number(state.movies[idx].views) || 0).toLocaleString()}`;
+
+        renderPlayerServersAndEpisodes(state.movies[idx]);
+        renderAds();
+        renderCatalog();
+        openModal("player-modal");
+      };
+
+      function getMovieSourcesList(movie) {
+        const list = [];
+        if (movie.videoUrl) {
+          list.push({ label: "سێرڤەری سەرەکی", url: movie.videoUrl });
+        }
+        if (movie.backupUrl) {
+          list.push({ label: "سێرڤەری یەدەگ", url: movie.backupUrl });
+        }
+        if (Array.isArray(movie.episodes)) {
+          movie.episodes.forEach((ep, i) => {
+            if (ep && ep.url) {
+              list.push({ label: ep.title || `ئەڵقەی ${i + 1}`, url: ep.url });
+            }
+          });
+        }
+        return list;
+      }
+
+      function renderPlayerServersAndEpisodes(movie) {
+        const sources = getMovieSourcesList(movie);
+        const wrap = document.getElementById("server-buttons-wrap");
+        const stage = document.getElementById("video-stage");
+
+        if (sources.length === 0) {
+          stage.innerHTML = buildVideoEmbedHtml("");
+          wrap.innerHTML = "";
+          return;
+        }
+
+        const safeIdx = Math.min(state.activeServerIndex, sources.length - 1);
+        state.activeServerIndex = safeIdx;
+        stage.innerHTML = buildVideoEmbedHtml(sources[safeIdx].url);
+
+        wrap.innerHTML = sources.map((src, i) => `
+          <button
+            type="button"
+            onclick="switchPlayerSource('${escapeAttr(movie.id)}', ${i})"
+            class="cat-tab ${i === safeIdx ? "active" : ""}"
+            style="padding: 6px 12px; font-size: 12px;"
+          >${escapeHtml(src.label)}</button>
+        `).join("");
+      }
+
+      window.switchPlayerSource = function (movieId, idx) {
+        const movie = state.movies.find(m => m.id === movieId);
+        if (!movie) return;
+        state.activeServerIndex = idx;
+        renderPlayerServersAndEpisodes(movie);
+      };
+
+      window.toggleTheaterMode = function () {
+        state.theaterMode = !state.theaterMode;
+        document.body.classList.toggle("theater-active", state.theaterMode);
+        const lbl = document.getElementById("theater-btn-label");
+        if (lbl) lbl.textContent = state.theaterMode ? "دەرچوون لە سینەما" : "دۆخی سینەما";
+      };
+
+      window.closePlayerModal = function () {
+        state.theaterMode = false;
+        document.body.classList.remove("theater-active");
+        const lbl = document.getElementById("theater-btn-label");
+        if (lbl) lbl.textContent = "دۆخی سینەما";
+        const stage = document.getElementById("video-stage");
+        if (stage) stage.innerHTML = "";
+        state.activePlayerMovieId = null;
+        closeModal("player-modal");
+      };
+
+      // =====================================================================
+      // ADS SYSTEM (CRUD + SLOT RENDERING)
+      // =====================================================================
+      function renderAds() {
+        const slotMap = {
+          top: "ad-slot-top",
+          mid: "ad-slot-mid",
+          player: "ad-slot-player",
+          bottom: "ad-slot-bottom"
+        };
+
+        const slotLabels = {
+          top: "ڕیکلامی سەرەوە",
+          mid: "ڕیکلامی ناوەڕاست",
+          player: "ڕیکلامی ناو پلەیەر",
+          bottom: "ڕیکلامی خوارەوە"
+        };
+
+        Object.entries(slotMap).forEach(([slotKey, elId]) => {
+          const container = document.getElementById(elId);
+          if (!container) return;
+          const activeAds = state.ads.filter(ad => ad.active && ad.slot === slotKey);
+          if (activeAds.length === 0) {
+            container.innerHTML = "";
+            return;
+          }
+
+          container.innerHTML = activeAds.map(ad => `
+            <a href="${escapeAttr(ad.link || "https://t.me/Kurds_Movies")}" target="_blank" rel="noopener noreferrer" class="ad-banner-card">
+              <div class="ad-content-left">
+                ${ad.image ? `<img src="${escapeAttr(ad.image)}" alt="${escapeAttr(ad.title)}" onerror="this.style.display='none'" class="ad-thumb" />` : ""}
+                <div style="min-width: 0;">
+                  <div>
+                    <span class="ad-badge">${escapeHtml(slotLabels[slotKey] || "ڕیکلام")}</span>
+                    <span class="ad-title">${escapeHtml(ad.title)}</span>
+                  </div>
+                  <p class="ad-desc">${escapeHtml(ad.desc)}</p>
+                </div>
+              </div>
+              <span class="ad-cta-btn">بینین ←</span>
+            </a>
+          `).join("");
+        });
+      }
+
+      window.handleAdImageUpload = function (input) {
+        const file = input.files && input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          state.uploadedAdImageDataUrl = ev.target.result || "";
+          document.getElementById("ad-image-url").value = state.uploadedAdImageDataUrl;
+        };
+        reader.readAsDataURL(file);
+      };
+
+      window.handleSaveAd = function (event) {
+        event.preventDefault();
+        const editId = document.getElementById("edit-ad-id").value;
+        const title = document.getElementById("ad-title").value.trim();
+        const slot = document.getElementById("ad-slot").value;
+        const image = document.getElementById("ad-image-url").value.trim() || state.uploadedAdImageDataUrl || "";
+        const link = document.getElementById("ad-link").value.trim() || "https://t.me/Kurds_Movies";
+        const desc = document.getElementById("ad-desc").value.trim();
+        const active = document.getElementById("ad-active").checked;
+
+        if (!title || !desc) {
+          showToast("ناونیشان و دەقی ڕیکلام پێویستن", "error");
+          return;
+        }
+
+        if (editId) {
+          const idx = state.ads.findIndex(a => a.id === editId);
+          if (idx > -1) {
+            state.ads[idx] = { ...state.ads[idx], title, slot, image, link, desc, active };
+            showToast("ڕیکلامەکە نوێکرایەوە");
+          }
+        } else {
+          state.ads.unshift({
+            id: "ad-" + Date.now(),
+            title,
+            slot,
+            image,
+            link,
+            desc,
+            active,
+            createdAt: Date.now()
+          });
+          showToast("ڕیکلامە نوێیەکە زیادکرا");
+        }
+
+        safeWriteJson(STORAGE_KEYS.ADS, state.ads);
+        resetAdForm();
+        renderAds();
+        renderAdminAdsList();
+      };
+
+      window.editAd = function (adId) {
+        const ad = state.ads.find(a => a.id === adId);
+        if (!ad) return;
+        document.getElementById("edit-ad-id").value = ad.id;
+        document.getElementById("ad-title").value = ad.title || "";
+        document.getElementById("ad-slot").value = ad.slot || "top";
+        document.getElementById("ad-image-url").value = ad.image || "";
+        document.getElementById("ad-link").value = ad.link || "https://t.me/Kurds_Movies";
+        document.getElementById("ad-desc").value = ad.desc || "";
+        document.getElementById("ad-active").checked = !!ad.active;
+        document.getElementById("ad-form-heading").textContent = `دەستکاریکردنی ڕیکلام: ${ad.title}`;
+        document.getElementById("cancel-ad-edit-btn").style.display = "inline-block";
+      };
+
+      window.toggleAdStatus = function (adId) {
+        const idx = state.ads.findIndex(a => a.id === adId);
+        if (idx === -1) return;
+        state.ads[idx].active = !state.ads[idx].active;
+        safeWriteJson(STORAGE_KEYS.ADS, state.ads);
+        renderAds();
+        renderAdminAdsList();
+        showToast(state.ads[idx].active ? "ڕیکلام چالاک کرا" : "ڕیکلام ڕاگیرا");
+      };
+
+      window.deleteAd = function (adId) {
+        state.ads = state.ads.filter(a => a.id !== adId);
+        safeWriteJson(STORAGE_KEYS.ADS, state.ads);
+        renderAds();
+        renderAdminAdsList();
+        showToast("ڕیکلام سڕایەوە");
+      };
+
+      window.resetAdForm = function () {
+        document.getElementById("ad-crud-form").reset();
+        document.getElementById("edit-ad-id").value = "";
+        document.getElementById("ad-link").value = "https://t.me/Kurds_Movies";
+        document.getElementById("ad-active").checked = true;
+        document.getElementById("ad-form-heading").textContent = "زیادکردنی ڕیکلامی نوێ";
+        document.getElementById("cancel-ad-edit-btn").style.display = "none";
+        state.uploadedAdImageDataUrl = "";
+      };
+
+      function renderAdminAdsList() {
+        const container = document.getElementById("admin-ads-list");
+        if (!container) return;
+        if (state.ads.length === 0) {
+          container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary);">هیچ ڕیکلامێک تۆمار نەکراوە.</div>`;
+          return;
+        }
+
+        container.innerHTML = state.ads.map(ad => `
+          <div class="list-row-card">
+            <div style="min-width: 0;">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px;">
+                <span class="mini-badge" style="background: ${ad.active ? "rgba(16,185,129,0.2)" : "rgba(255,255,255,0.1)"}; color: ${ad.active ? "#34d399" : "#a1a1aa"};">${ad.active ? "چالاک" : "ڕاگیراو"}</span>
+                <span class="mini-badge mini-rating">${escapeHtml(ad.slot)}</span>
+                <strong style="font-size: 13px; color: #ffffff;">${escapeHtml(ad.title)}</strong>
+              </div>
+              <div style="font-size: 12px; color: var(--text-secondary); margin-top: 3px;">${escapeHtml(ad.desc)}</div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <button type="button" onclick="toggleAdStatus('${escapeAttr(ad.id)}')" class="btn-pill btn-auth">${ad.active ? "ڕاگرتن" : "چالاککردن"}</button>
+              <button type="button" onclick="editAd('${escapeAttr(ad.id)}')" class="btn-pill btn-vip-nav">دەستکاری</button>
+              <button type="button" onclick="deleteAd('${escapeAttr(ad.id)}')" class="btn-danger-soft">سڕینەوە</button>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // =====================================================================
+      // ADMIN PANEL (@i4m_SHAW) & PERMANENT STORAGE CRUD
+      // =====================================================================
+      window.openAdminModal = function () {
+        refreshAdminScreenVisibility();
+        openModal("admin-modal");
+      };
+
+      function refreshAdminScreenVisibility() {
+        const lockScreen = document.getElementById("admin-lock-screen");
+        const workspace = document.getElementById("admin-workspace");
+        if (state.adminUnlocked) {
+          lockScreen.style.display = "none";
+          workspace.style.display = "flex";
+          renderAdminMoviesList();
+          renderAdminUsersList();
+          renderAdminAdsList();
+        } else {
+          lockScreen.style.display = "flex";
+          workspace.style.display = "none";
+          document.getElementById("admin-pass-error").style.display = "none";
+          const passInput = document.getElementById("admin-password-input");
+          if (passInput) {
+            passInput.value = "";
+            setTimeout(() => passInput.focus(), 120);
+          }
+        }
+      }
+
+      window.handleAdminUnlock = function (event) {
+        event.preventDefault();
+        const entered = document.getElementById("admin-password-input").value;
+        if (entered === ADMIN_PASS) {
+          state.adminUnlocked = true;
+          sessionStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, "1");
+          refreshAdminScreenVisibility();
+          showToast("بەخێربێیت بۆ پانێڵی ئەدمینی کوردس مۆڤیس");
+        } else {
+          document.getElementById("admin-pass-error").style.display = "block";
+        }
+      };
+
+      window.lockAdminPanel = function () {
+        state.adminUnlocked = false;
+        sessionStorage.removeItem(STORAGE_KEYS.ADMIN_AUTH);
+        refreshAdminScreenVisibility();
+      };
+
+      window.switchAdminTab = function (tabName) {
+        ["storage", "vip", "ads", "backup"].forEach(t => {
+          const panel = document.getElementById(`admin-tab-${t}`);
+          if (panel) panel.style.display = t === tabName ? "flex" : "none";
+        });
+
+        document.querySelectorAll("#admin-workspace .sub-tab-btn").forEach(btn => {
+          btn.classList.toggle("active", btn.getAttribute("data-admintab") === tabName);
+        });
+
+        if (tabName === "storage") renderAdminMoviesList();
+        if (tabName === "vip") renderAdminUsersList();
+        if (tabName === "ads") renderAdminAdsList();
+      };
+
+      window.handlePosterFileUpload = function (input) {
+        const file = input.files && input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          state.uploadedPosterDataUrl = ev.target.result || "";
+          document.getElementById("m-poster-url").value = state.uploadedPosterDataUrl;
+        };
+        reader.readAsDataURL(file);
+      };
+
+      function parseEpisodesText(rawText) {
+        const lines = String(rawText || "").split(/\r?\n/);
+        const eps = [];
+        lines.forEach((line, i) => {
+          const trimmed = line.trim();
+          if (!trimmed) return;
+          const parts = trimmed.split("|");
+          if (parts.length >= 2) {
+            eps.push({ title: parts[0].trim() || `ئەڵقەی ${i + 1}`, url: parts.slice(1).join("|").trim() });
+          } else {
+            eps.push({ title: `ئەڵقەی ${i + 1}`, url: trimmed });
+          }
+        });
+        return eps;
+      }
+
+      window.handleSaveMovie = function (event) {
+        event.preventDefault();
+        const editId = document.getElementById("edit-movie-id").value;
+        const titleKu = document.getElementById("m-title-ku").value.trim();
+        const titleOrig = document.getElementById("m-title-orig").value.trim();
+        const category = document.getElementById("m-category").value;
+        const genre = document.getElementById("m-genre").value.trim() || category;
+        const year = parseInt(document.getElementById("m-year").value, 10) || 2025;
+        const rating = document.getElementById("m-rating").value.trim() || "8.0";
+        const quality = document.getElementById("m-quality").value.trim() || "1080p Full HD";
+        const duration = document.getElementById("m-duration").value.trim() || "120 خولەک";
+        const poster = document.getElementById("m-poster-url").value.trim() || state.uploadedPosterDataUrl || "https://placehold.co/400x600/141419/f59e0b?text=Kurds+Movies";
+        const videoUrl = document.getElementById("m-video-url").value.trim();
+        const backupUrl = document.getElementById("m-backup-url").value.trim();
+        const episodes = parseEpisodesText(document.getElementById("m-episodes").value);
+        const synopsis = document.getElementById("m-desc").value.trim();
+        const featured = document.getElementById("m-featured").checked;
+        const vipOnly = document.getElementById("m-vip-lock").checked;
+
+        if (!titleKu || !videoUrl) {
+          showToast("ناونیشانی کوردی و سەرچاوەی ڤیدیۆ پێویستن", "error");
+          return;
+        }
+
+        if (featured) {
+          state.movies.forEach(m => { m.featured = false; });
+        }
+
+        if (editId) {
+          const idx = state.movies.findIndex(m => m.id === editId);
+          if (idx > -1) {
+            state.movies[idx] = {
+              ...state.movies[idx],
+              titleKu,
+              titleOrig,
+              category,
+              genre,
+              year,
+              rating,
+              quality,
+              duration,
+              poster,
+              backdrop: poster,
+              videoUrl,
+              backupUrl,
+              episodes,
+              synopsis,
+              featured,
+              vipOnly
+            };
+            if (featured) state.heroMovieId = editId;
+            showToast("بەرهەمەکە بە سەرکەوتوویی نوێکرایەوە");
+          }
+        } else {
+          const newId = "km-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6);
+          const newMovie = {
+            id: newId,
+            titleKu,
+            titleOrig,
+            category,
+            genre,
+            year,
+            rating,
+            quality,
+            duration,
+            poster,
+            backdrop: poster,
+            videoUrl,
+            backupUrl,
+            episodes,
+            synopsis,
+            views: 0,
+            featured,
+            vipOnly,
+            createdAt: Date.now()
+          };
+          state.movies.unshift(newMovie);
+          if (featured) state.heroMovieId = newId;
+          showToast("بەرهەمە نوێیەکە بۆ هەمیشە لە ستۆرەیج پاشەکەوت کرا");
+        }
+
+        safeWriteJson(STORAGE_KEYS.MOVIES, state.movies);
+        resetMovieForm();
+        renderCatalog();
+        renderAdminMoviesList();
+      };
+
+      window.editMovieItem = function (movieId) {
+        const m = state.movies.find(item => item.id === movieId);
+        if (!m) return;
+        document.getElementById("edit-movie-id").value = m.id;
+        document.getElementById("m-title-ku").value = m.titleKu || "";
+        document.getElementById("m-title-orig").value = m.titleOrig || "";
+        document.getElementById("m-category").value = m.category || "فیلم";
+        document.getElementById("m-genre").value = m.genre || "";
+        document.getElementById("m-year").value = m.year || 2025;
+        document.getElementById("m-rating").value = m.rating || "8.0";
+        document.getElementById("m-quality").value = m.quality || "1080p Full HD";
+        document.getElementById("m-duration").value = m.duration || "";
+        document.getElementById("m-poster-url").value = m.poster || "";
+        document.getElementById("m-video-url").value = m.videoUrl || "";
+        document.getElementById("m-backup-url").value = m.backupUrl || "";
+        document.getElementById("m-episodes").value = Array.isArray(m.episodes)
+          ? m.episodes.map(e => `${e.title} | ${e.url}`).join("\n")
+          : "";
+        document.getElementById("m-desc").value = m.synopsis || "";
+        document.getElementById("m-featured").checked = !!m.featured;
+        document.getElementById("m-vip-lock").checked = !!m.vipOnly;
+
+        document.getElementById("movie-form-heading").textContent = `دەستکاریکردنی بەرهەم: ${m.titleKu}`;
+        document.getElementById("cancel-movie-edit-btn").style.display = "inline-block";
+      };
+
+      window.deleteMovieItem = function (movieId) {
+        state.movies = state.movies.filter(m => m.id !== movieId);
+        if (state.heroMovieId === movieId) state.heroMovieId = null;
+        safeWriteJson(STORAGE_KEYS.MOVIES, state.movies);
+        renderCatalog();
+        renderAdminMoviesList();
+        showToast("بەرهەمەکە لە ستۆرەیج سڕایەوە");
+      };
+
+      window.resetMovieForm = function () {
+        document.getElementById("movie-crud-form").reset();
+        document.getElementById("edit-movie-id").value = "";
+        document.getElementById("m-year").value = "2025";
+        document.getElementById("m-rating").value = "8.5";
+        document.getElementById("m-quality").value = "1080p Full HD";
+        document.getElementById("movie-form-heading").textContent = "زیادکردنی فیلم یان درامای نوێ (هەڵگرتنی هەمیشەیی)";
+        document.getElementById("cancel-movie-edit-btn").style.display = "none";
+        state.uploadedPosterDataUrl = "";
+      };
+
+      function renderAdminMoviesList() {
+        const container = document.getElementById("admin-movies-list");
+        const countEl = document.getElementById("admin-movies-count");
+        if (!container) return;
+        if (countEl) countEl.textContent = String(state.movies.length);
+
+        if (state.movies.length === 0) {
+          container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary);">هیچ بەرهەمێک نییە.</div>`;
+          return;
+        }
+
+        container.innerHTML = state.movies.map(m => `
+          <div class="list-row-card">
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+              <img src="${escapeAttr(m.poster || "")}" alt="${escapeAttr(m.titleKu)}" onerror="this.src='https://placehold.co/60x85/141419/f59e0b?text=KM'" style="width: 42px; height: 58px; border-radius: 8px; object-fit: cover; flex-shrink: 0;" />
+              <div style="min-width: 0;">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px;">
+                  <strong style="font-size: 13px; color: #ffffff;">${escapeHtml(m.titleKu)}</strong>
+                  ${m.featured ? `<span class="mini-badge mini-vip">سەرەکی</span>` : ""}
+                  ${m.vipOnly ? `<span class="mini-badge mini-cat">قفڵی VIP</span>` : ""}
+                </div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">
+                  ${escapeHtml(m.category)} • ${escapeHtml(String(m.year || ""))} • ${(Number(m.views) || 0).toLocaleString()} بینەر
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <button type="button" onclick="editMovieItem('${escapeAttr(m.id)}')" class="btn-pill btn-vip-nav">دەستکاری</button>
+              <button type="button" onclick="deleteMovieItem('${escapeAttr(m.id)}')" class="btn-danger-soft">سڕینەوە</button>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      function renderAdminUsersList() {
+        const container = document.getElementById("admin-users-list");
+        if (!container) return;
+
+        if (state.users.length === 0) {
+          container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary);">هیچ ئەکاونتێک تۆمار نەکراوە.</div>`;
+          return;
+        }
+
+        container.innerHTML = state.users.map(u => {
+          const vipActive = isUserVip(u);
+          return `
+            <div class="list-row-card" style="border-color: ${vipActive ? "rgba(245, 158, 11, 0.4)" : "var(--border-subtle)"};">
+              <div>
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+                  <strong style="font-size: 14px; color: #ffffff;">${escapeHtml(u.name)}</strong>
+                  <span dir="ltr" style="font-size: 12px; color: var(--text-secondary);">${escapeHtml(u.email)}</span>
+                  ${vipActive
+                    ? `<span class="mini-badge mini-vip">★ VIP (${escapeHtml(u.vipPlanLabel || "چالاک")})</span>`
+                    : `<span class="mini-badge" style="background: rgba(255,255,255,0.08); color: #a1a1aa;">ئاسایی</span>`
+                  }
+                </div>
+                <div style="font-size: 11px; color: #fbbf24; margin-top: 3px;">
+                  ${vipActive ? formatRemainingDays(u.vipExpiresAt) : "VIP چالاک نییە"}
+                </div>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                <button type="button" onclick="applyVipToUser('${escapeAttr(u.id)}', '1m')" class="btn-pill btn-vip-nav">+١ مانگ</button>
+                <button type="button" onclick="applyVipToUser('${escapeAttr(u.id)}', '2m')" class="btn-pill btn-vip-nav">+٢ مانگ</button>
+                <button type="button" onclick="applyVipToUser('${escapeAttr(u.id)}', '3m')" class="btn-pill btn-vip-nav">+٣ مانگ</button>
+                <button type="button" onclick="applyVipToUser('${escapeAttr(u.id)}', '6m')" class="btn-pill btn-vip-nav">+٦ مانگ</button>
+                <button type="button" onclick="applyVipToUser('${escapeAttr(u.id)}', '1y')" class="btn-pill btn-admin">+١ ساڵ</button>
+                ${vipActive ? `<button type="button" onclick="applyVipToUser('${escapeAttr(u.id)}', 'revoke')" class="btn-danger-soft">هەڵوەشاندنەوە</button>` : ""}
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // =====================================================================
+      // BACKUP & RESTORE (JSON)
+      // =====================================================================
+      window.exportAllDataJson = function () {
+        const bundle = {
+          brand: "Kurds Movies",
+          exportedAt: new Date().toISOString(),
+          movies: state.movies,
+          users: state.users,
+          ads: state.ads
+        };
+        const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `kurds-movies-backup-${Date.now()}.json`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        showToast("فایلی باکئەپی کوردس مۆڤیس داگیرا");
+      };
+
+      window.importAllDataJson = function (input) {
+        const file = input.files && input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          try {
+            const parsed = JSON.parse(String(ev.target.result || "{}"));
+            if (Array.isArray(parsed.movies)) {
+              state.movies = parsed.movies;
+              safeWriteJson(STORAGE_KEYS.MOVIES, state.movies);
+            }
+            if (Array.isArray(parsed.users)) {
+              state.users = parsed.users;
+              safeWriteJson(STORAGE_KEYS.USERS, state.users);
+            }
+            if (Array.isArray(parsed.ads)) {
+              state.ads = parsed.ads;
+              safeWriteJson(STORAGE_KEYS.ADS, state.ads);
+            }
+            renderAuthHeaderAndGuestBar();
+            renderCatalog();
+            renderAds();
+            renderAdminMoviesList();
+            renderAdminUsersList();
+            renderAdminAdsList();
+            showToast("باکئەپ بە سەرکەوتوویی گەڕێندرایەوە");
+          } catch (err) {
+            console.error("Import error:", err);
+            showToast("فایلی JSON دروست نییە", "error");
+          }
+        };
+        reader.readAsText(file);
+        input.value = "";
+      };
+
+      // =====================================================================
+      // MODAL HELPERS & ESCAPING
+      // =====================================================================
+      function openModal(id) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.add("open");
+          document.body.style.overflow = "hidden";
+        }
+      }
+
+      window.closeModal = function (id) {
+        if (id === "player-modal") {
+          const stage = document.getElementById("video-stage");
+          if (stage) stage.innerHTML = "";
+          state.theaterMode = false;
+          document.body.classList.remove("theater-active");
+        }
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.remove("open");
+        }
+        const anyOpen = document.querySelectorAll(".modal-backdrop.open").length > 0;
+        if (!anyOpen) {
+          document.body.style.overflow = "";
+        }
+      };
+
+      function escapeHtml(str) {
+        return String(str || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function escapeAttr(str) {
+        return escapeHtml(str);
+      }
+
+      // Close modal when clicking backdrop outside panel
+      document.addEventListener("click", function (ev) {
+        if (ev.target && ev.target.classList && ev.target.classList.contains("modal-backdrop")) {
+          closeModal(ev.target.id);
+        }
+      });
+
+      // Close modal on Escape key
+      document.addEventListener("keydown", function (ev) {
+        if (ev.key === "Escape") {
+          const openModals = document.querySelectorAll(".modal-backdrop.open");
+          if (openModals.length > 0) {
+            const topModal = openModals[openModals.length - 1];
+            closeModal(topModal.id);
+          }
+        }
+      });
+
+      // Sync across tabs in same browser
+      window.addEventListener("storage", function (ev) {
+        if (
+          ev.key === STORAGE_KEYS.MOVIES ||
+          ev.key === STORAGE_KEYS.USERS ||
+          ev.key === STORAGE_KEYS.PRESENCE ||
+          ev.key === STORAGE_KEYS.ADS ||
+          ev.key === STORAGE_KEYS.SESSION
+        ) {
+          initializeDataStore();
+          renderAuthHeaderAndGuestBar();
+          renderCatalog();
+          renderAds();
+          if (state.adminUnlocked) {
+            renderAdminMoviesList();
+            renderAdminUsersList();
+            renderAdminAdsList();
+          }
+        }
+      });
+
+      // =====================================================================
+      // BOOTSTRAP APP
+      // =====================================================================
+      window.addEventListener("DOMContentLoaded", function () {
+        initializeDataStore();
+        updateMemberHeartbeat();
+        renderAuthHeaderAndGuestBar();
+        renderCatalog();
+        renderAds();
+
+        setInterval(function () {
+          updateMemberHeartbeat();
+        }, 20000);
+      });
+    })();
+  </script>
 </body>
 </html>
